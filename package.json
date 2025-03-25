@@ -1,0 +1,14 @@
+{
+  "type": "module",
+  "scripts": {
+    "clean": "rm -rf _site",
+    "dev": "npm run clean && eleventy --config=.eleventy.js --serve --incremental",
+    "build": "npm run clean && eleventy --config=.eleventy.js"
+  },
+  "dependencies": {
+    "@11ty/eleventy": "^3.0.0",
+    "@11ty/eleventy-plugin-pug": "^1.0.0",
+    "@11ty/eleventy-plugin-vite": "^6.0.0",
+    "events": "^3.3.0"
+  }
+}
