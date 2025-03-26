@@ -9,6 +9,11 @@
     "@11ty/eleventy": "^3.0.0",
     "@11ty/eleventy-plugin-pug": "^1.0.0",
     "@11ty/eleventy-plugin-vite": "^6.0.0",
-    "events": "^3.3.0"
+    "events": "^3.3.0",
+    "include-media": "^2.0.0",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "sass": "^1.86.0"
   }
 }

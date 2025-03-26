@@ -4,8 +4,12 @@ export default class Home extends Page {
   constructor() {
     super({
       element: ".home",
-      elements: { wrapper: ".home__wrapper", links: ".home__background__link" },
+      elements: {
+        wrapper: ".home__wrapper",
+        links: ".home__background__link",
+        mainWrapper: ".home__main__wrapper",
+      },
     });
-    const backgroundGradient = new BackgroundGradient(this.selectors.element);
+    const backgroundGradient = new BackgroundGradient(this.element);
   }
 }

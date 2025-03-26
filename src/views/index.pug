@@ -2,9 +2,13 @@ extends ./_layouts/layout.pug
 block content
     .home 
         .home__wrapper 
-            h1.home__title 22Carbone
             .home__video__wrapper
-                video.home__video(src="")
+                h1.home__title 
+                    span 22
+                    | Carbone 
+                .home__video__filter
+                img.home__video(src="/src/assets/img/home-video-placeholder.png", alt="Présentation 22Carbone")
+                //- video.home__video(src="")
             .home__main__wrapper
                 .home__who__wrapper 
                     h2.home__h2 Qui ?

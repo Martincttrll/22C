@@ -1,0 +1,58 @@
+@use "../utils" as *;
+
+.background__gradient__wrapper {
+  @extend %cover;
+  position: absolute;
+  // filter: blur(50px);
+  overflow: hidden;
+  z-index: -1;
+  background: url("src/assets/img/noise-dark.png");
+}
+
+.background__gradient__blob {
+  position: absolute;
+  opacity: 0.8;
+  pointer-events: none;
+  z-index: -2;
+  filter: blur(150px);
+  transform: translate(-50%, -50%);
+}
+
+.blob__1 {
+  width: 35rem;
+  height: 35rem;
+  background: radial-gradient(circle, $radical-red, transparent),
+    url("/src/assets/img/noise-light.png");
+  top: 10%;
+  left: 20%;
+}
+
+.blob__2 {
+  width: 50rem;
+  height: 50rem;
+  background-color: $cod-gray;
+  background: radial-gradient(circle, $cod-gray, transparent),
+    url("/src/assets/img/noise-light.png");
+  top: 30%;
+  left: 50%;
+}
+
+.blob__3 {
+  width: 108rem;
+  height: 148rem;
+  background: radial-gradient(circle, $zarin-crimson, transparent),
+    url("/src/assets/img/noise-light.png");
+  transform: translate(-50%, -50%);
+  top: 90%;
+  left: 5%;
+}
+
+.blob__4 {
+  width: 102rem;
+  height: 402rem;
+  background: radial-gradient(circle, $mine-shaft, transparent),
+    url("/src/assets/img/noise-light.png");
+  transform: translate(-50%, -50%);
+  top: 0%;
+  left: 100%;
+}

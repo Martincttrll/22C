@@ -1,0 +1,14 @@
+@import "include-media";
+
+$breakpoints: (
+  "phone": 768px,
+  "tablet": 1024px,
+  "desktop": 1920px,
+) !default;
+
+//Colors
+$radical-red: #ff3759;
+$zarin-crimson: #ed3131;
+$cod-gray: #1e1e1e;
+$jon: #371f1f;
+$mine-shaft: #282524;

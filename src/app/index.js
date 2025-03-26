@@ -1,3 +1,4 @@
+import "../styles/style.scss";
 import Home from "./pages/Home";
 
 class App {
