@@ -1,8 +1,16 @@
+@use "../utils/" as *;
+
 %text-12 {
   font-size: 1.2rem;
+  @include media("<phone") {
+    font-size: 3rem;
+  }
 }
 %text-16 {
   font-size: 1.6rem;
+  @include media("<phone") {
+    font-size: 3rem;
+  }
 }
 %text-18 {
   font-size: 1.8rem;

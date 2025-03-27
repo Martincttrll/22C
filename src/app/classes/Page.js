@@ -16,7 +16,7 @@ export default class Page extends EventEmitter {
     this.element = document.querySelector(this.selectors.element);
     this.elements = {};
 
-    each(this.selectors.elements, (selector, key) => {
+    each(this.selectors, (selector, key) => {
       if (
         selector instanceof window.HTMLElement ||
         selector instanceof window.NodeList

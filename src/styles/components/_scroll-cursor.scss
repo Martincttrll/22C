@@ -1,0 +1,49 @@
+@use "../utils/" as *;
+@use "../shared/" as *;
+.cursor__scroll {
+  @extend %center;
+  position: fixed;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  pointer-events: none;
+  mix-blend-mode: difference;
+  top: -50px;
+  left: -50px;
+  transition: transform 0.2s ease-out;
+  opacity: 0;
+  z-index: 100;
+}
+
+.cursor__scroll__text {
+  @extend %text-12;
+  @extend %center;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  font-weight: bold;
+  color: white;
+  text-transform: uppercase;
+  mix-blend-mode: difference;
+  animation: rotateText 3s linear infinite;
+}
+
+.cursor__scroll__text span {
+  position: absolute;
+  text-transform: uppercase;
+  transform: rotate(0deg);
+}
+
+@keyframes rotateText {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Effet visible sur la vidéo */
+.home__video__wrapper:hover ~ .custom-cursor {
+  opacity: 1;
+}

@@ -5,9 +5,7 @@ const updateMousePosition = (event) => {
   mouseX = event.clientX;
   mouseY = event.clientY;
 };
-
 document.addEventListener("mousemove", updateMousePosition);
-
 const getMousePosition = () => {
   return { mouseX, mouseY };
 };
