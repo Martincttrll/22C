@@ -1,13 +1,10 @@
-let mouseX = 0;
-let mouseY = 0;
+let mouse = { x: window.innerWidth, y: window.innerHeight };
 
 const updateMousePosition = (event) => {
-  mouseX = event.clientX;
-  mouseY = event.clientY;
-};
-document.addEventListener("mousemove", updateMousePosition);
-const getMousePosition = () => {
-  return { mouseX, mouseY };
+  mouse.x = event.clientX;
+  mouse.y = event.clientY;
 };
 
-export { getMousePosition };
+document.addEventListener("mousemove", updateMousePosition);
+
+export { mouse };

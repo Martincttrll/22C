@@ -1,5 +1,5 @@
-import { getMousePosition } from "../utils/mousePos";
-export class ScrollCursor {
+import { mouse } from "../utils/mousePos";
+export class TextCursor {
   constructor(element, text) {
     this.element = element;
     this.text = text;
@@ -17,6 +17,7 @@ export class ScrollCursor {
 
     this.circleText(cursorText);
     this.animate(cursor);
+    this.addEventListener(cursor);
   }
 
   circleText(cursorText) {
@@ -30,16 +31,18 @@ export class ScrollCursor {
     }
   }
 
-  animate(cursor) {
-    const { mouseX, mouseY } = getMousePosition();
-    this.element.addEventListener("mouseenter", () => {
+  addEventListener(cursor) {
+    this.element.addEventListener("mouseover", () => {
       cursor.style.opacity = "1";
     });
 
     this.element.addEventListener("mouseleave", () => {
       cursor.style.opacity = "0";
     });
-    cursor.style.transform = `translate(${mouseX}px, ${mouseY}px)`;
+  }
+
+  animate(cursor) {
+    cursor.style.transform = `translate(${mouse.x}px, ${mouse.y}px)`;
     requestAnimationFrame(() => this.animate(cursor));
   }
 }

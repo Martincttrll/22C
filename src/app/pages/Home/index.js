@@ -1,6 +1,6 @@
 import Page from "../../classes/Page";
 import { BackgroundGradient } from "../../animations/BackgroundGradient";
-import { ScrollCursor } from "../../animations/scrollCrusor";
+import { TextCursor } from "../../animations/TextCrusor";
 export default class Home extends Page {
   constructor() {
     super({
@@ -13,7 +13,7 @@ export default class Home extends Page {
       },
     });
 
-    new BackgroundGradient(this.element);
-    new ScrollCursor(this.elements.videoWrapper, "scroll ⚈ scroll ⚈ ");
+    new BackgroundGradient(this.elements.mainWrapper);
+    new TextCursor(this.elements.videoWrapper, "scroll ⚈ scroll ⚈ ");
   }
 }

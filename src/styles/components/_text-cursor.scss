@@ -10,9 +10,9 @@
   mix-blend-mode: difference;
   top: -50px;
   left: -50px;
-  transition: transform 0.2s ease-out;
   opacity: 0;
   z-index: 100;
+  transform: opacity 1s ease;
 }
 
 .cursor__scroll__text {
@@ -41,9 +41,4 @@
   100% {
     transform: rotate(360deg);
   }
-}
-
-/* Effet visible sur la vidéo */
-.home__video__wrapper:hover ~ .custom-cursor {
-  opacity: 1;
 }

@@ -1,7 +1,8 @@
 import EventEmitter from "events";
 import { each } from "lodash";
+import { SmoothScroll } from "../animations/smoothScroll";
 export default class Page extends EventEmitter {
-  constructor({ element, elements }) {
+  constructor({ element, elements, isScrollable = true }) {
     super();
 
     this.selectors = {
@@ -9,7 +10,12 @@ export default class Page extends EventEmitter {
       ...elements,
     };
 
+    this.isScrollable = isScrollable;
+
     this.create();
+    if (this.isScrollable) {
+      this.initSmoothScroll();
+    }
   }
 
   create() {
@@ -34,5 +40,9 @@ export default class Page extends EventEmitter {
         }
       }
     });
+  }
+
+  initSmoothScroll() {
+    new SmoothScroll(this.element, this.elements[0]);
   }
 }
