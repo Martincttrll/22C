@@ -1,6 +1,7 @@
 import Page from "../../classes/Page";
 import { BackgroundGradient } from "../../animations/BackgroundGradient";
 import { TextCursor } from "../../animations/TextCrusor";
+import { Parallax } from "../../animations/Parallax";
 export default class Home extends Page {
   constructor() {
     super({
@@ -14,6 +15,10 @@ export default class Home extends Page {
     });
 
     new BackgroundGradient(this.elements.mainWrapper);
-    new TextCursor(this.elements.videoWrapper, "scroll ⚈ scroll ⚈ ");
+    const textCursor = new TextCursor(
+      this.elements.videoWrapper,
+      "scroll ⚈ scroll ⚈ "
+    );
+    new Parallax(this.elements.videoWrapper, this.smoothScroll.lenis);
   }
 }

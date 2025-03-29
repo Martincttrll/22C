@@ -3,21 +3,28 @@ export class TextCursor {
   constructor(element, text) {
     this.element = element;
     this.text = text;
+
+    this.cursor = null;
+
+    this.lerpFactor = 0.1;
+    this.currentX = 0;
+    this.currentY = 0;
+    this.cursorHasMoved = false;
     this.create();
   }
 
   create() {
-    const cursor = document.createElement("div");
-    cursor.classList.add("cursor__scroll");
+    this.cursor = document.createElement("div");
+    this.cursor.classList.add("cursor__scroll");
     const cursorText = document.createElement("div");
     cursorText.classList.add("cursor__scroll__text");
 
-    cursor.appendChild(cursorText);
-    this.element.appendChild(cursor);
+    this.cursor.appendChild(cursorText);
+    document.querySelector("body").appendChild(this.cursor);
 
     this.circleText(cursorText);
-    this.animate(cursor);
-    this.addEventListener(cursor);
+    this.animate();
+    this.addEventListener();
   }
 
   circleText(cursorText) {
@@ -31,18 +38,33 @@ export class TextCursor {
     }
   }
 
-  addEventListener(cursor) {
+  addEventListener() {
+    document.addEventListener(
+      "mousemove",
+      () => {
+        if (!this.cursorHasMoved) {
+          this.cursorHasMoved = true;
+          this.cursor.style.opacity = "1";
+        }
+      },
+      { once: true }
+    );
     this.element.addEventListener("mouseover", () => {
-      cursor.style.opacity = "1";
+      if (this.cursorHasMoved) {
+        this.cursor.style.opacity = "1";
+      }
     });
 
     this.element.addEventListener("mouseleave", () => {
-      cursor.style.opacity = "0";
+      this.cursor.style.opacity = "0";
     });
   }
 
-  animate(cursor) {
-    cursor.style.transform = `translate(${mouse.x}px, ${mouse.y}px)`;
-    requestAnimationFrame(() => this.animate(cursor));
+  animate() {
+    this.currentX += (mouse.x - this.currentX) * this.lerpFactor;
+    this.currentY += (mouse.y - this.currentY) * this.lerpFactor;
+
+    this.cursor.style.transform = `translate(${this.currentX}px, ${this.currentY}px)`;
+    requestAnimationFrame(() => this.animate());
   }
 }

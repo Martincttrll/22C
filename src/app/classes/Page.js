@@ -11,6 +11,7 @@ export default class Page extends EventEmitter {
     };
 
     this.isScrollable = isScrollable;
+    this.smoothScroll = null;
 
     this.create();
     if (this.isScrollable) {
@@ -43,6 +44,6 @@ export default class Page extends EventEmitter {
   }
 
   initSmoothScroll() {
-    new SmoothScroll(this.element, this.elements[0]);
+    this.smoothScroll = new SmoothScroll(this.element, this.elements[0]);
   }
 }
