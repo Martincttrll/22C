@@ -39,20 +39,20 @@ export class TextCursor {
   }
 
   addEventListener() {
-    document.addEventListener(
-      "mousemove",
-      () => {
-        if (!this.cursorHasMoved) {
-          this.cursorHasMoved = true;
-          this.cursor.style.opacity = "1";
-        }
-      },
-      { once: true }
-    );
+    // document.addEventListener(
+    //   "mousemove",
+    //   () => {
+    //     if (!this.cursorHasMoved) {
+    //       this.cursorHasMoved = true;
+    //       this.cursor.style.opacity = "1";
+    //     }
+    //   },
+    //   { once: true }
+    // );
     this.element.addEventListener("mouseover", () => {
-      if (this.cursorHasMoved) {
-        this.cursor.style.opacity = "1";
-      }
+      // if (this.cursorHasMoved) {
+      this.cursor.style.opacity = "1";
+      // }
     });
 
     this.element.addEventListener("mouseleave", () => {

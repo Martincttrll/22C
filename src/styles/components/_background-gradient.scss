@@ -6,7 +6,8 @@
   // filter: blur(50px);
   overflow: hidden;
   z-index: -1;
-  background: url("src/assets/img/noise-dark.png");
+  background: url("src/assets/img/noise-light.png");
+  opacity: 0.5;
 }
 
 .background__gradient__blob {

@@ -11,8 +11,7 @@ export class SmoothScroll {
     this.lenis = new Lenis({
       wrapper: this.wrapper,
       content: this.content,
-      lerp: 0.08,
-      autoRaf: true,
+      lerp: 0.07,
     });
   }
 }

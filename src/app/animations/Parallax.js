@@ -16,8 +16,16 @@ export class Parallax {
     this.lenis.on("scroll", (e) => {
       this.currentY +=
         (e.animatedScroll * this.lerpFactor - this.currentY) * 0.1;
+      const scrollProgress = Math.min(
+        1,
+        Math.max(
+          0,
+          this.currentY / (document.body.scrollHeight - window.innerHeight)
+        )
+      );
       each(this.elements, (element) => {
-        element.style.transform = `translateY(${this.currentY}px)`;
+        const scale = 1 + scrollProgress * 0.5;
+        element.style.transform = `translateY(${this.currentY}px) scale(${scale})`;
       });
     });
   }

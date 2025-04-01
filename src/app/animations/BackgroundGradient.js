@@ -15,17 +15,17 @@ export class BackgroundGradient {
     const gradientWrapper = document.createElement("div");
     gradientWrapper.classList.add("background__gradient__wrapper");
 
-    for (let i = 0; i < 4; i++) {
-      const blop = document.createElement("div");
-      blop.classList.add("background__gradient__blob", `blob__${i + 1}`);
-      blop.dataset.offsetX = "0";
-      blop.dataset.offsetY = "0";
-      gradientWrapper.appendChild(blop);
-    }
+    // for (let i = 0; i < 4; i++) {
+    //   const blop = document.createElement("div");
+    //   blop.classList.add("background__gradient__blob", `blob__${i + 1}`);
+    //   blop.dataset.offsetX = "0";
+    //   blop.dataset.offsetY = "0";
+    //   gradientWrapper.appendChild(blop);
+    // }
 
     this.element.appendChild(gradientWrapper);
     this.animate = this.animate.bind(this); // Assurer le bon `this`
-    window.addEventListener("mousemove", this.animate);
+    // window.addEventListener("mousemove", this.animate);
   }
 
   animate() {

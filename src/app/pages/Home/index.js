@@ -2,6 +2,9 @@ import Page from "../../classes/Page";
 import { BackgroundGradient } from "../../animations/BackgroundGradient";
 import { TextCursor } from "../../animations/TextCrusor";
 import { Parallax } from "../../animations/Parallax";
+import { HomeScene } from "../../three/scenes/HomeScene";
+import { Detection } from "../../classes/Detection";
+
 export default class Home extends Page {
   constructor() {
     super({
@@ -15,10 +18,12 @@ export default class Home extends Page {
     });
 
     new BackgroundGradient(this.elements.mainWrapper);
-    const textCursor = new TextCursor(
-      this.elements.videoWrapper,
-      "scroll ⚈ scroll ⚈ "
-    );
+
+    if (!Detection.isMobile) {
+      new TextCursor(this.elements.videoWrapper, "scroll ⚈ scroll ⚈ ");
+    }
+
     new Parallax(this.elements.videoWrapper, this.smoothScroll.lenis);
+    new HomeScene(this.smoothScroll.lenis);
   }
 }

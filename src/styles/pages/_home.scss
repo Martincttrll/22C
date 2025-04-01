@@ -3,6 +3,7 @@
 .home {
   @extend %page;
   overflow-x: hidden;
+  color: white;
 }
 
 .home p {
@@ -65,11 +66,29 @@
 }
 
 .home__main__wrapper {
-  background-color: white;
+  background-color: rgb(0, 0, 0);
   z-index: 0;
   padding-top: 15rem;
   position: relative;
 }
+.home__three__wrapper {
+  position: relative;
+  height: 50rem;
+}
+
+.home__three__label {
+  @extend %cover;
+  @extend %center;
+  width: 100%;
+  font-family: "wagon";
+  text-align: center;
+  z-index: -1;
+  font-size: 20vw;
+  // font-weight: 700;
+  text-transform: uppercase;
+  opacity: 0.04;
+}
+
 .home__who__wrapper {
   @extend %center;
   flex-direction: column;
