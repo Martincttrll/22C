@@ -1,0 +1,77 @@
+@use "../utils/" as *;
+
+nav.nav__wrapper {
+  position: sticky;
+  z-index: 4;
+  justify-content: space-between;
+  padding: 2rem;
+  display: none;
+}
+nav.nav__wrapper.active {
+  display: flex;
+}
+a.nav__logo {
+  color: $primary;
+  text-decoration: none;
+  font-family: "baunk";
+  font-size: 2rem;
+  mix-blend-mode: difference;
+  text-transform: uppercase;
+}
+
+.nav__menu__btn {
+  cursor: pointer;
+  position: relative;
+  width: 50px;
+  height: 10px;
+}
+.nav__menu__btn::before,
+.nav__menu__btn::after {
+  content: "";
+  position: absolute;
+  background-color: $primary;
+  height: 2px;
+  width: 100%;
+}
+.nav__menu__btn::before {
+  top: 0px;
+}
+.nav__menu__btn::after {
+  bottom: 0px;
+}
+
+.nav__menu__wrapper {
+  @extend %cover;
+  @extend %center;
+  height: 0;
+  z-index: 3;
+  flex-direction: column;
+  background-color: rgb(39, 39, 39);
+  transition: height 0.5s ease;
+}
+.nav__menu__link {
+  position: relative;
+  color: $primary;
+  text-decoration: none;
+  font-family: "baunk";
+  font-size: 5rem;
+  mix-blend-mode: difference;
+  text-transform: uppercase;
+  margin-bottom: 50px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  &::before {
+    content: "";
+    height: 6px;
+    width: 0;
+    position: absolute;
+    background-color: $primary;
+    left: -20px;
+    top: 40%;
+    transition: width 0.5s ease;
+  }
+  &:hover::before {
+    width: calc(100% + 40px);
+  }
+}

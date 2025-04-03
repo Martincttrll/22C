@@ -4,6 +4,27 @@
   @extend %page;
   overflow-x: hidden;
   color: white;
+  // position: relative;
+}
+
+.home__vertical__line {
+  background-color: rgba(0, 0, 0, 0.233);
+  width: 1px;
+  height: 100%;
+  position: absolute;
+  z-index: 1;
+  &:nth-child(1) {
+    left: 20%;
+  }
+  &:nth-child(2) {
+    left: 40%;
+  }
+  &:nth-child(3) {
+    left: 60%;
+  }
+  &:nth-child(4) {
+    left: 80%;
+  }
 }
 
 .home p {
@@ -11,36 +32,39 @@
 }
 
 .home h1 {
-  @extend %title-220;
-  font-family: "wagon";
+  @extend %title-200;
+  font-family: "baunk";
   font-weight: 700;
-  color: $radical-red;
+  color: $primary;
   position: absolute;
   z-index: 2;
-  bottom: 0rem;
-  right: 6rem;
+  transform: translate(-50%);
+  bottom: 0;
+  left: 50%;
+  text-transform: uppercase;
+  mix-blend-mode: difference;
 }
-.home h1 span {
-  font-weight: 200;
-  font-style: italic;
-}
+// .home h1 span {
+//   font-weight: 200;
+//   font-style: italic;
+// }
 
 .home h2 {
   @extend %title-96;
   position: relative;
-  font-family: "wagon";
+  font-family: "baunk";
   font-weight: 700;
-  color: $radical-red;
-}
+  color: $primary;
 
-.home h2::after {
-  content: "";
-  width: 16rem;
-  height: 0.4rem;
-  background-color: $radical-red;
-  position: absolute;
-  bottom: 0;
-  left: 12rem;
+  &::after {
+    content: "";
+    width: 16rem;
+    height: 0.4rem;
+    background-color: $primary;
+    position: absolute;
+    bottom: -10px;
+    left: 12rem;
+  }
 }
 
 .home__video__wrapper {
@@ -66,10 +90,18 @@
 }
 
 .home__main__wrapper {
-  background-color: rgb(0, 0, 0);
-  z-index: 0;
-  padding-top: 15rem;
   position: relative;
+  background-color: rgb(0, 0, 0);
+  padding-top: 15rem;
+  z-index: 0;
+  &::after {
+    content: "";
+    @extend %cover;
+    @extend %center;
+    z-index: -1;
+    background-image: url("src/assets/img/noise-light.png");
+    opacity: 0.5;
+  }
 }
 .home__three__wrapper {
   position: relative;
@@ -84,7 +116,6 @@
   text-align: center;
   z-index: -1;
   font-size: 20vw;
-  // font-weight: 700;
   text-transform: uppercase;
   opacity: 0.04;
 }

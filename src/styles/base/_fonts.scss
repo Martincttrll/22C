@@ -7,22 +7,22 @@
   font-display: swap;
   font-style: normal;
 }
-@font-face {
-  font-family: "wagon";
-  src: url("../fonts/Wagon-ExtraLight.woff2") format("woff2");
-  src: url("../fonts/Wagon-ExtraLight.woff") format("woff");
-  font-weight: 200;
-  font-display: swap;
-  font-style: normal;
-}
-@font-face {
-  font-family: "wagon";
-  src: url("../fonts/Wagon-ExtraLightItalic.woff2") format("woff2");
-  src: url("../fonts/Wagon-ExtraLightItalic.woff") format("woff");
-  font-weight: 200;
-  font-display: swap;
-  font-style: italic;
-}
+// @font-face {
+//   font-family: "wagon";
+//   src: url("../fonts/Wagon-ExtraLight.woff2") format("woff2");
+//   src: url("../fonts/Wagon-ExtraLight.woff") format("woff");
+//   font-weight: 200;
+//   font-display: swap;
+//   font-style: normal;
+// }
+// @font-face {
+//   font-family: "wagon";
+//   src: url("../fonts/Wagon-ExtraLightItalic.woff2") format("woff2");
+//   src: url("../fonts/Wagon-ExtraLightItalic.woff") format("woff");
+//   font-weight: 200;
+//   font-display: swap;
+//   font-style: italic;
+// }
 
 //Roboto
 @font-face {
@@ -57,3 +57,42 @@
   font-display: swap;
   font-style: normal;
 }
+
+//Baunk
+@font-face {
+  font-family: "baunk";
+  src: url("../fonts/Baunk.woff2") format("woff2");
+  src: url("../fonts/Baunk.woff") format("woff");
+  font-weight: 400;
+  font-display: swap;
+  font-style: normal;
+}
+
+//Humane
+// @font-face {
+//   font-family: "humane";
+//   src: url("../fonts/Humane-Regular.woff2") format("woff2");
+//   // src: url("../fonts/Baunk.woff") format("woff");
+//   font-weight: 400;
+//   font-display: swap;
+//   font-style: normal;
+// }
+//Galgo
+// @font-face {
+//   font-family: "galgo";
+//   src: url("../fonts/Galgo-Regular.woff2") format("woff2");
+//   // src: url("../fonts/Baunk.woff") format("woff");
+//   font-weight: 400;
+//   font-display: swap;
+//   font-style: normal;
+// }
+
+//Crenzo
+// @font-face {
+//   font-family: "crenzo";
+//   src: url("../fonts/CRENZO.woff2") format("woff2");
+//   // src: url("../fonts/CRENZO.woff") format("woff");
+//   font-weight: 400;
+//   font-display: swap;
+//   font-style: normal;
+// }

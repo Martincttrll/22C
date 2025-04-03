@@ -21,15 +21,15 @@ export class HomeScene {
 
     this.steps = [
       {
-        spotLight: new THREE.SpotLight(0xb8ffa3ff, 0),
+        spotLightColor: 0xb8ffa3ff,
         label: "sphinx",
       },
       {
-        spotLight: new THREE.SpotLight(0x35b7cc, 0),
+        spotLightColor: 0x35b7cc,
         label: "gabi",
       },
       {
-        spotLight: new THREE.SpotLight(0xcc332d, 0),
+        spotLightColor: 0xcc332d,
         label: "hatlas",
       },
     ];
@@ -53,14 +53,6 @@ export class HomeScene {
     this.directionalLight.target = model;
 
     const label = document.querySelector(".home__three__label");
-
-    this.steps.forEach((step) => {
-      step.spotLight.position.set(1, 2.5, 0);
-      step.spotLight.angle = 0.4;
-      step.spotLight.target = model;
-      this.app.scene.add(step.spotLight.target);
-      this.app.scene.add(step.spotLight);
-    });
 
     const spotLight = new THREE.SpotLight(0xb8ffa3ff, 3);
     spotLight.position.set(1, 2.5, 0);
@@ -89,7 +81,7 @@ export class HomeScene {
           start: `${index * 33}% top`,
           end: `${(index + 1) * 33}% top`,
           scrub: true,
-          markers: true, // Debug
+          // markers: true, // Debug
           onEnter: () => {
             document.querySelector(".home__three__label").innerText =
               step.label;

@@ -11,3 +11,8 @@
   display: flex;
   justify-content: center;
 }
+
+%content-padding {
+  padding-left: calc(100vw / 12);
+  padding-right: calc(100vw / 12);
+}

@@ -18,10 +18,7 @@ export class Parallax {
         (e.animatedScroll * this.lerpFactor - this.currentY) * 0.1;
       const scrollProgress = Math.min(
         1,
-        Math.max(
-          0,
-          this.currentY / (document.body.scrollHeight - window.innerHeight)
-        )
+        Math.max(0, this.currentY / window.innerHeight)
       );
       each(this.elements, (element) => {
         const scale = 1 + scrollProgress * 0.5;

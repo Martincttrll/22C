@@ -13,10 +13,3 @@ body {
   @extend %cover;
   font-family: "robotoMono";
 }
-
-cursor {
-  background-color: black;
-  mix-blend-mode: difference;
-  width: 20px;
-  height: 20px;
-}
