@@ -9,7 +9,7 @@
 
 .home__vertical__line {
   background-color: rgba(0, 0, 0, 0.233);
-  width: 1px;
+  width: 2px;
   height: 100%;
   position: absolute;
   z-index: 1;
@@ -38,16 +38,16 @@
   color: $primary;
   position: absolute;
   z-index: 2;
-  transform: translate(-50%);
   bottom: 0;
-  left: 50%;
+  left: 0;
   text-transform: uppercase;
   mix-blend-mode: difference;
+  transform-origin: left bottom;
 }
-// .home h1 span {
-//   font-weight: 200;
-//   font-style: italic;
-// }
+
+.home h1.hidden {
+  display: none;
+}
 
 .home h2 {
   @extend %title-96;

@@ -1,11 +1,9 @@
 import "../styles/style.scss";
-import "lenis/dist/lenis.css";
 import Home from "./pages/Home";
 
 class App {
   constructor() {
-    console.log("App running");
-
+    console.log("©2025 - 22Carbone by MartinCtrl");
     this.createPages();
   }
 

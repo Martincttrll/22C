@@ -44,6 +44,9 @@ export default class Page extends EventEmitter {
   }
 
   initSmoothScroll() {
-    this.smoothScroll = new SmoothScroll(this.element, this.elements[0]);
+    this.smoothScroll = new SmoothScroll(
+      this.element,
+      this.elements["wrapper"]
+    );
   }
 }

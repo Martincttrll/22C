@@ -8,12 +8,6 @@ gsap.registerPlugin(ScrollTrigger);
 
 export class HomeScene {
   constructor(lenis) {
-    this.lenis = lenis;
-
-    this.lenis.on("scroll", () => {
-      ScrollTrigger.update();
-    });
-
     gsap.ticker.add((time) => {
       this.lenis.raf(time * 1000);
     });
