@@ -15,7 +15,7 @@ export default class Page extends EventEmitter {
 
     this.create();
     if (this.isScrollable) {
-      this.initSmoothScroll();
+      this.smoothScroll = new SmoothScroll(this.element, this.elements.wrapper);
     }
   }
 
@@ -41,12 +41,5 @@ export default class Page extends EventEmitter {
         }
       }
     });
-  }
-
-  initSmoothScroll() {
-    this.smoothScroll = new SmoothScroll(
-      this.element,
-      this.elements["wrapper"]
-    );
   }
 }

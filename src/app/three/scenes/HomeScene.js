@@ -7,24 +7,24 @@ import ScrollTrigger from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 export class HomeScene {
-  constructor(lenis) {
-    gsap.ticker.add((time) => {
-      this.lenis.raf(time * 1000);
-    });
-    gsap.ticker.lagSmoothing(0);
-
+  constructor(selector) {
+    this.selector = selector;
+    this.models = [];
     this.steps = [
       {
-        spotLightColor: 0xb8ffa3ff,
+        color: 0xb8ffa3,
         label: "sphinx",
+        modelPath: "src/assets/models/caracter/caracter.gltf",
       },
       {
-        spotLightColor: 0x35b7cc,
+        color: 0x35b7cc,
         label: "gabi",
+        modelPath: "src/assets/models/caracter/caracter.gltf",
       },
       {
-        spotLightColor: 0xcc332d,
+        color: 0xcc332d,
         label: "hatlas",
+        modelPath: "src/assets/models/caracter/caracter.gltf",
       },
     ];
 
@@ -33,55 +33,111 @@ export class HomeScene {
   }
 
   async create() {
-    this.app = new App(".home__three__wrapper", false);
+    this.app = new App(this.selector, false);
+
+    //Lights
+    this.spotLight = new THREE.SpotLight(this.steps[0].color, 3);
+    this.spotLight.position.set(0.8, 2.5, 0);
+    this.spotLight.angle = 0.3;
+    this.spotLight.penumbra = 0.2;
+    this.app.scene.add(this.spotLight);
+
+    const spotLightHelper = new THREE.SpotLightHelper(this.spotLight);
+    // this.app.scene.add(spotLightHelper);
+
+    this.directionalLight = new THREE.DirectionalLight(0xffffff, 0.2);
+    // this.app.scene.add(this.directionalLight);
+
+    //Models
+    this.modelGroup = new THREE.Group();
+    this.app.scene.add(this.modelGroup);
 
     const modelLoader = new ModelLoader();
-    const model = await modelLoader.load(
-      "src/assets/models/caracter/caracter.gltf"
+    this.modelPromises = this.steps.map((step, i) =>
+      modelLoader.load(step.modelPath).then((model) => {
+        model.position.x = i * 2;
+        step.model = model;
+        this.modelGroup.add(model);
+      })
     );
 
-    this.app.add(model);
-
-    this.directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-    this.app.scene.add(this.directionalLight);
-    this.directionalLight.target = model;
-
-    const label = document.querySelector(".home__three__label");
-
-    const spotLight = new THREE.SpotLight(0xb8ffa3ff, 3);
-    spotLight.position.set(1, 2.5, 0);
-    spotLight.angle = 0.4;
-    spotLight.target = model;
-    this.app.scene.add(spotLight);
-    // const helper = new THREE.SpotLightHelper(spotLight);
-    // this.app.scene.add(helper);
-
+    this.label = document.querySelector(".home__three__label");
+    this.label.innerText = this.steps[0].label;
+    // Camera
     this.app.camera.instance.position.z = 1;
     this.app.camera.instance.position.y = 0.58;
-
+    // Animation boucle (rotation des modèles)
     this.app.addUpdate(() => {
-      if (model) {
-        model.rotation.y += 0.01;
-      }
+      this.steps.forEach((step) => {
+        if (step.model) step.model.rotation.y += 0.01;
+      });
     });
   }
 
   setupScrollAnimation() {
-    this.steps.forEach((step, index) => {
-      gsap.to(step.spotLight, {
-        intensity: 2, // Augmente progressivement
+    Promise.all(this.modelPromises).then(() => {
+      const scrollDuration = this.steps.length * 1000;
+
+      // Crée une timeline pin scroll
+      const tl = gsap.timeline({
         scrollTrigger: {
-          trigger: ".home__three__wrapper",
-          start: `${index * 33}% top`,
-          end: `${(index + 1) * 33}% top`,
+          trigger: document.querySelector(this.selector),
+          start: "top center-=200px",
+          end: `+=${scrollDuration}`,
           scrub: true,
-          // markers: true, // Debug
-          onEnter: () => {
-            document.querySelector(".home__three__label").innerText =
-              step.label;
+          pin: true,
+          // markers: true,
+          onUpdate: (self) => {
+            // Met à jour le label et la couleur pendant le scroll
+            const stepIndex = Math.round(
+              self.progress * (this.steps.length - 1)
+            );
+            const step = this.steps[stepIndex];
+
+            // Mise à jour dynamique du label et de la couleur
+            this.label.innerText = step.label;
+            this.updateLightColor(step.color);
           },
         },
       });
+
+      this.steps.forEach((step, index) => {
+        const targetX = -index * 2;
+
+        tl.to(this.modelGroup.position, {
+          x: targetX,
+          duration: 1,
+          onStart: () => {
+            this.label.innerText = step.label;
+            this.updateLightColor(step.color);
+          },
+        });
+
+        ScrollTrigger.create({
+          trigger: document.querySelector(this.selector),
+          start: `top+=${index * 1000} center`,
+          end: `top+=${(index + 1) * 1000} center`,
+          scrub: true,
+          onLeaveBack: () => {
+            const prevStep = this.steps[index - 1] || this.steps[0];
+            this.label.innerText = prevStep.label;
+            this.updateLightColor(prevStep.color);
+          },
+        });
+      });
+    });
+  }
+
+  // Fonction pour changer la couleur du spot
+  updateLightColor(hexColor) {
+    const r = ((hexColor >> 16) & 255) / 255;
+    const g = ((hexColor >> 8) & 255) / 255;
+    const b = (hexColor & 255) / 255;
+    gsap.to(this.spotLight.color, {
+      r,
+      g,
+      b,
+      duration: 0.5,
     });
   }
 }

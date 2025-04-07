@@ -23,12 +23,12 @@ export default class Home extends Page {
     }
 
     new Navigation(this.smoothScroll.lenis);
-    new HeadingShrink(
-      this.smoothScroll.lenis,
-      this.elements.h1,
-      this.elements.logoNav
-    );
+    // new HeadingShrink(
+    //   this.smoothScroll.lenis,
+    //   this.elements.h1,
+    //   this.elements.logoNav
+    // );
     new Parallax(this.elements.videoWrapper, this.smoothScroll.lenis);
-    new HomeScene(this.smoothScroll.lenis);
+    new HomeScene(".home__three__wrapper");
   }
 }

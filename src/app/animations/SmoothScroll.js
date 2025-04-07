@@ -11,6 +11,7 @@ export class SmoothScroll {
     this.lenis = null;
     this.progress = 0;
     this.create();
+    this.initScrollTriggerProxy(this.lenis);
   }
 
   create() {
@@ -21,18 +22,42 @@ export class SmoothScroll {
       autoRaf: false,
     });
 
-    this.initScrollTriggerProxy(this.lenis);
-
-    const raf = (time) => {
-      this.lenis.raf(time);
-      ScrollTrigger.update();
-      requestAnimationFrame(raf);
-    };
-
-    requestAnimationFrame(raf);
-
     this.lenis.on("scroll", () => {
       this.updateScrollProgress();
+    });
+
+    gsap.ticker.add((time) => {
+      ScrollTrigger.update();
+      this.lenis.raf(time * 1000);
+    });
+    gsap.ticker.lagSmoothing(0);
+  }
+
+  initScrollTriggerProxy(lenis) {
+    const scroller = this.wrapper;
+
+    ScrollTrigger.scrollerProxy(scroller, {
+      scrollTop(value) {
+        if (arguments.length) {
+          lenis.scrollTo(value);
+        } else {
+          return lenis.scroll;
+        }
+      },
+      getBoundingClientRect() {
+        return {
+          top: 0,
+          left: 0,
+          width: window.innerWidth,
+          height: window.innerHeight,
+        };
+      },
+      pinType:
+        getComputedStyle(scroller).transform !== "none" ? "transform" : "fixed",
+    });
+
+    ScrollTrigger.defaults({
+      scroller: scroller,
     });
   }
 
@@ -41,33 +66,5 @@ export class SmoothScroll {
     const maxScroll = this.lenis.limit;
 
     this.progress = maxScroll === 0 ? 0 : (scroll / maxScroll) * 100;
-  }
-
-  initScrollTriggerProxy(lenis) {
-    ScrollTrigger.scrollerProxy(document.body, {
-      scrollTop(value) {
-        // setter : ScrollTrigger veut scrollTo()
-        if (arguments.length) {
-          lenis.scrollTo(value);
-        } else {
-          // getter : ScrollTrigger demande "on est scrollé à combien ?"
-          return lenis.scroll;
-        }
-      },
-      getBoundingClientRect() {
-        // dit à ScrollTrigger la taille de la fenêtre visible
-        return {
-          top: 0,
-          left: 0,
-          width: window.innerWidth,
-          height: window.innerHeight,
-        };
-      },
-      pinType: document.body.style.transform ? "transform" : "fixed",
-    });
-
-    ScrollTrigger.defaults({
-      scroller: document.body,
-    });
   }
 }

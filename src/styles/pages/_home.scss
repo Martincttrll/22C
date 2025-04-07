@@ -71,6 +71,7 @@
   @extend %center;
   width: 100vw;
   height: 100dvh;
+  overflow-x: hidden;
   background: black;
 }
 .home__video__filter {
@@ -87,6 +88,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  will-change: transform;
 }
 
 .home__main__wrapper {
@@ -116,6 +118,7 @@
   text-align: center;
   z-index: -1;
   font-size: 20vw;
+  font-weight: 200;
   text-transform: uppercase;
   opacity: 0.04;
 }

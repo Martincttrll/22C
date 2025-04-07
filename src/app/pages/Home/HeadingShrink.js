@@ -24,25 +24,23 @@ export class HeadingShrink {
 
     ScrollTrigger.create({
       trigger: this.startEl,
-      start: "top top+=20px", // Quand le haut de l'élément atteint 2rem du haut du viewport
+      start: "top top+=20px",
       onEnter: () => {
         this.startEl.classList.add("hidden");
       },
-      //   markers: true,
-      // Optionnel : tu peux retirer la classe quand on remonte
+      markers: true,
       onLeaveBack: () => {
         this.startEl.classList.remove("hidden");
       },
     });
 
-    // Animate position + scale
     gsap.to(this.startEl, {
       scale: scaleRatio,
       x: "2rem",
       ease: "power2.out",
       scrollTrigger: {
         trigger: this.startEl,
-        start: "bottom+=300 bottom",
+        start: "bottom bottom",
         end: `bottom top`,
         scrub: true,
       },
