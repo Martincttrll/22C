@@ -1,7 +1,7 @@
 import Page from "../../classes/Page";
 import { TextCursor } from "../../animations/TextCrusor";
 import { Parallax } from "../../animations/Parallax";
-import { HomeScene } from "../../three/scenes/HomeScene";
+import { MembersScene } from "./MembersScene";
 import { Detection } from "../../classes/Detection";
 import { Navigation } from "../../components/Navigation";
 import { HeadingShrink } from "./HeadingShrink";
@@ -17,18 +17,19 @@ export default class Home extends Page {
         logoNav: document.querySelector(".nav__logo"),
       },
     });
-
+  }
+  create() {
+    super.create();
     if (!Detection.isMobile) {
       new TextCursor(this.elements.videoWrapper, "scroll ⚈ scroll ⚈ ");
     }
 
-    new Navigation(this.smoothScroll.lenis);
     // new HeadingShrink(
     //   this.smoothScroll.lenis,
     //   this.elements.h1,
     //   this.elements.logoNav
     // );
     new Parallax(this.elements.videoWrapper, this.smoothScroll.lenis);
-    new HomeScene(".home__three__wrapper");
+    new MembersScene(".home__three__wrapper");
   }
 }

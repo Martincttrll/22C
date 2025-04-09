@@ -6,7 +6,7 @@ html(lang='fr')
         base(href="/")
         title 22Carbone
 
-        meta(name="description" content="Florian Jauze, Autheur, Dessinateur, Réalisateur.")
+        meta(name="description" content="22Carbone est un groupe originaire de Marseille composé d'un rappeur, Gabi et dedeux producteurs, Hatlas et Sphinx. Le groupe a été fondé en fin 2022.")
 
         link(rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96")
         link(rel="icon" type="image/svg+xml" href="/favicon.svg")
@@ -17,7 +17,8 @@ html(lang='fr')
 
     body
         include ../_includes/navigation.pug
-        block content
+        .content(data-template=template)
+            block content
 
 
         script(type="module", src="/src/app/index.js")

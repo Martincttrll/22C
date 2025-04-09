@@ -43,11 +43,12 @@ a.nav__logo {
 .nav__menu__wrapper {
   @extend %cover;
   @extend %center;
-  height: 0;
   z-index: 3;
+  backdrop-filter: blur(10px);
+  display: none;
+  background-color: rgba(0, 0, 0, 0.6);
   flex-direction: column;
-  background-color: rgb(39, 39, 39);
-  transition: height 0.5s ease;
+  opacity: 0;
 }
 .nav__menu__link {
   position: relative;
@@ -60,7 +61,6 @@ a.nav__logo {
   margin-bottom: 50px;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.5s ease;
   &::before {
     content: "";
     height: 6px;
@@ -71,7 +71,8 @@ a.nav__logo {
     top: 40%;
     transition: width 0.5s ease;
   }
-  &:hover::before {
+  &:hover::before,
+  &.current::before {
     width: calc(100% + 40px);
   }
 }

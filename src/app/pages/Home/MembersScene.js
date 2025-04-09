@@ -1,12 +1,12 @@
-import { App } from "../core/App";
+import { App } from "../../three/core/App";
 import * as THREE from "three";
-import { ModelLoader } from "../core/ModelLoader";
+import { ModelLoader } from "../../three/core/ModelLoader";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export class HomeScene {
+export class MembersScene {
   constructor(selector) {
     this.selector = selector;
     this.models = [];

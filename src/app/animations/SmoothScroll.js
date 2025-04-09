@@ -24,10 +24,10 @@ export class SmoothScroll {
 
     this.lenis.on("scroll", () => {
       this.updateScrollProgress();
+      ScrollTrigger.update();
     });
 
     gsap.ticker.add((time) => {
-      ScrollTrigger.update();
       this.lenis.raf(time * 1000);
     });
     gsap.ticker.lagSmoothing(0);

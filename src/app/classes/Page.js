@@ -12,11 +12,6 @@ export default class Page extends EventEmitter {
 
     this.isScrollable = isScrollable;
     this.smoothScroll = null;
-
-    this.create();
-    if (this.isScrollable) {
-      this.smoothScroll = new SmoothScroll(this.element, this.elements.wrapper);
-    }
   }
 
   create() {
@@ -41,5 +36,28 @@ export default class Page extends EventEmitter {
         }
       }
     });
+
+    if (this.isScrollable) {
+      this.smoothScroll = new SmoothScroll(this.element, this.elements.wrapper);
+    }
   }
+
+  show(_url) {
+    this.isVisible = true;
+
+    this.addEventListeners();
+
+    return Promise.resolve();
+  }
+
+  hide(_url) {
+    this.isVisible = false;
+
+    this.removeEventListeners();
+
+    return Promise.resolve();
+  }
+
+  addEventListeners() {}
+  removeEventListeners() {}
 }
