@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import { Navigation } from "./components/Navigation";
 import { Discography } from "./pages/Discography";
 import { each } from "lodash";
+import { Preloader } from "./components/Preloader";
 
 class App {
   constructor() {
@@ -24,7 +25,9 @@ class App {
     this.navigation = new Navigation(this.template);
   }
 
-  createPreloader() {}
+  createPreloader() {
+    this.preloader = new Preloader();
+  }
 
   createPages() {
     this.pages = {

@@ -1,0 +1,43 @@
+@use "../utils" as *;
+.preloader {
+  @extend %cover;
+  @extend %center;
+  overflow-x: hidden;
+  background: black;
+  color: white;
+  font-size: 4rem;
+  overflow: hidden;
+  z-index: 99999;
+}
+
+.preloader__barcode__wrapper {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: flex-end;
+  justify-content: end;
+}
+.preloader__bar {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 85%;
+  align-items: center;
+  //   position: relative;
+}
+.preloader__bar__line {
+  background-color: white;
+  position: relative;
+  height: 100%;
+}
+.preloader__bar__percent,
+.preloader__bar__text {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  left: 50%;
+  bottom: -7rem;
+}
+.preloader__number {
+}
+.preloader__number__text {
+}
