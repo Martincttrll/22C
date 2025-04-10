@@ -4,7 +4,6 @@ import { Navigation } from "./components/Navigation";
 import { Discography } from "./pages/Discography";
 import { each } from "lodash";
 import { Preloader } from "./components/Preloader";
-
 class App {
   constructor() {
     console.log("©2025 - 22Carbone by MartinCtrl");

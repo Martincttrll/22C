@@ -3,8 +3,7 @@ import { TextCursor } from "../../animations/TextCrusor";
 import { Parallax } from "../../animations/Parallax";
 import { MembersScene } from "./MembersScene";
 import { Detection } from "../../classes/Detection";
-import { Navigation } from "../../components/Navigation";
-import { HeadingShrink } from "./HeadingShrink";
+
 export default class Home extends Page {
   constructor() {
     super({

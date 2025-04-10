@@ -93,13 +93,13 @@ export class Preloader extends Component {
     lastBars.forEach((barObj, i) => {
       const { bar } = barObj;
       const label = document.createElement("div");
-      if ((i = 0)) {
+      if (i === 0) {
         label.classList.add("preloader__bar__percent", "unit");
         this.percentageUnit = label;
-      } else if ((i = 1)) {
+      } else if (i === 1) {
         label.classList.add("preloader__bar__percent", "ten");
         this.percentageTen = label;
-      } else if ((i = 2)) {
+      } else if (i === 2) {
         label.classList.add("preloader__bar__percent", "hundred");
         this.percentageHundred = label;
       }
@@ -164,9 +164,19 @@ export class Preloader extends Component {
   }
   loadAssets() {
     return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve();
-      }, 2000);
+      const totalSteps = 100;
+      let current = 0;
+
+      const interval = setInterval(() => {
+        current++;
+
+        this.updateCounter(current);
+
+        if (current >= totalSteps) {
+          clearInterval(interval);
+          resolve();
+        }
+      }, 20);
     });
   }
   onLoaded() {
@@ -209,7 +219,13 @@ export class Preloader extends Component {
       });
     });
   }
+  updateCounter(value) {
+    const padded = value.toString().padStart(3, "0");
 
+    if (this.percentageHundred) this.percentageHundred.innerText = padded[0];
+    if (this.percentageTen) this.percentageTen.innerText = padded[1];
+    if (this.percentageUnit) this.percentageUnit.innerText = padded[2];
+  }
   destroy() {
     this.element.parentNode.removeChild(this.element);
   }
