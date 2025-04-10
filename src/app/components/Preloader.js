@@ -1,16 +1,33 @@
 import gsap from "gsap";
+import Component from "../classes/Component";
 
-export class Preloader {
+export class Preloader extends Component {
   constructor() {
-    this.container = document.querySelector(".preloader__barcode__wrapper");
+    super({
+      element: ".preloader",
+      elements: {
+        container: ".preloader__barcode__wrapper",
+      },
+    });
     this.totalBars = 26;
     this.keyword = "22CARBONE";
     this.bars = [];
+    this.minDisplayTime = 1000;
+    this.entryStartTime = performance.now();
 
-    this.create();
+    this.createLoader();
+
+    this.loadAssets().then(() => {
+      const elapsed = performance.now() - this.entryStartTime;
+      const delay = Math.max(0, this.minDisplayTime - elapsed);
+
+      setTimeout(() => {
+        this.onLoaded();
+      }, delay);
+    });
   }
 
-  create() {
+  createLoader() {
     this.generateBars();
     this.displayPercentageLabels();
     this.addKeywordToBars();
@@ -19,8 +36,8 @@ export class Preloader {
 
   generateBars() {
     const windowWidth = window.innerWidth;
-    const minWidth = windowWidth * 0.0005; // 0.5%
-    const maxWidth = windowWidth * 0.025; // 2%
+    const minWidth = windowWidth * 0.0005;
+    const maxWidth = windowWidth * 0.025;
     const minSpacing = 10;
 
     const usedZones = [];
@@ -56,7 +73,7 @@ export class Preloader {
       bar.style.top = "0";
 
       bar.appendChild(line);
-      this.container.appendChild(bar);
+      this.elements.container.appendChild(bar);
 
       this.bars.push({ bar, line });
       usedZones.push({ x, width });
@@ -87,9 +104,11 @@ export class Preloader {
         this.percentageHundred = label;
       }
       label.innerText = "0";
-      console.log(bar);
       const line = bar.querySelector(".preloader__bar__line");
-      line.appendChild(label);
+      const lineRect = line.getBoundingClientRect();
+      label.style.bottom = lineRect.bottom;
+      label.style.left = lineRect.left;
+      bar.appendChild(label);
     });
   }
   addKeywordToBars() {
@@ -127,13 +146,6 @@ export class Preloader {
   }
 
   animatePreloader() {
-    this.bars.forEach((barObj) => {
-      const { bar } = barObj;
-      const line = bar.querySelector(".preloader__bar__line");
-
-      gsap.set(line, { opacity: 0, filter: "blur(10px)" });
-    });
-
     const randomBars = [...this.bars];
     gsap.utils.shuffle(randomBars);
 
@@ -149,32 +161,56 @@ export class Preloader {
         ease: "power2.out",
       });
     });
+  }
+  loadAssets() {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve();
+      }, 2000);
+    });
+  }
+  onLoaded() {
+    return new Promise((resolve) => {
+      this.emit("completed");
 
-    this.animatePercentageLabels();
+      this.animateOut = gsap.timeline({
+        delay: 0.5,
+        onComplete: () => {
+          this.destroy();
+          resolve();
+        },
+      });
+
+      this.animateOut.to(document.querySelectorAll(".preloader__bar__line"), {
+        width: 0,
+        duration: 1,
+        ease: "power2.inOut",
+        stagger: 0.01,
+      });
+
+      this.animateOut.to(
+        [
+          ...document.querySelectorAll(".preloader__bar__text"),
+          ...document.querySelectorAll(".preloader__bar__percent"),
+        ],
+        {
+          y: "100%",
+          autoAlpha: 0,
+          duration: 1,
+          ease: "power2.inOut",
+        },
+        "-=0.8"
+      );
+
+      this.animateOut.to(this.element, {
+        height: 0,
+        duration: 0.5,
+        ease: "power2.inOut",
+      });
+    });
   }
 
-  animatePercentageLabels() {
-    const duration = 5;
-
-    gsap.to(this.percentageUnit, {
-      innerText: 9,
-      duration: duration,
-      ease: "none",
-      snap: { innerText: 1 },
-    });
-
-    gsap.to(this.percentageTen, {
-      innerText: 9,
-      duration: duration,
-      ease: "none",
-      snap: { innerText: 10 },
-    });
-
-    gsap.to(this.percentageHundred, {
-      innerText: 1,
-      duration: duration,
-      ease: "none",
-      snap: { innerText: 100 },
-    });
+  destroy() {
+    this.element.parentNode.removeChild(this.element);
   }
 }

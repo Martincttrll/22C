@@ -27,6 +27,8 @@ class App {
 
   createPreloader() {
     this.preloader = new Preloader();
+
+    this.preloader.once("completed", this.onPreloaded.bind(this));
   }
 
   createPages() {
@@ -37,6 +39,18 @@ class App {
 
     this.page = this.pages[this.template];
     this.page.create();
+  }
+
+  /*
+   * Events
+   */
+
+  onPreloaded() {
+    // this.onResize();
+
+    // this.canvas.onPreloaded();
+
+    this.page.show();
   }
 
   onPopState() {
@@ -86,6 +100,11 @@ class App {
     }
   }
 
+  onContextMenu(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    return false;
+  }
   addLinkListeners() {
     const links = document.querySelectorAll("a");
 
@@ -100,11 +119,6 @@ class App {
   }
 
   //Disable rightclick
-  onContextMenu(event) {
-    event.preventDefault();
-    event.stopPropagation();
-    return false;
-  }
 
   addEventListeners() {
     window.addEventListener("popstate", this.onPopState, { passive: true });
