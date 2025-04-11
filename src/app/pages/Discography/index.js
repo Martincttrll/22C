@@ -1,6 +1,4 @@
 import Page from "../../classes/Page";
-import { Navigation } from "../../components/Navigation";
-
 export class Discography extends Page {
   constructor() {
     super({
@@ -14,5 +12,18 @@ export class Discography extends Page {
 
   create() {
     super.create();
+    this.fetchDiscographyData();
+  }
+
+  async fetchDiscographyData() {
+    const data = await fetch("albums.json");
+    if (data.ok) {
+      console.log(data);
+      const response = data.response;
+      this.albums = response.json();
+      console.log(this.albums);
+    } else {
+      console.error("Error during albums fetching.");
+    }
   }
 }

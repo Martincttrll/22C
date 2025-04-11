@@ -1,6 +1,5 @@
 import gsap from "gsap";
 import Component from "../classes/Component";
-
 export class Preloader extends Component {
   constructor() {
     super({
@@ -20,7 +19,6 @@ export class Preloader extends Component {
     this.loadAssets().then(() => {
       const elapsed = performance.now() - this.entryStartTime;
       const delay = Math.max(0, this.minDisplayTime - elapsed);
-
       setTimeout(() => {
         this.onLoaded();
       }, delay);

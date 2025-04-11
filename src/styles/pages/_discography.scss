@@ -1,0 +1,18 @@
+@use "../shared" as *;
+@use "../utils" as *;
+.discography {
+  @extend %page;
+  overflow-x: hidden;
+  color: white;
+}
+.discography__wrapper {
+  @extend %center;
+  width: 100vw;
+  height: 100dvh;
+  overflow-x: hidden;
+  background: black;
+}
+canvas.discography__album_cover {
+}
+.discography__albums__wrapper {
+}
