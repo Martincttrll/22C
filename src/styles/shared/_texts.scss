@@ -8,8 +8,8 @@
 }
 %text-16 {
   font-size: 1.6rem;
-  @include media("<phone") {
-    font-size: 3rem;
+  @include media("<tablet") {
+    font-size: 6rem;
   }
 }
 %text-18 {
