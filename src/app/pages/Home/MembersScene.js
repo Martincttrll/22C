@@ -6,6 +6,7 @@ import ScrollTrigger from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
+const SCROLL_DURATION = 800;
 export class MembersScene {
   constructor(selector) {
     this.selector = selector;
@@ -66,7 +67,6 @@ export class MembersScene {
     // Camera
     this.app.camera.instance.position.z = 1;
     this.app.camera.instance.position.y = 0.58;
-    // Animation boucle (rotation des modèles)
     this.app.addUpdate(() => {
       this.steps.forEach((step) => {
         if (step.model) step.model.rotation.y += 0.01;
@@ -76,9 +76,8 @@ export class MembersScene {
 
   setupScrollAnimation() {
     Promise.all(this.modelPromises).then(() => {
-      const scrollDuration = this.steps.length * 1000;
+      const scrollDuration = this.steps.length * SCROLL_DURATION;
 
-      // Crée une timeline pin scroll
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: document.querySelector(this.selector),
@@ -86,15 +85,12 @@ export class MembersScene {
           end: `+=${scrollDuration}`,
           scrub: true,
           pin: true,
-          // markers: true,
           onUpdate: (self) => {
-            // Met à jour le label et la couleur pendant le scroll
             const stepIndex = Math.round(
               self.progress * (this.steps.length - 1)
             );
             const step = this.steps[stepIndex];
 
-            // Mise à jour dynamique du label et de la couleur
             this.label.innerText = step.label;
             this.updateLightColor(step.color);
           },
@@ -115,8 +111,8 @@ export class MembersScene {
 
         ScrollTrigger.create({
           trigger: document.querySelector(this.selector),
-          start: `top+=${index * 1000} center`,
-          end: `top+=${(index + 1) * 1000} center`,
+          start: `top+=${index * SCROLL_DURATION} center`,
+          end: `top+=${(index + 1) * SCROLL_DURATION} center`,
           scrub: true,
           onLeaveBack: () => {
             const prevStep = this.steps[index - 1] || this.steps[0];

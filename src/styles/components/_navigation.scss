@@ -17,6 +17,9 @@ a.nav__logo {
   font-size: 2rem;
   mix-blend-mode: difference;
   text-transform: uppercase;
+  @include media("<tablet") {
+    font-size: 8rem;
+  }
 }
 
 .nav__menu__btn {
@@ -63,7 +66,7 @@ a.nav__logo {
   opacity: 0;
   &::before {
     content: "";
-    height: 6px;
+    height: 0.8rem;
     width: 0;
     position: absolute;
     background-color: $primary;

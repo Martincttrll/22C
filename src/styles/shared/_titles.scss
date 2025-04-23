@@ -8,6 +8,9 @@
 }
 %title-50 {
   font-size: 5rem;
+  @include media("<tablet") {
+    font-size: 16rem;
+  }
 }
 
 %title-96 {

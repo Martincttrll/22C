@@ -154,8 +154,8 @@ p.home__who__p {
 .home__news__item {
   display: grid;
   width: 100%;
-  grid-template-columns: 2fr 1fr 1fr;
-  gap: 1rem;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
   @include media("<tablet") {
     display: flex;
     flex-direction: column-reverse;
@@ -164,13 +164,29 @@ p.home__who__p {
   }
 }
 
+.home__news__info__wrapper {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  @include media("<tablet") {
+    display: block;
+  }
+}
+
 .home__news__item__label {
   @extend %title-30;
   font-weight: 700;
   max-width: 80%;
+  @include media("<tablet") {
+    max-width: 100%;
+    margin-bottom: 4rem;
+  }
 }
 .home__news__item__date {
   font-size: 1.5rem;
+  @include media("<tablet") {
+    margin-top: 4rem;
+    font-size: 6rem;
+  }
 }
 .home__news__item__text {
   line-height: 20px;

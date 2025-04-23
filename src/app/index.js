@@ -8,7 +8,7 @@ class App {
   constructor() {
     console.log("©2025 - 22Carbone by MartinCtrl");
     this.createContent();
-    this.createPreloader();
+    // this.createPreloader();
     this.createNavigation();
     this.createPages();
     this.addEventListeners();
@@ -117,11 +117,9 @@ class App {
     });
   }
 
-  //Disable rightclick
-
   addEventListeners() {
     window.addEventListener("popstate", this.onPopState, { passive: true });
-    window.oncontextmenu = this.onContextMenu;
+    // window.oncontextmenu = this.onContextMenu; Disable right click
   }
 }
 
