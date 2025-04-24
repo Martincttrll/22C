@@ -1,7 +1,4 @@
-import fetch from "node-fetch";
-import fs from "fs";
-import dotenv from "dotenv";
-dotenv.config();
+require("dotenv").config();
 
 const clientId = process.env.SPOTIFY_ID;
 const clientSecret = process.env.SPOTIFY_SECRET;
@@ -60,7 +57,7 @@ function isDurationClose(d1, d2, toleranceMs = 2000) {
   return Math.abs(d1 - d2) <= toleranceMs;
 }
 
-async function fetchAlbums() {
+module.exports = async function () {
   const artistId = process.env.ARTIST_ID;
   const token = await getToken();
   const albums = await getAlbums(artistId, token);
@@ -68,6 +65,12 @@ async function fetchAlbums() {
 
   for (const album of albums) {
     const tracks = await getTracks(album.id, token);
+
+    // Vérifiez que `tracks` est défini et contient des éléments
+    if (!tracks || tracks.length === 0) {
+      console.warn(`No tracks found for album: ${album.name}`);
+      continue;
+    }
 
     const filteredTracks = tracks.filter((track) =>
       track.artists.some((artist) => artist.id === artistId)
@@ -78,15 +81,15 @@ async function fetchAlbums() {
         id: album.id,
         name: album.name,
         release_date: album.release_date,
-        cover: album.images[0]?.url,
-        spotify_url: album.external_urls.spotify,
+        cover: album.images?.[0]?.url || null,
+        spotify_url: album.external_urls?.spotify || null,
         tracks: filteredTracks.map((track) => ({
           name: track.name,
           duration_ms: track.duration_ms,
           featuring: track.artists
             .filter((a) => a.id !== artistId)
             .map((a) => a.name),
-          spotify_url: track.external_urls.spotify,
+          spotify_url: track.external_urls?.spotify || null,
         })),
       });
     }
@@ -121,20 +124,9 @@ async function fetchAlbums() {
 
   const duplicateSingleIds = new Set(duplicateSingles.map((s) => s.id));
 
-  // Optionnel : log pour debug
-  if (duplicateSingles.length > 0) {
-    console.log("Singles détectés comme doublons :");
-    duplicateSingles.forEach((s) =>
-      console.log(`- ${s.name} (${s.release_date})`)
-    );
-  }
-
   const finalAlbums = sortedAlbums.filter(
     (album) => !duplicateSingleIds.has(album.id)
   );
-
-  fs.writeFileSync("albums.json", JSON.stringify(finalAlbums, null, 2));
-  console.log("Fichier JSON créé avec succès !");
-}
-
-fetchAlbums();
+  console.log(finalAlbums);
+  return finalAlbums;
+};

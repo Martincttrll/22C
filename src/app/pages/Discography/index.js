@@ -1,29 +1,47 @@
 import Page from "../../classes/Page";
+import { DiscographyScene } from "../../components/Canvas/Discography";
+import { each } from "lodash";
 export class Discography extends Page {
   constructor() {
     super({
       element: ".discography",
       elements: {
         wrapper: ".discography__wrapper",
-        h1: ".discography__title",
+        cover: ".discography__album__cover",
+        albums: ".discography__album",
       },
     });
+    this.sizes = {
+      width: window.innerWidth,
+      height: window.innerHeight,
+    };
   }
 
   create() {
     super.create();
-    this.fetchDiscographyData();
+    this.onLinkOver();
+    this.discographyScene = new DiscographyScene({
+      container: this.elements.wrapper,
+      sizes: this.sizes,
+    });
+    this.addEventListeners();
   }
 
-  async fetchDiscographyData() {
-    const data = await fetch("albums.json");
-    if (data.ok) {
-      console.log(data);
-      const response = data.response;
-      this.albums = response.json();
-      console.log(this.albums);
-    } else {
-      console.error("Error during albums fetching.");
-    }
+  onLinkOver() {
+    each(this.elements.albums, (album) => {
+      album.addEventListener("mouseover", () => {
+        this.elements.cover.src = album.dataset.cover;
+      });
+    });
+  }
+
+  onResize() {
+    this.sizes.width = window.innerWidth;
+    this.sizes.height = window.innerHeight;
+
+    this.discographyScene.onResize();
+  }
+  addEventListeners() {
+    window.addEventListener("resize", this.onResize.bind(this));
   }
 }

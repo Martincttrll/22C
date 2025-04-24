@@ -7,5 +7,10 @@ extends ./_layouts/layout.pug
 block content
     .discography 
         .discography__wrapper
-            canvas.discography__album_cover
+            img.discography__album__cover(data-src=spotify[0].cover, alt=spotify[0].title)
             .discography__albums__wrapper
+                    each album in spotify
+                        .discography__album(data-cover=album.cover)
+                            //- img.discography__album__cover(src=album.cover, alt=album.title)
+                            .discography__album__title #{album.name}
+                            .discography__album__release__date (#{album.release_date.slice(0,4)})
