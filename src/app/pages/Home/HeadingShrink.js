@@ -3,8 +3,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 export class HeadingShrink {
-  constructor(lenis, startEl, endEl) {
-    this.lenis = lenis;
+  constructor(smoother, startEl, endEl) {
+    this.smoother = smoother;
     this.startEl = startEl;
     this.endEl = endEl;
 

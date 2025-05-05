@@ -1,8 +1,8 @@
 import EventEmitter from "events";
 import { each } from "lodash";
-import { SmoothScroll } from "../animations/smoothScroll";
+import { SmoothScroll } from "../animations/SmoothScroll";
 export default class Page extends EventEmitter {
-  constructor({ element, elements, isScrollable = true }) {
+  constructor({ element, elements, navigation, isScrollable = true }) {
     super();
 
     this.selectors = {
@@ -12,6 +12,7 @@ export default class Page extends EventEmitter {
 
     this.isScrollable = isScrollable;
     this.smoothScroll = null;
+    this.navigation = navigation;
   }
 
   create() {
@@ -58,6 +59,23 @@ export default class Page extends EventEmitter {
     return Promise.resolve();
   }
 
-  addEventListeners() {}
+  addEventListeners() {
+    console.log(this.navigation);
+    if (this.isScrollable && this.navigation) {
+      this.navigation.on("menu:open", () => {
+        console.log("menu:open");
+        if (this.smoothScroll) {
+          this.smoothScroll.smoother.paused(true);
+        }
+      });
+
+      this.navigation.on("menu:close", () => {
+        console.log("menu:close");
+        if (this.smoothScroll) {
+          this.smoothScroll.smoother.paused(false);
+        }
+      });
+    }
+  }
   removeEventListeners() {}
 }

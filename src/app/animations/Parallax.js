@@ -1,8 +1,8 @@
 import { each } from "lodash";
-
+import gsap from "gsap";
 export class Parallax {
-  constructor(elements, lenis) {
-    this.lenis = lenis;
+  constructor(elements, smoother) {
+    this.smoother = smoother;
     this.elements = Array.isArray(elements) ? elements : [elements];
 
     this.lerpFactor = 0.2;
@@ -12,17 +12,23 @@ export class Parallax {
   }
 
   create() {
-    if (!this.lenis) return;
-    this.lenis.on("scroll", (e) => {
-      this.currentY +=
-        (e.animatedScroll * this.lerpFactor - this.currentY) * 0.1;
-      const scrollProgress = Math.min(
-        1,
-        Math.max(0, this.currentY / window.innerHeight)
-      );
-      each(this.elements, (element) => {
-        const scale = 1 + scrollProgress * 0.5;
-        element.style.transform = `translateY(${this.currentY}px) scale(${scale})`;
+    if (!this.smoother) return;
+    each(this.elements, (element) => {
+      gsap.to({
+        element,
+        y: () => {
+          return (
+            this.smoother.scrollTrigger.start - this.smoother.scrollTrigger.end
+          );
+        },
+        ease: "none",
+        scrollTrigger: {
+          trigger: element,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: true,
+          markers: true,
+        },
       });
     });
   }

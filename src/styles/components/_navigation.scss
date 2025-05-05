@@ -7,6 +7,7 @@ nav.nav__wrapper {
   padding: 2rem;
   display: none;
 }
+
 nav.nav__wrapper.active {
   display: flex;
 }
@@ -46,6 +47,7 @@ a.nav__logo {
 .nav__menu__wrapper {
   @extend %cover;
   @extend %center;
+  height: 100vh;
   z-index: 3;
   backdrop-filter: blur(10px);
   display: none;

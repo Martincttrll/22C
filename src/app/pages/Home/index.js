@@ -5,7 +5,7 @@ import { MembersScene } from "./MembersScene";
 import { Detection } from "../../classes/Detection";
 
 export default class Home extends Page {
-  constructor() {
+  constructor({ navigation }) {
     super({
       element: ".home",
       elements: {
@@ -15,6 +15,7 @@ export default class Home extends Page {
         h1: ".home__title",
         logoNav: document.querySelector(".nav__logo"),
       },
+      navigation,
     });
   }
   create() {
@@ -24,11 +25,15 @@ export default class Home extends Page {
     }
 
     // new HeadingShrink(
-    //   this.smoothScroll.lenis,
+    //   this.smoothScroll.smoother,
     //   this.elements.h1,
     //   this.elements.logoNav
     // );
-    new Parallax(this.elements.videoWrapper, this.smoothScroll.lenis);
+    // new Parallax(this.elements.videoWrapper, this.smoothScroll.smoother);
     new MembersScene(".home__three__wrapper");
+    this.show();
+  }
+  show() {
+    super.show();
   }
 }

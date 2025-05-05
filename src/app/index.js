@@ -32,7 +32,7 @@ class App {
 
   createPages() {
     this.pages = {
-      home: new Home(),
+      home: new Home({ navigation: this.navigation }),
       discography: new Discography(),
     };
 

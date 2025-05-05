@@ -1,7 +1,9 @@
 import { each } from "lodash";
 import gsap from "gsap";
-export class Navigation {
-  constructor(template, displayed = true) {
+import { EventEmitter } from "events";
+export class Navigation extends EventEmitter {
+  constructor(template) {
+    super();
     this.navigation = document.querySelector(".nav__wrapper");
     this.menuBtn = document.querySelector(".nav__menu__btn");
     this.menuWrapper = document.querySelector(".nav__menu__wrapper");
@@ -37,9 +39,7 @@ export class Navigation {
       this.menuWrapper.style.display = "none";
     });
 
-    if (displayed) {
-      this.display();
-    }
+    this.display();
     this.onChange(template);
     this.addEventListeners();
   }
@@ -67,6 +67,11 @@ export class Navigation {
     this.menuTimeline.reversed()
       ? this.menuTimeline.play()
       : this.menuTimeline.reverse();
+    if (this.isMenuOpen) {
+      this.emit("menu:open");
+    } else {
+      this.emit("menu:close");
+    }
   };
   addEventListeners() {
     this.menuBtn.addEventListener("click", this.toggleMenu);

@@ -69,15 +69,16 @@
 
 .home__video__wrapper {
   @extend %center;
+  position: relative;
   width: 100vw;
   height: 100dvh;
-  overflow-x: hidden;
+  overflow: hidden;
   background: black;
 }
 .home__video__filter {
   width: 100%;
   height: 100%;
-  position: fixed;
+  position: absolute;
   background-color: black;
   position: absolute;
   opacity: 0.4;
@@ -85,7 +86,7 @@
 }
 .home__video {
   @extend %center;
-  position: fixed;
+  position: relative;
   width: 100%;
   height: 100%;
   object-fit: cover;
