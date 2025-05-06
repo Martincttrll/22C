@@ -1,0 +1,26 @@
+---
+template: album
+pagination:
+  data: spotify
+  size: 1
+  alias: album
+---
+extends ./_layouts/layout.pug
+block content
+
+    .album
+        .album__wrapper
+            img.album__cover(data-src=album.cover, alt=album.title)
+            .album__info
+                h1.album__title #{album.name}
+                h2.album__release_date (#{album.release_date.slice(0,4)})
+                h3.album__label #{album.label}
+                h4.album__duration #{Math.floor(album.duration_ms / 60000)} min
+                h5.album__tracks #{album.tracks.length} tracks
+                p.album__description #{album.description}
+    
+                ul
+                    each track in album.tracks
+                        li #{track.name} – #{track.duration_ms}
+
+

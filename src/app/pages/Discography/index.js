@@ -41,6 +41,15 @@ export class Discography extends Page {
 
     this.discographyScene.onResize();
   }
+
+  onLinkClick() {
+    each(this.elements.albums, (album) => {
+      album.addEventListener("click", () => {
+        console.log("");
+      });
+    });
+  }
+
   addEventListeners() {
     window.addEventListener("resize", this.onResize.bind(this));
   }

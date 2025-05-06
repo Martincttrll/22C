@@ -57,6 +57,15 @@ function isDurationClose(d1, d2, toleranceMs = 2000) {
   return Math.abs(d1 - d2) <= toleranceMs;
 }
 
+const slugify = (str) => {
+  return str
+    .toLowerCase()
+    .trim()
+    .replace(/['"]/g, "") // Supprime les apostrophes et guillemets
+    .replace(/[^a-z0-9]+/g, "-") // Remplace les caractères non alphanumériques par des tirets
+    .replace(/^-+|-+$/g, ""); // Supprime les tirets en début ou fin de chaîne
+};
+
 module.exports = async function () {
   const artistId = process.env.ARTIST_ID;
   const token = await getToken();
@@ -76,13 +85,17 @@ module.exports = async function () {
       track.artists.some((artist) => artist.id === artistId)
     );
 
+    const isCollab = filteredTracks.length < tracks.length / 2;
+
     if (filteredTracks.length > 0) {
       albumsWithTracks.push({
         id: album.id,
         name: album.name,
+        slug: slugify(album.name),
         release_date: album.release_date,
         cover: album.images?.[0]?.url || null,
         spotify_url: album.external_urls?.spotify || null,
+        isCollab,
         tracks: filteredTracks.map((track) => ({
           name: track.name,
           duration_ms: track.duration_ms,
@@ -127,6 +140,6 @@ module.exports = async function () {
   const finalAlbums = sortedAlbums.filter(
     (album) => !duplicateSingleIds.has(album.id)
   );
-  console.log(finalAlbums);
+  // console.log(finalAlbums);
   return finalAlbums;
 };

@@ -1,6 +1,7 @@
 import EleventyVitePlugin from "@11ty/eleventy-plugin-vite";
 import pugPlugin from "@11ty/eleventy-plugin-pug";
 import dotenv from "dotenv";
+import slugify from "slugify";
 
 dotenv.config();
 

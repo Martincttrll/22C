@@ -1,7 +1,8 @@
 import "../styles/style.scss";
 import Home from "./pages/Home";
-import { Navigation } from "./components/Navigation";
 import { Discography } from "./pages/Discography";
+import { Album } from "./pages/Album";
+import { Navigation } from "./components/Navigation";
 import { each } from "lodash";
 import { Preloader } from "./components/Preloader";
 class App {
@@ -34,6 +35,7 @@ class App {
     this.pages = {
       home: new Home(),
       discography: new Discography(),
+      album: new Album(),
     };
 
     this.page = this.pages[this.template];
@@ -52,12 +54,12 @@ class App {
     this.page.show();
   }
 
-  onPopState() {
+  onPopState = () => {
     this.onChange({
       url: window.location.pathname,
       push: true,
     });
-  }
+  };
 
   async onChange({ url, push = true }) {
     if (this.isFetching || this.url === url) return;
