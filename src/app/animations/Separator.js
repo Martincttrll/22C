@@ -6,7 +6,6 @@ export default class Separator extends Animation {
   }
 
   animateIn() {
-    console.log(this.element);
     gsap.fromTo(
       this.element,
       {
@@ -16,12 +15,10 @@ export default class Separator extends Animation {
         width: "100%",
         duration: 1,
         ease: "power2.out",
+        onComplete: () => {
+          this.observer.disconnect();
+        },
       }
     );
-  }
-  animateOut() {
-    gsap.set(this.element, {
-      width: 0,
-    });
   }
 }

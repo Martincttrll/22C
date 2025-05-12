@@ -23,11 +23,6 @@ export default class Home extends Page {
       new TextCursor(this.elements.videoWrapper, "scroll ⚈ scroll ⚈ ");
     }
 
-    // new HeadingShrink(
-    //   this.smoothScroll.lenis,
-    //   this.elements.h1,
-    //   this.elements.logoNav
-    // );
     new Parallax(this.elements.videoWrapper, this.smoothScroll.lenis);
     new MembersScene(".home__three__wrapper");
   }

@@ -71,6 +71,7 @@ module.exports = async function () {
   const token = await getToken();
   const albums = await getAlbums(artistId, token);
   const albumsWithTracks = [];
+  const collaborationTracks = [];
 
   for (const album of albums) {
     const tracks = await getTracks(album.id, token);
@@ -85,9 +86,29 @@ module.exports = async function () {
       track.artists.some((artist) => artist.id === artistId)
     );
 
-    const isCollab = filteredTracks.length < tracks.length / 2;
+    const collabTracks = tracks.filter(
+      (track) =>
+        track.artists.some((artist) => artist.id === artistId) &&
+        filteredTracks.length < tracks.length
+    );
 
-    if (filteredTracks.length > 0) {
+    // Ajoutez les pistes en featuring à la liste des collaborations
+    collaborationTracks.push(
+      ...collabTracks.map((track) => ({
+        name: track.name,
+        duration_ms: track.duration_ms,
+        album: album.name,
+        featuring: track.artists
+          .filter((a) => a.id !== artistId)
+          .map((a) => a.name),
+        spotify_url: track.external_urls?.spotify || null,
+      }))
+    );
+
+    if (
+      filteredTracks.length > 0 &&
+      filteredTracks.length > tracks.length / 2
+    ) {
       albumsWithTracks.push({
         id: album.id,
         name: album.name,
@@ -95,7 +116,6 @@ module.exports = async function () {
         release_date: album.release_date,
         cover: album.images?.[0]?.url || null,
         spotify_url: album.external_urls?.spotify || null,
-        isCollab,
         tracks: filteredTracks.map((track) => ({
           name: track.name,
           duration_ms: track.duration_ms,
@@ -106,6 +126,17 @@ module.exports = async function () {
         })),
       });
     }
+  }
+  if (collaborationTracks.length > 0) {
+    albumsWithTracks.push({
+      id: "collaborations",
+      name: "Collaborations",
+      slug: "collaborations",
+      release_date: String(collaborationTracks.length).padStart(3, "0"),
+      cover: null,
+      spotify_url: null,
+      tracks: collaborationTracks,
+    });
   }
 
   // Tri par date de sortie
@@ -140,6 +171,7 @@ module.exports = async function () {
   const finalAlbums = sortedAlbums.filter(
     (album) => !duplicateSingleIds.has(album.id)
   );
+
   // console.log(finalAlbums);
   return finalAlbums;
 };

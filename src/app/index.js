@@ -75,6 +75,7 @@ class App {
       tempDom.innerHTML = html;
       const newContent = tempDom.querySelector(".content");
       const newTemplate = newContent.getAttribute("data-template");
+      const newTitle = tempDom.querySelector("title").innerText;
 
       if (!newContent || !this.pages[newTemplate]) {
         throw new Error("New page content or template not found");
@@ -83,6 +84,7 @@ class App {
       this.content.replaceWith(newContent);
       this.content = newContent;
       this.template = newTemplate;
+      document.title = newTitle;
 
       this.navigation.onChange(this.template);
       const page = this.pages[url];

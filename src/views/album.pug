@@ -4,6 +4,7 @@ pagination:
   data: spotify
   size: 1
   alias: album
+title: "Album | 22Carbone"
 ---
 extends ./_layouts/layout.pug
 block content
@@ -12,7 +13,7 @@ block content
             img.album__cover(data-src=album.cover, alt=album.title)
             .album__info
                 h1.album__title #{album.name}
-                h2.album__release_date (#{album.release_date.slice(0,4)})
+                h2.album__release_date (#{album.release_date ? album.release_date.slice(0,4) : ""})
                 h3.album__label #{album.label}
                 h4.album__duration #{duration}
                 h5.album__tracks #{album.tracks.length} tracks
