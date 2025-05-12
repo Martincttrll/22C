@@ -10,35 +10,26 @@ extends ./_layouts/layout.pug
 block content
     .album
         .album__wrapper
-            img.album__cover(data-src=album.cover, alt=album.title)
-            .album__info
-                h1.album__title #{album.name}
-                h2.album__release_date (#{album.release_date ? album.release_date.slice(0,4) : ""})
-                h3.album__label #{album.label}
-                h4.album__duration #{duration}
-                h5.album__tracks #{album.tracks.length} tracks
-                p.album__description #{album.description}
-    
-                ul
-                    each track in album.tracks
-                        - const duration = new Date(track.duration_ms).toISOString().substr(11, 8);
-                        li #{track.name} - #{duration}
-
-                .tracklist
-                        h2.tracklist__title #{album.name}
-                        
-                        table.tracklist__table
-                        thead
+        
+            h1.album__title #{album.name} 
+            .album__tracklist   
+                
+                table.album__tracklist__table
+                    thead
+                        tr
+                            th Titre
+                            th Feat.
+                            th Album
+                            th Durée
+                            th
+                    tbody
+                        each track, index in album.tracks
                             tr
-                                th Titre
-                                th Feat.
-                                th Album
-                                th Durée
-                        tbody
-                            each track, index in album.tracks
-                                tr
-                                    td.track__name #{track.name}
-                                    td.track__feat #{track.feat || ''}
-                                    td.track__album #{album.name}
-                                    - const duration = new Date(track.duration_ms).toISOString().substr(11, 8);
-                                    td.track__duration #{duration}
+                                td.album__track__name #{track.name}
+                                td.album__track__feat #{track.feat || ''}
+                                td.album__track__album #{album.name}
+                                - const duration = new Date(track.duration_ms).toISOString().substr(11, 8);
+                                td.album__track__duration #{duration}
+                                td.album__track__duration
+                                    a(href=track.spotify_url, target="_blank")
+                                        img(src="/src/assets/img/icons/spotify.svg", alt="Spotify")

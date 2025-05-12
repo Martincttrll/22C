@@ -1,0 +1,69 @@
+@use "../shared" as *;
+@use "../utils" as *;
+.album {
+  @extend %page;
+  overflow-x: hidden;
+}
+.album__wrapper {
+  @extend %cover;
+  @extend %content-padding;
+  box-sizing: border-box;
+  width: 100vw;
+  height: 100dvh;
+  overflow-x: hidden;
+  background: white;
+  color: black;
+  padding-top: 10rem;
+  font-size: 1.6rem;
+}
+
+h1.album__title {
+  @extend %title-96;
+  font-weight: 700;
+  font-family: "baunk";
+  margin-bottom: 5rem;
+}
+table.album__tracklist__table {
+  box-sizing: border-box;
+  width: 100%;
+}
+thead {
+  text-align: left;
+}
+tr {
+  width: 100%;
+  margin-bottom: 12px;
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    display: block;
+    width: 100%;
+    height: 1px;
+    background-color: black;
+  }
+}
+
+th {
+  font-family: "baunk";
+  font-size: 2rem;
+  font-weight: 700;
+  padding-bottom: 1rem;
+}
+tbody {
+}
+tr {
+}
+td {
+  padding: 2rem 0;
+}
+td.album__track__name {
+}
+td.album__track__feat {
+}
+td.album__track__album {
+}
+td.album__track__duration {
+}
