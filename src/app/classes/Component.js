@@ -4,20 +4,22 @@ import { each } from "lodash";
 export default class Component extends EventEmitter {
   constructor({ element, elements }) {
     super();
-    this.selectors = {
-      element,
+    this.selector = element;
+    this.selectorChildren = {
       ...elements,
     };
     this.create();
-
     this.addEventListeners();
   }
 
   create() {
-    this.element = document.querySelector(this.selectors.element);
-    this.elements = {};
+    if (this.selector instanceof window.HTMLElement) {
+      this.element = this.selector;
+    } else {
+      this.element = document.querySelector(this.selector);
+    }
 
-    each(this.selectors, (selector, key) => {
+    each(this.selectorChildren, (selector, key) => {
       if (
         selector instanceof window.HTMLElement ||
         selector instanceof window.NodeList

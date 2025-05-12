@@ -12,6 +12,10 @@
   overflow-x: hidden;
   background: black;
 }
+.discography a {
+  text-decoration: none;
+  color: inherit;
+}
 .discography__album__cover {
   @extend %center;
   position: absolute;
@@ -37,6 +41,7 @@
   position: relative;
   font-family: "baunk";
   text-transform: uppercase;
+  text-decoration: none;
 }
 
 .discography__album__release__date {
