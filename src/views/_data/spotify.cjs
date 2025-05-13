@@ -100,11 +100,11 @@ module.exports = async function () {
         album: album.name,
         featuring: track.artists
           .filter((a) => a.id !== artistId)
-          .map((a) => a.name),
+          .map((a) => a.name)
+          .join(", "),
         spotify_url: track.external_urls?.spotify || null,
       }))
     );
-
     if (
       filteredTracks.length > 0 &&
       filteredTracks.length > tracks.length / 2
@@ -121,7 +121,8 @@ module.exports = async function () {
           duration_ms: track.duration_ms,
           featuring: track.artists
             .filter((a) => a.id !== artistId)
-            .map((a) => a.name),
+            .map((a) => a.name)
+            .join(", "),
           spotify_url: track.external_urls?.spotify || null,
         })),
       });

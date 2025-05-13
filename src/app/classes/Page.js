@@ -2,6 +2,8 @@ import EventEmitter from "events";
 import { each } from "lodash";
 import { SmoothScroll } from "../animations/SmoothScroll";
 import Separator from "../animations/Separator";
+import Title from "../animations/Title";
+import Image from "../animations/Image";
 export default class Page extends EventEmitter {
   constructor({ element, elements, isScrollable = true }) {
     super();
@@ -10,6 +12,8 @@ export default class Page extends EventEmitter {
       element,
       ...elements,
       animationsSeparators: "[data-animation='separator']",
+      animationsTitles: "[data-animation='title']",
+      animationsImages: "[data-animation='image']",
     };
 
     this.isScrollable = isScrollable;
@@ -55,6 +59,16 @@ export default class Page extends EventEmitter {
         });
       }
     );
+    this.animationsTitles = each(this.elements.animationsTitles, (element) => {
+      return new Title({
+        element,
+      });
+    });
+    this.animationsImages = each(this.elements.animationsImages, (element) => {
+      return new Image({
+        element,
+      });
+    });
   }
 
   show(_url) {

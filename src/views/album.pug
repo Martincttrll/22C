@@ -18,18 +18,18 @@ block content
                     thead
                         tr
                             th Titre
-                            th Feat.
+                            th Feat .
                             th Album
                             th Durée
-                            th
+                            th(style="text-align:center;") Écouter        
                     tbody
                         each track, index in album.tracks
                             tr
                                 td.album__track__name #{track.name}
-                                td.album__track__feat #{track.feat || ''}
-                                td.album__track__album #{album.name}
+                                td.album__track__feat #{track.featuring || ''}
+                                td.album__track__album #{track.album ? track.album : album.name}
                                 - const duration = new Date(track.duration_ms).toISOString().substr(11, 8);
                                 td.album__track__duration #{duration}
-                                td.album__track__duration
+                                td.album__track__action
                                     a(href=track.spotify_url, target="_blank")
-                                        img(src="/src/assets/img/icons/spotify.svg", alt="Spotify")
+                                        img(src="/src/assets/img/arrow.svg", alt="Spotify",width="20px")
