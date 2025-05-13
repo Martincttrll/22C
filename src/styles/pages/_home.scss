@@ -141,9 +141,31 @@ p.home__who__p {
   }
 }
 
+.home__reels__title {
+  @extend %content-padding;
+  margin-top: 20rem;
+}
+
+.home__reels__wrapper {
+  @extend %content-padding;
+  display: flex;
+  margin-top: 6rem;
+  justify-content: center;
+  // width: 100%;
+}
+.home__reels__video {
+  width: 33.3333%;
+  filter: brightness(0.4) blur(2px);
+  transition: all 0.5s ease-in-out;
+  will-change: filter;
+}
+.home__reels__video:hover {
+  filter: brightness(1) blur(0px);
+}
+
 .home__news__wrapper {
   @extend %content-padding;
-  margin-top: 15rem;
+  margin-top: 10rem;
 }
 .home__news__separator {
   height: 1px;

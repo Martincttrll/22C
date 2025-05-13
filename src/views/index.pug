@@ -22,8 +22,23 @@ block content
                     p.home__who__p 22Carbone est un groupe originaire de Marseille composé d'un rappeur, Gabi, et de deux producteurs, Hatlas et Sphinx. Le groupe a été fondé en fin 2022, suite à la sortie de leur premier EP « DISTORSION » en décembre 2022. Depuis, ils comptent un deuxième projet à leur actif « ENTROPIE », et deux clips sur leur chaîne YouTube.
                 .home__three__wrapper
                     .home__three__label Sphinx
+
+                .home__reels__title
+                    h2.home__h2(data-animation="title") Récement 
+                    button.home__reels__label Activer le son ?
+                .home__reels__wrapper 
+                    video.home__reels__video(autoplay loop muted playsinline preload="auto", data-animation="reels")
+                        source(src="/src/assets/videos/reels_freestyle_bon_marche.mp4" type="video/mp4")
+                        | Votre navigateur ne supporte pas les vidéos.
+                    video.home__reels__video(autoplay loop muted playsinline preload="auto", data-animation="reels")
+                        source(src="/src/assets/videos/reels_digicode.mp4" type="video/mp4")
+                        | Votre navigateur ne supporte pas les vidéos.
+                    video.home__reels__video(autoplay loop muted playsinline preload="auto", data-animation="reels")
+                        source(src="/src/assets/videos/reels_trashtalking.mp4" type="video/mp4")
+                        | Votre navigateur ne supporte pas les vidéos.
+
                 .home__news__wrapper
-                    h2.home__h2(data-animation="title") News
+                    //- h2.home__h2(data-animation="title") News
                     .home__news__separator(data-animation="separator") 
                     .home__news__item
                         .home__news__info__wrapper
@@ -31,7 +46,7 @@ block content
                                 .home__news__item__date 22/10/2023 
                                 .home__news__item__label Nouvel EP - DISTORSION
                             p.home__news__item__text 22Carbone sor*t son premier EP "DISTORSION" sur toutes les plateformes de streaming.
-                        img(src="/src/assets/img/carousel-gabi.png",width="100%").home__news__item__img(data-animation="image")
+                        img.home__news__item__img(src="/src/assets/img/carousel-gabi.png",width="100%",data-animation="image")
                     .home__news__separator(data-animation="separator") 
                     .home__news__item
                         .home__news__info__wrapper
@@ -39,7 +54,7 @@ block content
                                 .home__news__item__date 22/10/2023 
                                 .home__news__item__label Concert à La Cigale
                             p.home__news__item__text 22Carbone sort son premier EP "DISTORSION" sur toutes les plateformes de streaming. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi aliquam vero enim! Quis modi libero a dolorem reiciendis laudantium consectetur, dolor tempora quam eum repellat hic iure! Error, nam laborum?
-                        img(src="/src/assets/img/carousel-hatlas.png",width="100%").home__news__item__img(data-animation="image")
+                        img.home__news__item__img(src="/src/assets/img/carousel-hatlas.png",width="100%",data-animation="image")
                     .home__news__separator(data-animation="separator") 
                     .home__news__item
                         .home__news__info__wrapper
@@ -47,7 +62,7 @@ block content
                                 .home__news__item__date 22/10/2023 
                                 .home__news__item__label Festival Les Trans-Musicales
                             p.home__news__item__text 22Carbone sort son premier EP "DISTORSION" sur toutes les plateformes de streaming.
-                        img(src="/src/assets/img/carousel-sphinx.png",width="100%").home__news__item__img(data-animation="image")
+                        img.home__news__item__img(src="/src/assets/img/carousel-sphinx.png",width="100%",data-animation="image")
                     .home__news__separator(data-animation="separator") 
                     .home__news__item
                         .home__news__info__wrapper
@@ -55,6 +70,6 @@ block content
                                 .home__news__item__date 22/10/2023 
                                 .home__news__item__label 22Carbone sort son premier EP "DISTORSION"
                             p.home__news__item__text 22Carbone sort son premier EP "DISTORSION" sur toutes les plateformes de streaming.
-                        img(src="/src/assets/img/carousel-gabi.png",width="100%").home__news__item__img(data-animation="image")
+                        img.home__news__item__img(src="/src/assets/img/carousel-gabi.png",width="100%",data-animation="image")
     
 
