@@ -1,6 +1,6 @@
 @use "../utils/" as *;
 @use "../shared/" as *;
-.cursor__scroll {
+.cursor {
   @extend %center;
   position: fixed;
   width: 100px;
@@ -15,7 +15,7 @@
   transform: opacity 1s ease;
 }
 
-.cursor__scroll__text {
+.cursor__text {
   @extend %text-12;
   @extend %center;
   position: relative;
@@ -28,7 +28,7 @@
   animation: rotateText 3s linear infinite;
 }
 
-.cursor__scroll__text span {
+.cursor__text span {
   position: absolute;
   text-transform: uppercase;
   transform: rotate(0deg);

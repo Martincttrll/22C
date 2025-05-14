@@ -25,17 +25,17 @@ block content
 
                 .home__reels__title
                     h2.home__h2(data-animation="title") Récement 
-                    button.home__reels__label Activer le son ?
-                .home__reels__wrapper 
-                    video.home__reels__video(autoplay loop muted playsinline preload="auto", data-animation="reels")
-                        source(src="/src/assets/videos/reels_freestyle_bon_marche.mp4" type="video/mp4")
-                        | Votre navigateur ne supporte pas les vidéos.
-                    video.home__reels__video(autoplay loop muted playsinline preload="auto", data-animation="reels")
-                        source(src="/src/assets/videos/reels_digicode.mp4" type="video/mp4")
-                        | Votre navigateur ne supporte pas les vidéos.
-                    video.home__reels__video(autoplay loop muted playsinline preload="auto", data-animation="reels")
-                        source(src="/src/assets/videos/reels_trashtalking.mp4" type="video/mp4")
-                        | Votre navigateur ne supporte pas les vidéos.
+                .home__reels__wrapper
+                    .home__reels__video__wrapper
+                        video.home__reels__video(autoplay loop muted playsinline preload="auto")
+                            source(src="/src/assets/videos/reels_freestyle_bon_marche.mp4" type="video/mp4")
+                            | Votre navigateur ne supporte pas les vidéos.
+                        video.home__reels__video(autoplay loop muted playsinline preload="auto")
+                            source(src="/src/assets/videos/reels_digicode.mp4" type="video/mp4")
+                            | Votre navigateur ne supporte pas les vidéos.
+                        video.home__reels__video(autoplay loop muted playsinline preload="auto")
+                            source(src="/src/assets/videos/reels_trashtalking.mp4" type="video/mp4")
+                            | Votre navigateur ne supporte pas les vidéos.
 
                 .home__news__wrapper
                     //- h2.home__h2(data-animation="title") News

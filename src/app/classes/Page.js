@@ -15,11 +15,11 @@ export default class Page extends EventEmitter {
       animationsSeparators: "[data-animation='separator']",
       animationsTitles: "[data-animation='title']",
       animationsImages: "[data-animation='image']",
-      animationsReels: "[data-animation='reels']",
     };
 
     this.isScrollable = isScrollable;
     this.smoothScroll = null;
+    this.textCursor = null;
   }
 
   create() {
@@ -50,6 +50,7 @@ export default class Page extends EventEmitter {
     }
 
     this.createAnimations();
+    this.createTextCursor();
   }
 
   createAnimations() {
@@ -71,11 +72,13 @@ export default class Page extends EventEmitter {
         element,
       });
     });
-    this.animationsReels = each(this.elements.animationsReels, (element) => {
-      return new Reels({
-        element,
-      });
-    });
+  }
+
+  createTextCursor() {}
+  destroyTextCursor() {
+    if (this.textCursor) {
+      this.textCursor.cursor.remove();
+    }
   }
 
   show(_url) {
@@ -90,6 +93,7 @@ export default class Page extends EventEmitter {
     this.isVisible = false;
 
     this.removeEventListeners();
+    this.destroyTextCursor();
 
     return Promise.resolve();
   }
