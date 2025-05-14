@@ -16,7 +16,8 @@
 }
 
 .cursor__text {
-  @extend %text-12;
+  // @extend %text-12;
+  font-size: 12px;
   @extend %center;
   position: relative;
   width: 100%;
@@ -34,11 +35,49 @@
   transform: rotate(0deg);
 }
 
+.cursor__icon {
+  @extend %center;
+  gap: 5px;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  color: white;
+}
+
+.cursor__icon .sound__bar {
+  width: 6px;
+  border-radius: 2px;
+  height: 25px;
+  animation: soundBar 0.5s infinite;
+  background-color: white;
+  transform-origin: center;
+  mix-blend-mode: difference;
+}
+
+.cursor__icon .sound__bar:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.cursor__icon .sound__bar:nth-child(2) {
+  animation-delay: 0.3s;
+}
+.cursor__icon .sound__bar:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
 @keyframes rotateText {
   0% {
     transform: rotate(0deg);
   }
   100% {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes soundBar {
+  0% {
+    height: 25px;
+  }
+  100% {
+    height: 12.5px;
   }
 }

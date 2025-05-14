@@ -8,6 +8,7 @@ export default class Component extends EventEmitter {
     this.selectorChildren = {
       ...elements,
     };
+    console.log(elements);
     this.create();
     this.addEventListeners();
   }
@@ -17,6 +18,11 @@ export default class Component extends EventEmitter {
       this.element = this.selector;
     } else {
       this.element = document.querySelector(this.selector);
+    }
+
+    if (!this.element) {
+      console.error(`Element not found for selector: ${this.selector}`);
+      return;
     }
 
     each(this.selectorChildren, (selector, key) => {

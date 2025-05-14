@@ -45,17 +45,46 @@ export class TextCursor {
     this.cursorIcon.innerHTML = icon || "";
   }
 
-  updateIconOnClick(newIcon) {
-    // Méthode pour changer dynamiquement l'icône au clic
-    this.cursorIcon.innerHTML = newIcon;
+  updateIconOnClick(elementConfig) {
+    const { icon, onClickIcon } = elementConfig;
 
-    // Vous pouvez ajouter ici la logique pour déclencher une animation GSAP
-    console.log("Icon updated on click!");
+    if (elementConfig.isToggled) {
+      this.updateIcon(icon);
+    } else {
+      this.updateIcon(onClickIcon);
+    }
+
+    elementConfig.isToggled = !elementConfig.isToggled;
+  }
+
+  updateIcon(icon) {
+    let newIcon;
+    if (typeof icon === "function") {
+      newIcon = icon();
+    } else {
+      newIcon = icon;
+    }
+
+    if (Array.isArray(newIcon)) {
+      this.cursorIcon.innerHTML = "";
+      newIcon.forEach((element) => {
+        this.cursorIcon.appendChild(element);
+      });
+    } else if (newIcon instanceof HTMLElement) {
+      this.cursorIcon.innerHTML = "";
+      this.cursorIcon.appendChild(newIcon);
+    } else if (typeof newIcon === "string") {
+      this.cursorIcon.innerHTML = newIcon;
+    }
   }
 
   addEventListener() {
-    this.elementsConfig.forEach(({ element, text, icon, onClickIcon }) => {
-      element.addEventListener("mouseover", () => {
+    this.elementsConfig.forEach((elementConfig) => {
+      const { element, text, icon, onClickIcon } = elementConfig;
+
+      elementConfig.isToggled = false;
+
+      element.addEventListener("mouseenter", () => {
         this.update({ text, icon });
         this.show();
       });
@@ -65,7 +94,7 @@ export class TextCursor {
       });
       if (onClickIcon) {
         element.addEventListener("click", () => {
-          this.updateIconOnClick(onClickIcon);
+          this.updateIconOnClick(elementConfig);
         });
       }
     });
