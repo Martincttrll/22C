@@ -8,7 +8,6 @@ export default class Component extends EventEmitter {
     this.selectorChildren = {
       ...elements,
     };
-
     this.create();
     this.addEventListeners();
   }
@@ -30,10 +29,9 @@ export default class Component extends EventEmitter {
     each(this.selectorChildren, (selector, key) => {
       if (
         selector instanceof window.HTMLElement ||
-        selector instanceof window.NodeList
+        selector instanceof window.NodeList ||
+        Array.isArray(selector)
       ) {
-        this.elements[key] = selector;
-      } else if (Array.isArray(selector)) {
         this.elements[key] = selector;
       } else {
         this.elements[key] = this.element.querySelectorAll(selector);

@@ -31,14 +31,12 @@ export default class Page extends EventEmitter {
     each(this.selectors, (selector, key) => {
       if (
         selector instanceof window.HTMLElement ||
-        selector instanceof window.NodeList
+        selector instanceof window.NodeList ||
+        Array.isArray(selector)
       ) {
-        this.elements[key] = selector;
-      } else if (Array.isArray(selector)) {
         this.elements[key] = selector;
       } else {
         this.elements[key] = this.element.querySelectorAll(selector);
-
         if (this.elements[key].length === 0) {
           this.elements[key] = null;
         } else if (this.elements[key].length === 1) {
@@ -56,41 +54,37 @@ export default class Page extends EventEmitter {
   }
 
   createAnimations() {
-    this.animationsSeparators = each(
-      this.elements.animationsSeparators,
-      (element) => {
-        return new Separator({
-          element,
-        });
-      }
-    );
-    this.animationsTitles = each(this.elements.animationsTitles, (element) => {
-      return new Title({
-        element,
-      });
-    });
-    this.animationsImages = each(this.elements.animationsImages, (element) => {
-      return new Image({
-        element,
-      });
-    });
+    const toArray = (elements) => {
+      if (!elements) return [];
+      return elements instanceof NodeList || Array.isArray(elements)
+        ? Array.from(elements)
+        : [elements];
+    };
 
-    const reelsElements =
-      Array.isArray(this.elements.animationsReels) ||
-      this.elements.animationsReels instanceof NodeList
-        ? this.elements.animationsReels
-        : [this.elements.animationsReels];
-    this.animationsReels = each(reelsElements, (element) => {
-      return new Reels({
-        element,
-        elements: { reels: element.querySelectorAll("video") },
-      });
-    });
+    this.animationsSeparators = toArray(this.elements.animationsSeparators).map(
+      (element) => new Separator({ element })
+    );
+
+    this.animationsTitles = toArray(this.elements.animationsTitles).map(
+      (element) => new Title({ element })
+    );
+
+    this.animationsImages = toArray(this.elements.animationsImages).map(
+      (element) => new Image({ element })
+    );
+
+    this.animationsReels = toArray(this.elements.animationsReels).map(
+      (element) =>
+        new Reels({
+          element,
+          elements: { reels: "video" },
+        })
+    );
   }
 
   createTextCursor() {}
   destroyTextCursor() {
-    if (this.textCursor) {
+    if (this.textCursor && this.textCursor.cursor) {
       this.textCursor.cursor.remove();
     }
   }

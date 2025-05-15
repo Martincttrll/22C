@@ -5,7 +5,6 @@ export default class Animation extends Component {
 
     this.previousScroll = window.scrollY;
     this.isScrollingDown = true;
-
     this.createObsverver();
     this.animateOut();
   }

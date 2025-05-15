@@ -4,7 +4,6 @@ import { gsap } from "gsap";
 export default class Reels extends Animation {
   constructor({ element, elements }) {
     super({ element, elements });
-
     this.isMuted = true;
   }
 
