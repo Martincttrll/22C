@@ -6,6 +6,9 @@ nav.nav__wrapper {
   justify-content: space-between;
   padding: 2rem;
   display: none;
+  @include media("<tablet") {
+    padding: 20px;
+  }
 }
 nav.nav__wrapper.active {
   display: flex;

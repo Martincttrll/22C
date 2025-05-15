@@ -148,19 +148,35 @@ p.home__who__p {
 
 .home__reels__wrapper {
   @extend %content-padding;
+  position: relative;
   display: flex;
   margin-top: 6rem;
   justify-content: center;
-  // width: 100%;
 }
+
 .home__reels__video {
   width: 33.3333%;
   filter: brightness(0.4) blur(2px);
   transition: all 0.5s ease-in-out;
   will-change: filter;
+  @include media("<tablet") {
+    width: 100%;
+  }
 }
 .home__reels__video:hover {
   filter: brightness(1) blur(0px);
+}
+.tap-anim {
+  position: absolute;
+  left: 50%;
+  top: 16.6666%;
+  width: 60px;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 10;
 }
 
 .home__news__wrapper {

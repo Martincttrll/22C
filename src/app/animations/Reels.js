@@ -1,26 +1,16 @@
 import { Detection } from "../classes/Detection";
 import Animation from "../classes/Animation";
-
+import { gsap } from "gsap";
 export default class Reels extends Animation {
   constructor({ element, elements }) {
     super({ element, elements });
-    // this.element = element;
-    // this.elements.reels = this.element.querySelectorAll("video");
-    this.isMuted = true;
 
-    this.addEventListeners();
-    this.addIntersectionObserver();
+    this.isMuted = true;
   }
 
-  /*TO DO :
-  faire hériter la classe de Animation
-  animateIn() mobile : ptite anime de doigt qui appuie sur les reels (full widh du wrapper )
-  animateOut() : mute 
-*/
   addEventListeners() {
     if (!Detection.isMobile) {
       this.element.addEventListener("click", (e) => {
-        console.log(e.target);
         this.isMuted = !this.isMuted;
 
         if (this.isMuted) {
@@ -46,6 +36,9 @@ export default class Reels extends Animation {
     } else {
       this.elements.reels.forEach((reel) => {
         reel.addEventListener("click", () => {
+          if (document.querySelector(".tap-anim")) {
+            document.querySelector(".tap-anim").remove();
+          }
           if (reel.muted) {
             this.elements.reels.forEach((otherReel) => {
               otherReel.muted = true;
@@ -59,23 +52,32 @@ export default class Reels extends Animation {
     }
   }
   animateIn() {
-    console.log(this.elements.reels);
-    console.log("Reels visible - animateIn");
-    this.elements.reels.forEach((reel) => {
-      reel.play().catch((error) => {
-        console.warn("Video play failed:", error);
-      });
-    });
+    if (Detection.isMobile) {
+      const tap = document.createElement("div");
+      tap.className = "tap-anim";
+      this.element.appendChild(tap);
+
+      gsap.fromTo(
+        tap,
+        { scale: 1, opacity: 1 },
+        {
+          scale: 3,
+          opacity: 0,
+          repeat: -1,
+          yoyo: false,
+          duration: 0.8,
+          ease: "power1.out",
+        }
+      );
+    }
   }
 
   animateOut() {
-    console.log(this.element);
-
-    console.log(this.elements.reels);
-    console.log("Reels hidden - animateOut");
+    if (document.querySelector(".tap-anim")) {
+      document.querySelector(".tap-anim").remove();
+    }
     this.elements.reels.forEach((reel) => {
       reel.muted = true;
-      reel.pause();
     });
   }
 }

@@ -13,6 +13,7 @@ export default class Home extends Page {
         videoWrapper: ".home__video__wrapper",
         h1: ".home__title",
         logoNav: document.querySelector(".nav__logo"),
+        reelsWrapper: ".home__reels__wrapper",
       },
     });
   }

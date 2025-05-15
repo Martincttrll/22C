@@ -8,12 +8,14 @@ export default class Component extends EventEmitter {
     this.selectorChildren = {
       ...elements,
     };
-    console.log(elements);
+
     this.create();
     this.addEventListeners();
   }
 
   create() {
+    this.elements = {};
+
     if (this.selector instanceof window.HTMLElement) {
       this.element = this.selector;
     } else {
