@@ -20,16 +20,17 @@ block content
                             th Titre
                             th Feat .
                             th Album
-                            th Durée
-                            th(style="text-align:center;") Écouter        
+                            th Durée 
                     tbody
                         each track, index in album.tracks
                             tr
-                                td.album__track__name #{track.name}
-                                td.album__track__feat #{track.featuring || ''}
-                                td.album__track__album #{track.album ? track.album : album.name}
+                                td.album__track__name
+                                    a(href=track.spotify_url, target="_blank", rel="noopener noreferrer") #{track.name}
+                                td.album__track__feat
+                                    a(href=track.spotify_url, target="_blank", rel="noopener noreferrer") #{track.featuring || ''}
+                                td.album__track__album
+                                    a(href=track.spotify_url, target="_blank", rel="noopener noreferrer") #{track.album ? track.album : album.name}
                                 - const duration = new Date(track.duration_ms).toISOString().substr(11, 8);
-                                td.album__track__duration #{duration}
-                                td.album__track__action
-                                    a(href=track.spotify_url, target="_blank")
-                                        img(src="/src/assets/picto/arrow.svg", alt="Spotify",width="20px")
+                                td.album__track__duration
+                                    a(href=track.spotify_url, target="_blank", rel="noopener noreferrer") #{duration}
+                            

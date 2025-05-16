@@ -73,5 +73,6 @@ export class Navigation {
     each(this.links, (link) => {
       link.addEventListener("click", this.toggleMenu);
     });
+    this.menuWrapper.addEventListener("click", this.toggleMenu);
   }
 }

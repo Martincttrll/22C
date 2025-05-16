@@ -1,12 +1,17 @@
 import Component from "./Component.js";
 export default class Animation extends Component {
-  constructor({ element, elements }) {
+  constructor({ element, elements, useObserver = true }) {
     super({ element, elements });
 
     this.previousScroll = window.scrollY;
     this.isScrollingDown = true;
-    this.createObsverver();
-    this.animateOut();
+
+    if (useObserver && "IntersectionObserver" in window) {
+      this.createObsverver();
+      this.animateOut();
+    } else {
+      this.animateIn();
+    }
   }
   createObsverver() {
     this.observer = new IntersectionObserver((entries) => {
