@@ -5,6 +5,7 @@ import { Album } from "./pages/Album";
 import { Navigation } from "./components/Navigation";
 import { each } from "lodash";
 import { Preloader } from "./components/Preloader";
+import Canvas from "./components/Canvas";
 class App {
   constructor() {
     console.log("©2025 - 22Carbone by MartinCtrl");
@@ -12,8 +13,10 @@ class App {
     // this.createPreloader();
     this.createNavigation();
     this.createPages();
+    this.createCanvas();
     this.addEventListeners();
     this.addLinkListeners();
+    this.onResize();
   }
 
   createContent() {
@@ -42,16 +45,29 @@ class App {
     this.page.create();
   }
 
+  createCanvas() {
+    this.canvas = new Canvas();
+  }
+
   /*
    * Events
    */
 
   onPreloaded() {
-    // this.onResize();
+    this.onResize();
 
     // this.canvas.onPreloaded();
 
     this.page.show();
+  }
+
+  onResize() {
+    if (this.page && this.page.onResize) {
+      this.page.onResize();
+    }
+    if (this.canvas && this.canvas.onResize) {
+      this.canvas.onResize();
+    }
   }
 
   onPopState = () => {
@@ -95,6 +111,7 @@ class App {
 
       this.page = this.pages[this.template];
       this.page.create();
+      this.onResize();
       this.page.show();
       this.isFetching = false;
       this.addLinkListeners();
@@ -123,6 +140,7 @@ class App {
 
   addEventListeners() {
     window.addEventListener("popstate", this.onPopState, { passive: true });
+    window.addEventListener("resize", this.onResize.bind(this));
     // window.oncontextmenu = this.onContextMenu; Disable right click
   }
 }
