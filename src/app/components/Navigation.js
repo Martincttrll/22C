@@ -74,5 +74,10 @@ export class Navigation {
       link.addEventListener("click", this.toggleMenu);
     });
     this.menuWrapper.addEventListener("click", this.toggleMenu);
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        this.toggleMenu();
+      }
+    });
   }
 }
