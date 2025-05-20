@@ -1,12 +1,16 @@
 //Class qui permet de génerer tous les canvas du site (preloader ????)
 import * as THREE from "three";
+import Home from "./Home";
 export default class Canvas {
   constructor() {
     this.createRenderer();
     this.createScene();
     this.createCamera();
-    this.createCube();
+
+    this.updateCallbacks = [];
+
     this.update();
+    this.createHome();
   }
 
   createRenderer() {
@@ -37,23 +41,41 @@ export default class Canvas {
     this.scene = new THREE.Scene();
   }
 
-  createCube() {
-    this.cube = new THREE.Mesh(
-      new THREE.BoxGeometry(2, 2, 2),
-      new THREE.MeshBasicMaterial({ color: 0xff0000 })
-    );
-    this.scene.add(this.cube);
-  }
-
   update() {
     requestAnimationFrame(() => this.update());
-    this.cube.rotation.x += 0.01;
-    this.cube.rotation.y += 0.01;
+    this.updateCallbacks.forEach((update) => update());
     this.renderer.render(this.scene, this.camera);
   }
 
+  addUpdate(updateFunction) {
+    this.updateCallbacks.push(updateFunction);
+  }
+
+  createHome() {
+    this.home = new Home({
+      scene: this.scene,
+      camera: this.camera,
+      addUpdate: this.addUpdate.bind(this),
+    });
+  }
+
+  /**
+   * Events.
+   */
   onResize() {
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    this.camera.aspect = window.innerWidth / window.innerHeight;
+    this.camera.updateProjectionMatrix();
+  }
+
+  onChange(template, isPreloaded) {
+    if (template === "/") {
+      this.home.show(isPreloaded);
+    } else {
+      this.home.hide();
+    }
+
+    this.template = template;
   }
 }

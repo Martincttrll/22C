@@ -12,6 +12,7 @@ html {
 body {
   @extend %cover;
   font-family: "robotoMono";
+  overflow: hidden;
 }
 
 //lenis

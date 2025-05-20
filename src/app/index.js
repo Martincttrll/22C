@@ -103,6 +103,7 @@ class App {
       document.title = newTitle;
 
       this.navigation.onChange(this.template);
+      this.canvas.onChange(this.template);
       const page = this.pages[url];
 
       if (push) {

@@ -1,7 +1,6 @@
 import Page from "../../classes/Page";
 import { TextCursor } from "../../components/TextCrusor";
 import { Parallax } from "../../animations/Parallax";
-import { MembersScene } from "./MembersScene";
 
 export default class Home extends Page {
   constructor() {
@@ -50,6 +49,5 @@ export default class Home extends Page {
   create() {
     super.create();
     new Parallax(this.elements.videoWrapper, this.smoothScroll.lenis);
-    new MembersScene(".home__three__wrapper");
   }
 }
