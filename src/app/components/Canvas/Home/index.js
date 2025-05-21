@@ -95,17 +95,29 @@ export default class Home {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: document.querySelector(".home__three__wrapper"),
-        start: "top center-=200px",
+        start: "top center",
         end: `+=${scrollDuration}`,
         scrub: true,
         pin: true,
+        markers: true,
         onUpdate: (self) => {
-          const stepIndex = Math.round(self.progress * (this.steps.length - 1));
-          const step = this.steps[stepIndex];
+          const index = Math.round(self.progress * (this.steps.length - 1));
+          const step = this.steps[index];
           this.label.innerText = step.label;
           this.updateLightColor(step.color);
         },
       },
+    });
+
+    this.modelGroup.position.y = -2.5;
+
+    tl.to(this.modelGroup.position, {
+      y: 0,
+      duration: 1,
+      ease: "power2.out",
+    }).call(() => {
+      this.label.innerText = this.steps[0].label;
+      this.updateLightColor(this.steps[0].color);
     });
 
     this.steps.forEach((step, index) => {
@@ -114,23 +126,16 @@ export default class Home {
       tl.to(this.modelGroup.position, {
         x: targetX,
         duration: 1,
-        onStart: () => {
-          this.label.innerText = step.label;
-          this.updateLightColor(step.color);
-        },
+      }).call(() => {
+        this.label.innerText = step.label;
+        this.updateLightColor(step.color);
       });
+    });
 
-      ScrollTrigger.create({
-        trigger: document.querySelector(this.selector),
-        start: `top+=${index * SCROLL_DURATION} center`,
-        end: `top+=${(index + 1) * SCROLL_DURATION} center`,
-        scrub: true,
-        onLeaveBack: () => {
-          const prevStep = this.steps[index - 1] || this.steps[0];
-          this.label.innerText = prevStep.label;
-          this.updateLightColor(prevStep.color);
-        },
-      });
+    tl.to(this.modelGroup.position, {
+      y: 2.5,
+      duration: 1,
+      ease: "power2.out",
     });
   }
 

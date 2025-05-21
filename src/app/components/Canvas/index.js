@@ -19,7 +19,6 @@ export default class Canvas {
     this.renderer.domElement.style.pointerEvents = "none";
     this.renderer.domElement.style.border = "1px solid red";
     this.renderer.domElement.style.position = "absolute";
-    this.renderer.domElement.style.cursor = "absolute";
     this.renderer.domElement.style.overflow = "hidden";
     this.renderer.domElement.style.top = 0;
     this.renderer.domElement.style.left = 0;
