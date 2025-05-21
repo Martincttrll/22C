@@ -10,7 +10,7 @@ class App {
   constructor() {
     console.log("©2025 - 22Carbone by MartinCtrl");
     this.createContent();
-    // this.createPreloader();
+    this.createPreloader();
     this.createNavigation();
     this.createPages();
     this.createCanvas();
@@ -46,7 +46,7 @@ class App {
   }
 
   createCanvas() {
-    this.canvas = new Canvas();
+    this.canvas = new Canvas({ template: this.template });
   }
 
   /*
@@ -56,7 +56,7 @@ class App {
   onPreloaded() {
     this.onResize();
 
-    // this.canvas.onPreloaded();
+    this.canvas.onPreloaded();
 
     this.page.show();
   }
@@ -81,7 +81,6 @@ class App {
     if (this.isFetching || this.url === url) return;
 
     this.isFetching = true;
-
     this.page.hide();
 
     const request = await window.fetch(url);
@@ -104,7 +103,6 @@ class App {
 
       this.navigation.onChange(this.template);
       this.canvas.onChange(this.template);
-      const page = this.pages[url];
 
       if (push) {
         window.history.pushState({}, "", url);

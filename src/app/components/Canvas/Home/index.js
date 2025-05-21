@@ -11,6 +11,7 @@ export default class Home {
   constructor({ scene, camera, addUpdate }) {
     this.scene = scene;
     this.camera = camera;
+    this.group = new THREE.Group();
     this.addUpdate = addUpdate;
     this.loader = new GLTFLoader();
 
@@ -32,15 +33,6 @@ export default class Home {
         modelPath: "src/assets/models/caracter/caracter.gltf",
       },
     ];
-
-    this.init();
-  }
-
-  async init() {
-    this.createLights();
-    await this.loadModels();
-    this.setupCamera();
-    this.setupScrollAnimation();
   }
 
   createLights() {
@@ -48,15 +40,15 @@ export default class Home {
     this.spotLight.position.set(0.8, 2.5, -2);
     this.spotLight.angle = 0.3;
     this.spotLight.penumbra = 0.2;
-    this.scene.add(this.spotLight);
+    this.group.add(this.spotLight);
 
     this.directionalLight = new THREE.DirectionalLight(0xffffff, 0.2);
-    this.scene.add(this.directionalLight);
+    this.group.add(this.directionalLight);
   }
 
   async loadModels() {
     this.modelGroup = new THREE.Group();
-    this.scene.add(this.modelGroup);
+    this.group.add(this.modelGroup);
 
     const modelPromises = this.steps.map(async (step, i) => {
       const model = await new Promise((resolve, reject) => {
@@ -99,7 +91,6 @@ export default class Home {
         end: `+=${scrollDuration}`,
         scrub: true,
         pin: true,
-        markers: true,
         onUpdate: (self) => {
           const index = Math.round(self.progress * (this.steps.length - 1));
           const step = this.steps[index];
@@ -150,5 +141,16 @@ export default class Home {
       b,
       duration: 0.5,
     });
+  }
+
+  async show() {
+    this.createLights();
+    await this.loadModels();
+    this.setupCamera();
+    this.setupScrollAnimation();
+    this.scene.add(this.group);
+  }
+  hide() {
+    this.scene.remove(this.group);
   }
 }

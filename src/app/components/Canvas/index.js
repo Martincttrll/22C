@@ -1,16 +1,15 @@
 //Class qui permet de génerer tous les canvas du site (preloader ????)
 import * as THREE from "three";
 import Home from "./Home";
+import Discography from "./Discography";
 export default class Canvas {
-  constructor() {
+  constructor({ template }) {
+    this.template = template;
+    this.updateCallbacks = [];
     this.createRenderer();
     this.createScene();
     this.createCamera();
-
-    this.updateCallbacks = [];
-
     this.update();
-    this.createHome();
   }
 
   createRenderer() {
@@ -36,6 +35,7 @@ export default class Canvas {
     );
     this.camera.position.z = 5;
   }
+
   createScene() {
     this.scene = new THREE.Scene();
   }
@@ -58,9 +58,23 @@ export default class Canvas {
     });
   }
 
+  createDiscography() {
+    this.discography = new Discography({
+      scene: this.scene,
+    });
+  }
+
   /**
    * Events.
    */
+
+  onPreloaded() {
+    this.createHome();
+    this.createDiscography();
+
+    this.onChange(this.template, true);
+  }
+
   onResize() {
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -69,10 +83,16 @@ export default class Canvas {
   }
 
   onChange(template, isPreloaded) {
-    if (template === "/") {
+    if (template === "home") {
       this.home.show(isPreloaded);
     } else {
       this.home.hide();
+    }
+
+    if (template === "discography") {
+      this.discography.show(isPreloaded);
+    } else {
+      this.discography.hide();
     }
 
     this.template = template;
