@@ -116,6 +116,11 @@ module.exports = async function () {
         release_date: album.release_date,
         cover: album.images?.[0]?.url || null,
         spotify_url: album.external_urls?.spotify || null,
+        total_ms: filteredTracks.reduce(
+          (sum, track) => sum + track.duration_ms,
+          0
+        ),
+        total_tracks: album.total_tracks,
         tracks: filteredTracks.map((track) => ({
           name: track.name,
           duration_ms: track.duration_ms,
@@ -137,6 +142,11 @@ module.exports = async function () {
       cover: null,
       spotify_url: null,
       tracks: collaborationTracks,
+      total_ms: collaborationTracks.reduce(
+        (sum, track) => sum + track.duration_ms,
+        0
+      ),
+      total_tracks: collaborationTracks.length,
     });
   }
 
@@ -173,6 +183,6 @@ module.exports = async function () {
     (album) => !duplicateSingleIds.has(album.id)
   );
 
-  // console.log(finalAlbums);
+  console.log(finalAlbums);
   return finalAlbums;
 };

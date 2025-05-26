@@ -7,48 +7,68 @@
 }
 .discography__wrapper {
   @extend %cover;
+  overflow: hidden;
   width: 100vw;
   height: 100dvh;
   overflow-x: hidden;
   background: black;
-}
-.discography a {
-  text-decoration: none;
-  color: inherit;
-}
-.discography__album__cover {
-  @extend %center;
-  position: absolute;
-  transform: translate(-50%, -50%);
-  top: 50%;
-  left: 50%;
+  position: relative;
 }
 
-.discography__albums__wrapper {
-  @extend %cover;
+.discography__album {
+  position: absolute;
   @extend %center;
-  position: relative;
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
-  gap: 8rem;
+  height: 100dvh;
+  width: 100vw;
+  visibility: hidden;
   mix-blend-mode: difference;
 }
-.discography__album {
+
+.discography__album__cover {
+  position: absolute;
+  transform: translateX(-50%);
+  bottom: -70%;
+  left: 50%;
+  width: 80vw;
+}
+.discography__album__label {
+  position: relative;
+  top: -20rem;
+}
+.discography__album__title {
   @extend %title-50;
   font-size: 8rem;
   text-align: center;
-  position: relative;
   font-family: "baunk";
   text-transform: uppercase;
   text-decoration: none;
 }
 
-.discography__album__release__date {
+.discography__album__date {
   position: absolute;
   top: 0;
   transform: translate(0, -50%);
   left: 100%;
   font-size: 2rem;
   font-family: "robotoMono";
+  & .before {
+    content: "";
+    width: 0%;
+    height: 2.1rem;
+    background-color: white;
+    position: absolute;
+  }
+}
+.discography__album__info {
+  display: inline-flex;
+  gap: 2rem;
+  font-size: 2rem;
+  font-family: "robotoMono";
+  & .before {
+    content: "";
+    width: 0%;
+    height: 2.1rem;
+    background-color: white;
+    position: absolute;
+  }
 }

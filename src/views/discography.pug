@@ -6,13 +6,16 @@ extends ./_layouts/layout.pug
 block content
     .discography 
         .discography__wrapper
-            img.discography__album__cover(data-src=spotify[0].cover, alt=spotify[0].title)
-            .discography__albums__wrapper
-                    each album in spotify
-                        a(href="/discography/"+album.slug+"/")                         
-                            .discography__album(data-cover=album.cover)
-                                .discography__album__title #{album.name}
-                                .discography__album__release__date (#{album.release_date.slice(0,4)})
+                each album in spotify                        
+                    .discography__album(data-cover=album.cover)
+                        .discography__album__label
+                            .discography__album__title #{album.name}
+                            .discography__album__date (#{album.release_date.slice(0,4)})
+                            .discography__album__info
+                                div #{album.total_tracks} tracks
+                                div ⚈
+                                div #{Math.floor(album.total_ms / 60000)} min
+                        img.discography__album__cover(src=album.cover, alt=album.name)
 //- Covers empilées comme https://jams.basicagency.com/ avec titre en gros au milieu 
 //- Transition au click vers album, cover s'intègre en se mettant sur le coté ? genre 1/3 qui dépasse sur left.
 //- la cover sort au hover (dans album)?
