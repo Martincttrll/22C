@@ -97,6 +97,7 @@ module.exports = async function () {
       ...collabTracks.map((track) => ({
         name: track.name,
         duration_ms: track.duration_ms,
+        cover: album.images?.[0]?.url || null,
         album: album.name,
         featuring: track.artists
           .filter((a) => a.id !== artistId)
@@ -134,12 +135,13 @@ module.exports = async function () {
     }
   }
   if (collaborationTracks.length > 0) {
+    console.log();
     albumsWithTracks.push({
       id: "collaborations",
       name: "Collaborations",
       slug: "collaborations",
       release_date: String(collaborationTracks.length).padStart(3, "0"),
-      cover: null,
+      cover: collaborationTracks[0]?.cover || null,
       spotify_url: null,
       tracks: collaborationTracks,
       total_ms: collaborationTracks.reduce(
@@ -183,6 +185,6 @@ module.exports = async function () {
     (album) => !duplicateSingleIds.has(album.id)
   );
 
-  console.log(finalAlbums);
+  // console.log(finalAlbums);
   return finalAlbums;
 };

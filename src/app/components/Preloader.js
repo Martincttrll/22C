@@ -11,7 +11,7 @@ export class Preloader extends Component {
     this.totalBars = 26;
     this.keyword = "22CARBONE";
     this.bars = [];
-    this.minDisplayTime = 500;
+    this.minDisplayTime = 1000;
     this.entryStartTime = performance.now();
 
     this.createLoader();
