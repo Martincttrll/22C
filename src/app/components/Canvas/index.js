@@ -22,7 +22,7 @@ export default class Canvas {
     this.renderer.domElement.style.boxSizing = "border-box";
     this.renderer.domElement.style.top = 0;
     this.renderer.domElement.style.left = 0;
-    this.renderer.domElement.style.zIndex = 10;
+    this.renderer.domElement.style.zIndex = 0;
 
     document.body.appendChild(this.renderer.domElement);
   }
@@ -99,12 +99,14 @@ export default class Canvas {
 
   onChange(template, isPreloaded) {
     if (template === "home") {
+      this.canvasPage = this.home;
       this.home.show(isPreloaded);
     } else {
       this.home.hide();
     }
 
     if (template === "discography") {
+      this.canvasPage = this.discography;
       this.discography.show(isPreloaded);
     } else {
       this.discography.hide();

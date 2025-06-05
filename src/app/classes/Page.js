@@ -89,9 +89,12 @@ export default class Page extends EventEmitter {
     }
   }
 
+  setCanvasPage(canvasPage) {
+    this.canvasPage = canvasPage;
+  }
+
   show(_url) {
     this.isVisible = true;
-
     this.addEventListeners();
 
     return Promise.resolve();

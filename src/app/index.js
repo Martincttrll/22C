@@ -3,7 +3,7 @@ import Home from "./pages/Home";
 import { Discography } from "./pages/Discography";
 import { Album } from "./pages/Album";
 import { Navigation } from "./components/Navigation";
-import { each } from "lodash";
+import { each, set } from "lodash";
 import { Preloader } from "./components/Preloader";
 import Canvas from "./components/Canvas";
 class App {
@@ -59,6 +59,8 @@ class App {
     this.canvas.onPreloaded();
 
     this.page.show();
+
+    this.page.setCanvasPage(this.canvas.canvasPage);
   }
 
   onResize() {
@@ -110,6 +112,9 @@ class App {
 
       this.page = this.pages[this.template];
       this.page.create();
+
+      this.page.setCanvasPage(this.canvas.canvasPage);
+
       this.onResize();
       this.page.show();
       this.isFetching = false;
