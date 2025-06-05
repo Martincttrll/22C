@@ -63,6 +63,7 @@ export class Navigation {
   }
 
   toggleMenu = () => {
+    console.log("Toggling menu");
     this.isMenuOpen = !this.isMenuOpen;
     this.menuTimeline.reversed()
       ? this.menuTimeline.play()
@@ -71,7 +72,10 @@ export class Navigation {
   addEventListeners() {
     this.menuBtn.addEventListener("click", this.toggleMenu);
     each(this.links, (link) => {
-      link.addEventListener("click", this.toggleMenu);
+      link.addEventListener("click", (e) => {
+        e.stopPropagation();
+        this.toggleMenu();
+      });
     });
     this.menuWrapper.addEventListener("click", this.toggleMenu);
     window.addEventListener("keydown", (e) => {
