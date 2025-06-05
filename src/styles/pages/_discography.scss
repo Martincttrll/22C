@@ -30,6 +30,7 @@
   bottom: -100rem;
   left: 50%;
   width: 80vw;
+  visibility: hidden;
   @include media("<tablet") {
     bottom: 10vw;
   }

@@ -106,6 +106,9 @@ export class Discography extends Page {
     });
 
     const tl = gsap.timeline({
+      onStart: () => {
+        this.canvasPage.scrollToIndex(next);
+      },
       onComplete: () => {
         this.isAnimating = false;
       },
@@ -165,11 +168,7 @@ export class Discography extends Page {
   }
 
   handleWheel(e) {
-    // this.scrollAccumulator += Math.abs(e.deltaY);
-
-    // if (this.scrollAccumulator > this.scrollThreshold) {
     this.direction = e.deltaY < 0 ? "up" : "down";
-    // this.scrollAccumulator = 0;
     if (this.direction === "down") {
       if (this.currentIndex === this.elements.albums.length - 1) {
         this.nextIndex = 0;
@@ -179,7 +178,6 @@ export class Discography extends Page {
       this.nextAlbum = this.elements.albums[this.nextIndex];
       this.next();
     } else if (this.direction === "up") {
-      // this.scrollAccumulator = 0;
       if (this.currentIndex === 0) {
         this.previousIndex = this.elements.albums.length - 1;
       } else {
@@ -188,7 +186,6 @@ export class Discography extends Page {
       this.previousAlbum = this.elements.albums[this.previousIndex];
       this.previous();
     }
-    // }
   }
 
   next() {
