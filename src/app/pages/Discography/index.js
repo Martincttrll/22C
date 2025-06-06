@@ -100,7 +100,7 @@ export class Discography extends Page {
       if (el) el._splitText = newSplits[i];
     });
 
-    gsap.set(newSplits[0].chars, { y: next ? "100%" : "-100%" });
+    gsap.set(newSplits[0].chars, { y: next ? "-100%" : "100%" });
     gsap.set([newSplits[1].chars, newSplits[2].chars], {
       x: next ? "100%" : "-100%",
     });
@@ -115,7 +115,7 @@ export class Discography extends Page {
     });
 
     tl.to(oldSplits[0].chars, {
-      y: next ? "-100%" : "100%",
+      y: next ? "100%" : "-100%",
       duration: 0.4,
       ease: "power2.inOut",
       stagger: 0.04,
