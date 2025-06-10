@@ -57,39 +57,73 @@ export default class Discography {
       ? this.mediaInstances[total - 1]
       : this.mediaInstances[0];
 
-    const edgeTarget = targetPositions[next ? total - 1 : 0];
+    const edgeTarget = targetPositions[next ? 0 : total - 1];
+    this.mediaInstances.forEach((media) => {
+      console.log(media.title, media.mesh.position);
+    });
+    console.log("edgeTarget", edgeTarget);
+
     //Center medias
     this.mediaInstances.forEach((media, i) => {
-      // if (media != edgeMedia) {
-      let targetIndex = next ? (i - 1 + total) % total : (i + 1) % total;
-      const target = targetPositions[targetIndex];
-      tl.to(
-        media.mesh.position,
-        {
-          x: target.x,
-          y: target.y,
-          z: target.z,
-          duration: 0.7,
-          ease: "power2.inOut",
-        },
-        "<"
-      );
-      // }
+      if (media != edgeMedia) {
+        let targetIndex = next ? (i - 1 + total) % total : (i + 1) % total;
+        const target = targetPositions[targetIndex];
+        tl.to(
+          media.mesh.position,
+          {
+            x: target.x,
+            y: target.y,
+            z: target.z,
+            duration: 0.7,
+            ease: "power2.inOut",
+          },
+          "<"
+        );
+      }
     });
 
     //Edge media
-    tl.to(edgeMedia.mesh.material, {
-      opacity: 1,
-      duration: 0.7,
+    //Disappear
+    tl.to(
+      edgeMedia.mesh.position,
+      {
+        y: edgeMedia.mesh.position.y - 8,
+        duration: 0.4,
+        ease: "power2.inOut",
+      },
+      "<"
+    );
+    tl.to(
+      edgeMedia.mesh.material,
+      {
+        opacity: 0,
+        duration: 0.4,
+        ease: "power2.inOut",
+      },
+      "<"
+    );
+    //Reappear
+    tl.add(() => {
+      edgeMedia.mesh.position.x = edgeTarget.x;
+      edgeMedia.mesh.position.y = edgeTarget.y - 8;
+      edgeMedia.mesh.position.z = edgeTarget.z;
+    }, "+=0.01");
+
+    // Réapparition (remonte et fade in)
+    tl.to(edgeMedia.mesh.position, {
+      y: edgeTarget.y,
+      duration: 0.3,
       ease: "power2.inOut",
     });
-    // tl.to(edgeMedia.mesh.position, {
-    //   x: edgeTarget.x,
-    //   y: edgeTarget.y,
-    //   z: edgeTarget.z,
-    //   duration: 0.7,
-    //   ease: "power2.inOut",
-    // });
+    tl.to(
+      edgeMedia.mesh.material,
+      {
+        opacity: 1,
+        duration: 0.3,
+        ease: "power2.inOut",
+      },
+      "<"
+    );
   }
 
   onResize(sizes) {

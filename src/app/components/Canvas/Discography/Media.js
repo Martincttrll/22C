@@ -2,6 +2,7 @@ import * as THREE from "three";
 export default class Media {
   constructor({ element, group, sizes }) {
     this.element = element;
+    //this.title = document.querySelector(".discography__album__title").innerText; // debug a supprimer
     this.group = group;
     this.sizes = sizes;
     this.createTextures();
