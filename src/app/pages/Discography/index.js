@@ -1,6 +1,8 @@
 import Page from "../../classes/Page";
 import gsap from "gsap";
 import SplitText from "gsap/SplitText";
+import { Detection } from "../../classes/Detection";
+
 gsap.registerPlugin(SplitText);
 export class Discography extends Page {
   constructor() {
@@ -15,8 +17,6 @@ export class Discography extends Page {
         info: ".discography__album__info",
       },
     });
-    // this.scrollAccumulator = 0;
-    // this.scrollThreshold = 1000;
     this.isAnimating = false;
   }
 
@@ -116,7 +116,7 @@ export class Discography extends Page {
 
     tl.to(oldSplits[0].chars, {
       y: next ? "100%" : "-100%",
-      duration: 0.4,
+      duration: 0.3,
       ease: "power2.inOut",
       stagger: 0.04,
     });
@@ -124,7 +124,7 @@ export class Discography extends Page {
       [oldSplits[1].chars, oldSplits[2].chars],
       {
         x: next ? "-100%" : "100%",
-        duration: 0.4,
+        duration: 0.3,
         ease: "power2.inOut",
         stagger: 0.04,
       },
@@ -142,7 +142,7 @@ export class Discography extends Page {
       newSplits[0].chars,
       {
         y: "0%",
-        duration: 0.4,
+        duration: 0.3,
         ease: "power2.inOut",
         stagger: 0.04,
       },
@@ -152,7 +152,7 @@ export class Discography extends Page {
       [newSplits[1].chars, newSplits[2].chars],
       {
         x: "0%",
-        duration: 0.4,
+        duration: 0.3,
         ease: "power2.inOut",
         stagger: 0.04,
       },
@@ -162,13 +162,35 @@ export class Discography extends Page {
 
   addEventListeners() {
     super.addEventListeners();
-    window.addEventListener("wheel", this.handleWheel.bind(this), {
-      passive: true,
-    });
+    if (!Detection.isMobile) {
+      window.addEventListener(
+        "wheel",
+        (e) => {
+          this.direction = e.deltaY < 0 ? "up" : "down";
+          this.handleWheel();
+        },
+        {
+          passive: true,
+        }
+      );
+    } else {
+      let startY = 0;
+      window.addEventListener("touchstart", (e) => {
+        startY = e.touches[0].clientY;
+      });
+      window.addEventListener("touchend", (e) => {
+        const endY = e.changedTouches[0].clientY;
+        if (endY > startY + 10) {
+          this.direction = "down";
+        } else if (endY < startY - 10) {
+          this.direction = "up";
+        }
+        this.handleWheel();
+      });
+    }
   }
 
-  handleWheel(e) {
-    this.direction = e.deltaY < 0 ? "up" : "down";
+  handleWheel() {
     if (this.direction === "down") {
       if (this.currentIndex === this.elements.albums.length - 1) {
         this.nextIndex = 0;
