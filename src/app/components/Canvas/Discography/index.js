@@ -30,8 +30,9 @@ export default class Discography {
       media.mesh.position.z -= i * 0.5;
       media.mesh.position.y += i * 0.5;
       media.mesh.rotation.x = 0.1;
-      // media.mesh.material.opacity = 1 * (1 - i * 0.1);
     });
+
+    this.group.position.y -= 1;
   }
 
   scrollToIndex(next) {
@@ -56,34 +57,6 @@ export default class Discography {
     const edgeMedia = next
       ? this.mediaInstances[total - 1]
       : this.mediaInstances[0];
-
-    const edgeTarget = targetPositions[next ? 0 : total - 1];
-    this.mediaInstances.forEach((media) => {
-      console.log(media.title, media.mesh.position);
-    });
-    console.log("edgeTarget", edgeTarget);
-
-    //Center medias
-    this.mediaInstances.forEach((media, i) => {
-      if (media != edgeMedia) {
-        let targetIndex = next ? (i - 1 + total) % total : (i + 1) % total;
-        const target = targetPositions[targetIndex];
-        tl.to(
-          media.mesh.position,
-          {
-            x: target.x,
-            y: target.y,
-            z: target.z,
-            duration: 0.7,
-            ease: "power2.inOut",
-          },
-          "<"
-        );
-      }
-    });
-
-    //Edge media
-    //Disappear
     tl.to(
       edgeMedia.mesh.position,
       {
@@ -102,28 +75,26 @@ export default class Discography {
       },
       "<"
     );
-    //Reappear
-    tl.add(() => {
-      edgeMedia.mesh.position.x = edgeTarget.x;
-      edgeMedia.mesh.position.y = edgeTarget.y - 8;
-      edgeMedia.mesh.position.z = edgeTarget.z;
-    }, "+=0.01");
-
-    // Réapparition (remonte et fade in)
-    tl.to(edgeMedia.mesh.position, {
-      y: edgeTarget.y,
+    tl.to(edgeMedia.mesh.material, {
+      opacity: 1,
       duration: 0.3,
       ease: "power2.inOut",
     });
-    tl.to(
-      edgeMedia.mesh.material,
-      {
-        opacity: 1,
-        duration: 0.3,
-        ease: "power2.inOut",
-      },
-      "<"
-    );
+    this.mediaInstances.forEach((media, i) => {
+      let targetIndex = next ? (i - 1 + total) % total : (i + 1) % total;
+      const target = targetPositions[targetIndex];
+      tl.to(
+        media.mesh.position,
+        {
+          x: target.x,
+          y: target.y,
+          z: target.z,
+          duration: 0.7,
+          ease: "power2.inOut",
+        },
+        "<"
+      );
+    });
   }
 
   onResize(sizes) {
