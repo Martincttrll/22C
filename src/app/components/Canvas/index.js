@@ -63,6 +63,7 @@ export default class Canvas {
     this.discography = new Discography({
       scene: this.scene,
       sizes: this.sizes,
+      camera: this.camera,
     });
   }
 

@@ -4,8 +4,9 @@ import * as THREE from "three";
 import gsap from "gsap";
 
 export default class Discography {
-  constructor({ scene, sizes }) {
+  constructor({ scene, sizes, camera }) {
     this.scene = scene;
+    this.camera = camera;
     this.sizes = sizes;
     this.group = new THREE.Group();
   }
@@ -35,7 +36,39 @@ export default class Discography {
     this.group.position.y -= 1;
   }
 
-  scrollToIndex(next) {
+  createRaycaster() {
+    this.raycaster = new THREE.Raycaster();
+    this.mouse = new THREE.Vector2();
+    window.addEventListener("mousemove", (event) => {
+      this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      this.raycaster.setFromCamera(this.mouse, this.camera);
+      const intersects = this.raycaster.intersectObjects(
+        this.mediaInstances.map((media) => media.mesh)
+      );
+      if (intersects.length > 0) {
+        document.body.style.cursor = "pointer";
+      } else {
+        document.body.style.cursor = "";
+      }
+    });
+    window.addEventListener("click", (event) => {
+      this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      this.raycaster.setFromCamera(this.mouse, this.camera);
+      const intersects = this.raycaster.intersectObjects(
+        this.mediaInstances.map((media) => media.mesh)
+      );
+      if (intersects.length > 0) {
+        const mesh = intersects[0].object;
+        const media = this.mediaInstances.find((m) => m.mesh === mesh);
+        //Animate trasition to the album page
+        this.onClick(mesh);
+      }
+    });
+  }
+
+  onScroll(next) {
     const tl = gsap.timeline();
     const total = this.mediaInstances.length;
     if (total < 2) return;
@@ -97,6 +130,48 @@ export default class Discography {
     });
   }
 
+  onClick(mesh) {
+    let targetHeight, targetWidth;
+    const isMobile = window.innerWidth < 768;
+    if (isMobile) {
+      targetWidth = this.sizes.width * 0.8;
+      targetHeight = targetWidth * (this.bounds.height / this.bounds.width);
+    } else {
+      targetHeight = this.sizes.height * 0.8;
+      targetWidth = targetHeight * (this.bounds.width / this.bounds.height);
+    }
+
+    gsap.to(mesh.position, {
+      y: 2,
+      z: -2,
+      duration: 0.7,
+      ease: "power2.inOut",
+    });
+    gsap.to(mesh.rotation, {
+      x: 0,
+      duration: 0.4,
+      ease: "power2.inOut",
+    });
+    gsap.to(mesh.scale, {
+      x: targetWidth,
+      y: targetHeight,
+      duration: 0.7,
+      ease: "power2.inOut",
+    });
+
+    this.mediaInstances.forEach((media) => {
+      if (media.mesh !== mesh) {
+        gsap.to(media.mesh.position, {
+          y: media.mesh.position.y - 8,
+          z: -0.2,
+          duration: 0.5,
+          ease: "power2.inOut",
+        });
+      }
+    });
+    // window.app.onChange({ url: `/discography/${media.slug}/` });
+  }
+
   onResize(sizes) {
     each(this.mediaInstances, (media) => {
       media.onResize(sizes);
@@ -106,6 +181,7 @@ export default class Discography {
   show() {
     this.createMedia();
     this.createGallery();
+    this.createRaycaster();
     this.scene.add(this.group);
   }
 

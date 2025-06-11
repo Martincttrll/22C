@@ -107,7 +107,7 @@ export class Discography extends Page {
 
     const tl = gsap.timeline({
       onStart: () => {
-        this.canvasPage.scrollToIndex(next);
+        this.canvasPage.onScroll(next);
       },
       onComplete: () => {
         this.isAnimating = false;

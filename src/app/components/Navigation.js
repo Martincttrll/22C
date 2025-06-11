@@ -63,7 +63,6 @@ export class Navigation {
   }
 
   toggleMenu = () => {
-    console.log("Toggling menu");
     this.isMenuOpen = !this.isMenuOpen;
     this.menuTimeline.reversed()
       ? this.menuTimeline.play()
