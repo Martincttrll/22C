@@ -1,6 +1,6 @@
-import Page from "../../classes/Page";
-import { TextCursor } from "../../components/TextCrusor";
-import { Parallax } from "../../animations/Parallax";
+import Page from "@classes/Page";
+import { TextCursor } from "@components/TextCrusor";
+import { Parallax } from "@animations/Parallax";
 
 export default class Home extends Page {
   constructor() {

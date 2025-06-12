@@ -16,6 +16,20 @@ export default function (eleventyConfig) {
       publicDir: "public",
       root: "src",
       base: "/src/app/",
+
+      resolve: {
+        alias: {
+          "@styles": "/src/styles",
+          "@app": "/src/app",
+          "@utils": "/src/app/utils",
+          "@components": "/src/app/components",
+          "@shaders": "/src/app/shaders",
+          "@classes": "/src/app/classes",
+          "@animations": "/src/app/animations",
+          "@pages": "/src/app/pages",
+          "@canvas": "/src/app/components/Canvas",
+        },
+      },
     },
   });
   eleventyConfig.addPlugin(pugPlugin, {

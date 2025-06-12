@@ -1,6 +1,6 @@
 import gsap from "gsap";
 import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
-import Animation from "../classes/Animation.js";
+import Animation from "@classes/Animation.js";
 
 gsap.registerPlugin(ScrambleTextPlugin);
 

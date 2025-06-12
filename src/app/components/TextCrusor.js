@@ -1,5 +1,5 @@
-import { mouse } from "../utils/mousePos";
-import { Detection } from "../classes/Detection";
+import { mouse } from "@utils/mousePos";
+import { Detection } from "@classes/Detection";
 export class TextCursor {
   constructor({ elementsConfig }) {
     this.elementsConfig = elementsConfig;

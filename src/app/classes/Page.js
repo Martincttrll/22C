@@ -1,10 +1,10 @@
 import EventEmitter from "events";
 import { each } from "lodash";
-import { SmoothScroll } from "../animations/SmoothScroll";
-import Separator from "../animations/Separator";
-import Title from "../animations/Title";
-import Image from "../animations/Image";
-import Reels from "../animations/Reels";
+import { SmoothScroll } from "@animations/SmoothScroll";
+import Separator from "@animations/Separator";
+import Title from "@animations/Title";
+import Image from "@animations/Image";
+import Reels from "@animations/Reels";
 
 export default class Page extends EventEmitter {
   constructor({ element, elements, isScrollable = true }) {

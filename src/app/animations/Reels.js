@@ -1,5 +1,5 @@
-import { Detection } from "../classes/Detection";
-import Animation from "../classes/Animation";
+import { Detection } from "@classes/Detection";
+import Animation from "@classes/Animation";
 import { gsap } from "gsap";
 export default class Reels extends Animation {
   constructor({ element, elements }) {

@@ -1,5 +1,5 @@
 import gsap from "gsap";
-import Animation from "../classes/Animation";
+import Animation from "@classes/Animation";
 
 export default class Image extends Animation {
   constructor({ element, elements }) {

@@ -1,7 +1,7 @@
-import Page from "../../classes/Page";
+import Page from "@classes/Page";
 import gsap from "gsap";
 import SplitText from "gsap/SplitText";
-import { Detection } from "../../classes/Detection";
+import { Detection } from "@classes/Detection";
 
 gsap.registerPlugin(SplitText);
 export class Discography extends Page {

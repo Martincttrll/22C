@@ -1,11 +1,11 @@
-import "../styles/style.scss";
-import Home from "./pages/Home";
-import { Discography } from "./pages/Discography";
-import { Album } from "./pages/Album";
-import { Navigation } from "./components/Navigation";
-import { each, set } from "lodash";
-import { Preloader } from "./components/Preloader";
-import Canvas from "./components/Canvas";
+import "@styles/style.scss";
+import Home from "@pages/Home";
+import { Discography } from "@pages/Discography";
+import { Album } from "@pages/Album";
+import { Navigation } from "@components/Navigation";
+import { each } from "lodash";
+import { Preloader } from "@components/Preloader";
+import Canvas from "@components/Canvas";
 class App {
   constructor() {
     console.log("©2025 - 22Carbone by MartinCtrl");

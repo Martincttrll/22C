@@ -1,5 +1,5 @@
 import gsap from "gsap";
-import Animation from "../classes/Animation.js";
+import Animation from "@classes/Animation.js";
 export default class Separator extends Animation {
   constructor({ element, elements }) {
     super({ element, elements });
