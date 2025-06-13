@@ -134,14 +134,12 @@ export default class Discography {
   }
 
   onClick(mesh) {
-    let targetHeight, targetWidth;
+    let targetScale;
     const isMobile = window.innerWidth < 768;
     if (isMobile) {
-      targetWidth = this.sizes.width * 0.8;
-      targetHeight = targetWidth * (this.bounds.height / this.bounds.width);
+      targetScale = this.sizes.width * 0.8;
     } else {
-      targetHeight = this.sizes.height * 0.8;
-      targetWidth = targetHeight * (this.bounds.width / this.bounds.height);
+      targetScale = this.sizes.height * 0.8;
     }
 
     gsap.to(mesh.position, {
@@ -156,8 +154,8 @@ export default class Discography {
       ease: "power2.inOut",
     });
     gsap.to(mesh.scale, {
-      x: targetWidth,
-      y: targetHeight,
+      x: targetScale,
+      y: targetScale,
       duration: 0.7,
       ease: "power2.inOut",
     });
@@ -172,6 +170,8 @@ export default class Discography {
         });
       }
     });
+
+    //FLIP, tracklist (tableau de la page album), ZOOM-IN, FADE-OUT, il reste que le tableau des tracks !!!!!!
     // window.app.onChange({ url: `/discography/${media.slug}/` });
   }
 
@@ -182,10 +182,8 @@ export default class Discography {
   }
 
   show() {
+    //////RESET COVER POSITION (si changement de page après scroll, desyncro titre/première cover)
     this.scene.add(this.group);
-    this.mediaInstances.forEach((media, i) => {
-      media.mesh.position.set(0, 0, 0);
-    });
   }
 
   hide() {
