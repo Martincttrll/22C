@@ -56,8 +56,6 @@ export default class Media {
   onResize(sizes) {
     console.log("ozo");
     this.sizes = sizes;
-    if (this.element) {
-      this.createBounds();
-    }
+    this.createBounds();
   }
 }

@@ -149,7 +149,6 @@ export default class Home {
     this.modelGroup.position.set(0, -2.5, 0);
     this.setupScrollAnimation();
     this.scene.add(this.group);
-    console.log(this.modelGroup.position);
   }
   hide() {
     this.scene.remove(this.group);
