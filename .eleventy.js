@@ -15,7 +15,6 @@ export default function (eleventyConfig) {
     viteOptions: {
       publicDir: "public",
       root: "src",
-      base: "/src/app/",
 
       resolve: {
         alias: {
