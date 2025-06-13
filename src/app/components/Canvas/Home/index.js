@@ -8,9 +8,8 @@ gsap.registerPlugin(ScrollTrigger);
 const SCROLL_DURATION = 800;
 
 export default class Home {
-  constructor({ scene, camera, addUpdate }) {
+  constructor({ scene, addUpdate }) {
     this.scene = scene;
-    this.camera = camera;
     this.group = new THREE.Group();
     this.addUpdate = addUpdate;
     this.loader = new GLTFLoader();
@@ -33,6 +32,8 @@ export default class Home {
         modelPath: "src/assets/models/caracter/caracter.gltf",
       },
     ];
+    this.createLights();
+    this.modelsPromise = this.loadModels();
   }
 
   createLights() {
@@ -59,16 +60,15 @@ export default class Home {
           (error) => reject(error)
         );
       });
-      model.position.z = -1;
+      model.position.z = 3;
       model.position.x = i * 3.5;
+      model.position.y = -model.scale.y / 2;
+
       step.model = model;
       this.modelGroup.add(model);
     });
 
     await Promise.all(modelPromises);
-
-    this.label = document.querySelector(".home__three__label");
-    this.label.innerText = this.steps[0].label;
 
     this.addUpdate(() => {
       this.steps.forEach((step) => {
@@ -77,12 +77,10 @@ export default class Home {
     });
   }
 
-  setupCamera() {
-    this.camera.position.set(0, 0.58, 1);
-  }
-
   setupScrollAnimation() {
+    ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     const scrollDuration = this.steps.length * SCROLL_DURATION;
+    this.label = document.querySelector(".home__three__label");
 
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -100,14 +98,13 @@ export default class Home {
       },
     });
 
-    this.modelGroup.position.y = -2.5;
-
     tl.to(this.modelGroup.position, {
       y: 0,
       duration: 1,
       ease: "power2.out",
     }).call(() => {
       this.label.innerText = this.steps[0].label;
+      this.updateLabel();
       this.updateLightColor(this.steps[0].color);
     });
 
@@ -130,6 +127,10 @@ export default class Home {
     });
   }
 
+  updateLabel() {
+    this.label.innerText = this.steps[0].label;
+  }
+
   updateLightColor(hexColor) {
     const r = ((hexColor >> 16) & 255) / 255;
     const g = ((hexColor >> 8) & 255) / 255;
@@ -144,11 +145,11 @@ export default class Home {
   }
 
   async show() {
-    this.createLights();
-    await this.loadModels();
-    this.setupCamera();
+    await this.modelsPromise;
+    this.modelGroup.position.set(0, -2.5, 0);
     this.setupScrollAnimation();
     this.scene.add(this.group);
+    console.log(this.modelGroup.position);
   }
   hide() {
     this.scene.remove(this.group);

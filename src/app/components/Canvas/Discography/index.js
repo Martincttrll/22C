@@ -9,6 +9,9 @@ export default class Discography {
     this.camera = camera;
     this.sizes = sizes;
     this.group = new THREE.Group();
+    this.createMedia();
+    this.createGallery();
+    this.createRaycaster();
   }
 
   createMedia() {
@@ -179,10 +182,10 @@ export default class Discography {
   }
 
   show() {
-    this.createMedia();
-    this.createGallery();
-    this.createRaycaster();
     this.scene.add(this.group);
+    this.mediaInstances.forEach((media, i) => {
+      media.mesh.position.set(0, 0, 0);
+    });
   }
 
   hide() {

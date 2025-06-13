@@ -34,7 +34,8 @@ export default class Canvas {
       0.1,
       1000
     );
-    this.camera.position.z = 5;
+
+    this.camera.position.set(0, 0, 5);
   }
 
   createScene() {
@@ -54,7 +55,6 @@ export default class Canvas {
   createHome() {
     this.home = new Home({
       scene: this.scene,
-      camera: this.camera,
       addUpdate: this.addUpdate.bind(this),
     });
   }
@@ -99,18 +99,17 @@ export default class Canvas {
   }
 
   onChange(template, isPreloaded) {
+    if (this.home) this.home.hide();
+    if (this.discography) this.discography.hide();
+
     if (template === "home") {
       this.canvasPage = this.home;
-      this.home.show(isPreloaded);
-    } else {
-      this.home.hide();
+    } else if (template === "discography") {
+      this.canvasPage = this.discography;
     }
 
-    if (template === "discography") {
-      this.canvasPage = this.discography;
-      this.discography.show(isPreloaded);
-    } else {
-      this.discography.hide();
+    if (this.canvasPage) {
+      this.canvasPage.show(isPreloaded);
     }
 
     this.template = template;
