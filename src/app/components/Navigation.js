@@ -1,14 +1,26 @@
 import { each } from "lodash";
 import gsap from "gsap";
+
 export class Navigation {
   constructor(template, displayed = true) {
     this.navigation = document.querySelector(".nav__wrapper");
     this.menuBtn = document.querySelector(".nav__menu__btn");
     this.menuWrapper = document.querySelector(".nav__menu__wrapper");
     this.links = document.querySelectorAll(".nav__menu__link");
-    this.isMenuOpen = false;
 
+    this.isMenuOpen = false;
+    this.isAnimating = false;
+
+    this.createTimeline();
+    if (displayed) this.show();
+
+    this.onChange(template);
+    this.addEventListeners();
+  }
+
+  createTimeline() {
     this.menuTimeline = gsap.timeline({ paused: true, reversed: true });
+
     this.menuTimeline
       .add(() => {
         this.menuWrapper.style.display = "flex";
@@ -33,16 +45,16 @@ export class Navigation {
         "-=0.4"
       );
 
-    this.menuTimeline.eventCallback("onReverseComplete", () => {
-      this.menuWrapper.style.display = "none";
-      this.isMenuOpen = false;
+    this.menuTimeline.eventCallback("onComplete", () => {
+      this.isAnimating = false;
+      this.isMenuOpen = true;
     });
 
-    if (displayed) {
-      this.show();
-    }
-    this.onChange(template);
-    this.addEventListeners();
+    this.menuTimeline.eventCallback("onReverseComplete", () => {
+      this.menuWrapper.style.display = "none";
+      this.isAnimating = false;
+      this.isMenuOpen = false;
+    });
   }
 
   show() {
@@ -58,29 +70,35 @@ export class Navigation {
       const href = link.getAttribute("href");
       const isActive =
         href.includes(template) || (template === "home" && href === "/");
-
       link.classList.toggle("current", isActive);
     });
   }
 
   toggleMenu = () => {
-    console.log("toggle menu");
-    this.isMenuOpen ? this.menuTimeline.reverse() : this.menuTimeline.play();
-    this.isMenuOpen = !this.isMenuOpen;
+    if (this.isAnimating) return;
+    this.isAnimating = true;
+
+    if (this.isMenuOpen) {
+      this.menuTimeline.reverse();
+    } else {
+      this.menuWrapper.style.display = "flex";
+      this.menuTimeline.play();
+    }
   };
+
   addEventListeners() {
     this.menuBtn.addEventListener("click", this.toggleMenu);
+    this.menuWrapper.addEventListener("click", this.toggleMenu);
+
     each(this.links, (link) => {
       link.addEventListener("click", (e) => {
         e.stopPropagation();
         this.toggleMenu();
       });
     });
-    this.menuWrapper.addEventListener("click", this.toggleMenu);
+
     window.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") {
-        this.toggleMenu();
-      }
+      if (e.key === "Escape") this.toggleMenu();
     });
   }
 }
