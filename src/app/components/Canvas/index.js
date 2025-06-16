@@ -16,7 +16,6 @@ export default class Canvas {
     this.renderer = new THREE.WebGLRenderer({ alpha: true });
 
     this.renderer.domElement.style.pointerEvents = "none";
-    this.renderer.domElement.style.border = "1px solid red";
     this.renderer.domElement.style.position = "absolute";
     this.renderer.domElement.style.overflow = "hidden";
     this.renderer.domElement.style.boxSizing = "border-box";

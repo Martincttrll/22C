@@ -9,9 +9,6 @@ export default class Discography {
     this.camera = camera;
     this.sizes = sizes;
     this.group = new THREE.Group();
-    this.createMedia();
-    this.createGallery();
-    this.createRaycaster();
   }
 
   createMedia() {
@@ -36,7 +33,7 @@ export default class Discography {
       media.mesh.rotation.x = 0.1;
     });
 
-    this.group.position.y -= 1;
+    this.group.position.y = -1;
   }
 
   createRaycaster() {
@@ -182,11 +179,21 @@ export default class Discography {
   }
 
   show() {
-    //////RESET COVER POSITION (si changement de page après scroll, desyncro titre/première cover)
+    this.createMedia();
+    this.createGallery();
+    this.createRaycaster();
     this.scene.add(this.group);
+    if (this.mediaInstances) {
+      this.mediaInstances.forEach((media) => media.show());
+    }
+    console.log(this.mediaInstances);
   }
 
   hide() {
+    this.group.clear();
     this.scene.remove(this.group);
+    if (this.mediaInstances) {
+      this.mediaInstances.forEach((media) => media.hide());
+    }
   }
 }

@@ -67,9 +67,12 @@ class App {
     if (this.page && this.page.onResize) {
       this.page.onResize();
     }
-    if (this.canvas && this.canvas.onResize) {
-      this.canvas.onResize();
-    }
+
+    window.requestAnimationFrame(() => {
+      if (this.canvas && this.canvas.onResize) {
+        this.canvas.onResize();
+      }
+    });
   }
 
   onPopState = () => {

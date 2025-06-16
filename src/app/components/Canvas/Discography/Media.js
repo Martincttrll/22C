@@ -33,17 +33,16 @@ export default class Media {
   }
 
   createBounds() {
-    const { width, height, x, y } = this.element.getBoundingClientRect();
-    this.bounds = { width, height, x, y };
-    this.updateScale();
-    this.updatePosition();
-    console.log(this.mesh.scale);
-    console.log(this.mesh.position);
+    requestAnimationFrame(() => {
+      const { width, height, x, y } = this.element.getBoundingClientRect();
+      this.bounds = { width, height, x, y };
+      this.updateScale();
+      this.updatePosition();
+    });
   }
   updateScale() {
     this.height = this.bounds.height / window.innerHeight;
     this.width = this.bounds.width / window.innerWidth;
-    if (this.width === 0 || this.height === 0) return;
     this.mesh.scale.x = this.sizes.width * this.width;
     this.mesh.scale.y = this.sizes.height * this.height;
   }
@@ -51,7 +50,6 @@ export default class Media {
   updatePosition() {
     this.x = (this.bounds.x + this.bounds.width / 2) / window.innerWidth;
     this.y = (this.bounds.y + this.bounds.height / 2) / window.innerHeight;
-    if (this.x === 0 || this.y === 0) return;
     this.mesh.position.x = this.x * this.sizes.width - this.sizes.width / 2;
     this.mesh.position.y = -this.y * this.sizes.height + this.sizes.height / 2;
   }
@@ -60,4 +58,6 @@ export default class Media {
     this.sizes = sizes;
     this.createBounds();
   }
+  show() {}
+  hide() {}
 }

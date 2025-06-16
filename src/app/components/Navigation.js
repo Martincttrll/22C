@@ -35,20 +35,21 @@ export class Navigation {
 
     this.menuTimeline.eventCallback("onReverseComplete", () => {
       this.menuWrapper.style.display = "none";
+      this.isMenuOpen = false;
     });
 
     if (displayed) {
-      this.display();
+      this.show();
     }
     this.onChange(template);
     this.addEventListeners();
   }
 
-  display() {
+  show() {
     this.navigation.classList.add("active");
   }
 
-  remove() {
+  hide() {
     this.navigation.classList.remove("active");
   }
 
@@ -64,10 +65,8 @@ export class Navigation {
 
   toggleMenu = () => {
     console.log("toggle menu");
+    this.isMenuOpen ? this.menuTimeline.reverse() : this.menuTimeline.play();
     this.isMenuOpen = !this.isMenuOpen;
-    this.menuTimeline.reversed()
-      ? this.menuTimeline.play()
-      : this.menuTimeline.reverse();
   };
   addEventListeners() {
     this.menuBtn.addEventListener("click", this.toggleMenu);
