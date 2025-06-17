@@ -20,9 +20,15 @@
 
 h1.album__title {
   @extend %title-96;
+  position: relative;
   font-weight: 700;
   font-family: "baunk";
   margin-bottom: 5rem;
+}
+.album__back__link {
+  position: relative;
+  text-decoration: none;
+  color: white;
 }
 table.album__tracklist__table {
   box-sizing: border-box;

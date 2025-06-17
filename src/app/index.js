@@ -107,7 +107,7 @@ class App {
       document.title = newTitle;
 
       this.navigation.onChange(this.template);
-      this.canvas.onChange(this.template);
+      this.canvas.onChange({ template: this.template, url });
 
       if (push) {
         window.history.pushState({}, "", url);

@@ -48,6 +48,7 @@ export default class Discography {
       );
       if (intersects.length > 0) {
         document.body.style.cursor = "pointer";
+        const mesh = intersects[0].object;
       } else {
         document.body.style.cursor = "";
       }
@@ -62,8 +63,9 @@ export default class Discography {
       if (intersects.length > 0) {
         const mesh = intersects[0].object;
         const media = this.mediaInstances.find((m) => m.mesh === mesh);
+        const url = `/discography/${media.slug}/`;
         //Animate trasition to the album page
-        this.onClick(mesh);
+        this.onClick(mesh, url);
       }
     });
   }
@@ -130,8 +132,9 @@ export default class Discography {
     });
   }
 
-  onClick(mesh) {
+  onClick(mesh, url) {
     let targetScale;
+    mesh.material.side = THREE.DoubleSide;
     const isMobile = window.innerWidth < 768;
     if (isMobile) {
       targetScale = this.sizes.width * 0.8;
@@ -139,37 +142,70 @@ export default class Discography {
       targetScale = this.sizes.height * 0.8;
     }
 
-    gsap.to(mesh.position, {
+    const tl = gsap.timeline();
+
+    tl.to(mesh.position, {
       y: 2,
       z: -2,
       duration: 0.7,
       ease: "power2.inOut",
-    });
-    gsap.to(mesh.rotation, {
-      x: 0,
-      duration: 0.4,
-      ease: "power2.inOut",
-    });
-    gsap.to(mesh.scale, {
-      x: targetScale,
-      y: targetScale,
-      duration: 0.7,
-      ease: "power2.inOut",
-    });
+    })
 
+      .to(
+        mesh.scale,
+        {
+          x: targetScale,
+          y: targetScale,
+          duration: 0.7,
+          ease: "power2.inOut",
+        },
+        "<"
+      )
+      .to(
+        mesh.rotation,
+        {
+          y: Math.PI,
+          duration: 0.8,
+          ease: "power2.inOut",
+        },
+        "+=0.4"
+      );
     this.mediaInstances.forEach((media) => {
       if (media.mesh !== mesh) {
-        gsap.to(media.mesh.position, {
-          y: media.mesh.position.y - 8,
-          z: -0.2,
-          duration: 0.5,
-          ease: "power2.inOut",
-        });
+        tl.to(
+          media.mesh.position,
+          {
+            y: media.mesh.position.y - 8,
+            z: -0.2,
+            duration: 0.5,
+            ease: "power2.inOut",
+          },
+          "<"
+        );
       }
     });
 
+    tl.to(mesh.scale, {
+      x: 32,
+      y: 32,
+      delay: 0.4,
+      duration: 0.6,
+      ease: "power2.inOut",
+    }).call(() => {
+      window.app.onChange({ url });
+    });
+    tl.to(
+      mesh.material,
+      {
+        opacity: 0,
+        delay: 0.2,
+        duration: 0.6,
+        ease: "power2.inOut",
+      },
+      "<"
+    );
+
     //FLIP, tracklist (tableau de la page album), ZOOM-IN, FADE-OUT, il reste que le tableau des tracks !!!!!!
-    // window.app.onChange({ url: `/discography/${media.slug}/` });
   }
 
   onResize(sizes) {
@@ -178,15 +214,16 @@ export default class Discography {
     });
   }
 
-  show() {
+  show(isPreloaded) {
     this.createMedia();
     this.createGallery();
     this.createRaycaster();
     this.scene.add(this.group);
     if (this.mediaInstances) {
-      this.mediaInstances.forEach((media) => media.show());
+      const delay = isPreloaded ? 2 : 0;
+
+      this.mediaInstances.forEach((media, i) => media.show(delay + i * 0.2));
     }
-    console.log(this.mediaInstances);
   }
 
   hide() {

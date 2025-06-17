@@ -74,7 +74,7 @@ export default class Canvas {
     this.createHome();
     this.createDiscography();
 
-    this.onChange(this.template, true);
+    this.onChange({ template: this.template, isPreloaded: true });
   }
 
   onResize() {
@@ -97,9 +97,9 @@ export default class Canvas {
     }
   }
 
-  onChange(template, isPreloaded) {
+  onChange({ template, url, isPreloaded }) {
     if (this.home) this.home.hide();
-    if (this.discography) this.discography.hide();
+    if (this.discography && template !== "album") this.discography.hide();
 
     if (template === "home") {
       this.canvasPage = this.home;
