@@ -7,6 +7,7 @@ export class Navigation {
     this.menuBtn = document.querySelector(".nav__menu__btn");
     this.menuWrapper = document.querySelector(".nav__menu__wrapper");
     this.links = document.querySelectorAll(".nav__menu__link");
+    this.disabled = document.querySelectorAll(".nav__menu__link.disabled");
 
     this.isMenuOpen = false;
     this.isAnimating = false;
@@ -32,12 +33,24 @@ export class Navigation {
         ease: "power2.out",
       })
       .fromTo(
-        this.links,
+        document.querySelectorAll(".nav__menu__link:not(.disabled)"),
         { y: 30, opacity: 0 },
         {
           y: 0,
           opacity: 1,
           stagger: 0.1,
+          duration: 0.5,
+          ease: "power2.out",
+          pointerEvents: "all",
+        },
+        "-=0.4"
+      )
+      .fromTo(
+        this.disabled,
+        { y: 30, opacity: 0 },
+        {
+          y: 0,
+          opacity: 0.5,
           duration: 0.5,
           ease: "power2.out",
           pointerEvents: "all",
@@ -68,9 +81,13 @@ export class Navigation {
   onChange(template) {
     each(this.links, (link) => {
       const href = link.getAttribute("href");
-      const isActive =
-        href.includes(template) || (template === "home" && href === "/");
-      link.classList.toggle("current", isActive);
+      if (href) {
+        const isActive =
+          href.includes(template) || (template === "home" && href === "/");
+        link.classList.toggle("current", isActive);
+      } else {
+        link.classList.add("disabled");
+      }
     });
   }
 
