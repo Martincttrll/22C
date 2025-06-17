@@ -15,6 +15,11 @@ block content
                                 div #{album.total_tracks} tracks
                                 div ⚈
                                 div #{Math.floor(album.total_ms / 60000)} min
+
+                        .discography__instructions
+                            img(src="src/assets/pictos/chevron.svg", alt="arrow", width="18px")
+                            div scroll
+                            img(src="src/assets/pictos/chevron.svg", alt="arrow", width="18px")
                         a(href="/discography/"+album.slug+"/")
                             img.discography__album__cover(src=album.cover, alt=album.name, data-slug=album.slug)
 //- Covers empilées comme https://jams.basicagency.com/ avec titre en gros au milieu 

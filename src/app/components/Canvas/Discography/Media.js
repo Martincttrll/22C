@@ -58,7 +58,6 @@ export default class Media {
   onResize(sizes) {
     this.sizes = sizes;
     this.createBounds();
-    console.log("resize", this.mesh.position.y);
   }
   show(delay) {
     // requestAnimationFrame(() => {

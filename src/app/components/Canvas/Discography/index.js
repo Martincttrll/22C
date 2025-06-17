@@ -1,5 +1,6 @@
 import { each } from "lodash";
 import Media from "./Media.js";
+import Transition from "../Transition.js";
 import * as THREE from "three";
 import gsap from "gsap";
 
@@ -133,79 +134,13 @@ export default class Discography {
   }
 
   onClick(mesh, url) {
-    let targetScale;
-    mesh.material.side = THREE.DoubleSide;
-    const isMobile = window.innerWidth < 768;
-    if (isMobile) {
-      targetScale = this.sizes.width * 0.8;
-    } else {
-      targetScale = this.sizes.height * 0.8;
-    }
-
-    const tl = gsap.timeline();
-
-    tl.to(mesh.position, {
-      y: 2,
-      z: -2,
-      duration: 0.7,
-      ease: "power2.inOut",
-    })
-
-      .to(
-        mesh.scale,
-        {
-          x: targetScale,
-          y: targetScale,
-          duration: 0.7,
-          ease: "power2.inOut",
-        },
-        "<"
-      )
-      .to(
-        mesh.rotation,
-        {
-          y: Math.PI,
-          duration: 0.8,
-          ease: "power2.inOut",
-        },
-        "+=0.4"
-      );
-    this.mediaInstances.forEach((media) => {
-      if (media.mesh !== mesh) {
-        tl.to(
-          media.mesh.position,
-          {
-            y: media.mesh.position.y - 8,
-            z: -0.2,
-            duration: 0.5,
-            ease: "power2.inOut",
-          },
-          "<"
-        );
-      }
+    this.transition = new Transition({
+      mesh,
+      url,
+      mediaInstaces: this.mediaInstances,
+      sizes: this.sizes,
     });
-
-    tl.to(mesh.scale, {
-      x: 32,
-      y: 32,
-      delay: 0.4,
-      duration: 0.6,
-      ease: "power2.inOut",
-    }).call(() => {
-      window.app.onChange({ url });
-    });
-    tl.to(
-      mesh.material,
-      {
-        opacity: 0,
-        delay: 0.2,
-        duration: 0.6,
-        ease: "power2.inOut",
-      },
-      "<"
-    );
-
-    //FLIP, tracklist (tableau de la page album), ZOOM-IN, FADE-OUT, il reste que le tableau des tracks !!!!!!
+    this.transition.playFromDiscography();
   }
 
   onResize(sizes) {
@@ -227,6 +162,7 @@ export default class Discography {
   }
 
   hide() {
+    console.log("clear disco");
     this.group.clear();
     this.scene.remove(this.group);
     if (this.mediaInstances) {

@@ -2,6 +2,7 @@
 import * as THREE from "three";
 import Home from "./Home";
 import Discography from "./Discography";
+import Album from "./Album";
 export default class Canvas {
   constructor({ template }) {
     this.template = template;
@@ -66,6 +67,15 @@ export default class Canvas {
     });
   }
 
+  createAlbum() {
+    this.album = new Album({
+      scene: this.scene,
+      sizes: this.sizes,
+      camera: this.camera,
+      group: this.discography.group,
+    });
+  }
+
   /**
    * Events.
    */
@@ -73,6 +83,7 @@ export default class Canvas {
   onPreloaded() {
     this.createHome();
     this.createDiscography();
+    this.createAlbum();
 
     this.onChange({ template: this.template, isPreloaded: true });
   }
@@ -97,14 +108,17 @@ export default class Canvas {
     }
   }
 
-  onChange({ template, url, isPreloaded }) {
+  onChange({ template, isPreloaded }) {
     if (this.home) this.home.hide();
     if (this.discography && template !== "album") this.discography.hide();
+    if (this.album && template !== "discography") this.album.hide();
 
     if (template === "home") {
       this.canvasPage = this.home;
     } else if (template === "discography") {
       this.canvasPage = this.discography;
+    } else if (template === "album") {
+      this.canvasPage = this.album;
     }
 
     if (this.canvasPage) {
@@ -112,5 +126,6 @@ export default class Canvas {
     }
 
     this.template = template;
+    console.log(this.canvasPage, this.template);
   }
 }
