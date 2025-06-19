@@ -7,7 +7,6 @@ export default class Album {
     this.camera = camera;
     this.sizes = sizes;
     this.group = group;
-    console.log("Album group : ", this.group);
   }
 
   show() {
@@ -16,7 +15,6 @@ export default class Album {
     //Sinon
   }
   hide() {
-    console.log("clear album");
     this.group.clear();
     this.scene.remove(this.group);
   }

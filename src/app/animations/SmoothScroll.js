@@ -64,7 +64,6 @@ export class SmoothScroll {
   updateScrollProgress() {
     const scroll = this.lenis.scroll;
     const maxScroll = this.lenis.limit;
-
     this.progress = maxScroll === 0 ? 0 : (scroll / maxScroll) * 100;
   }
 }

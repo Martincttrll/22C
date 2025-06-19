@@ -156,13 +156,11 @@ export default class Discography {
     this.scene.add(this.group);
     if (this.mediaInstances) {
       const delay = isPreloaded ? 2 : 0;
-
       this.mediaInstances.forEach((media, i) => media.show(delay + i * 0.2));
     }
   }
 
   hide() {
-    console.log("clear disco");
     this.group.clear();
     this.scene.remove(this.group);
     if (this.mediaInstances) {

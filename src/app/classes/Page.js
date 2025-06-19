@@ -5,6 +5,7 @@ import Separator from "@animations/Separator";
 import Title from "@animations/Title";
 import Image from "@animations/Image";
 import Reels from "@animations/Reels";
+import Paragraph from "@animations/Paragraph";
 
 export default class Page extends EventEmitter {
   constructor({ element, elements, isScrollable = true }) {
@@ -16,6 +17,7 @@ export default class Page extends EventEmitter {
       animationsSeparators: "[data-animation='separator']",
       animationsTitles: "[data-animation='title']",
       animationsImages: "[data-animation='image']",
+      animationsParagraphs: "[data-animation='paragraph']",
       animationsReels: "[data-animation='reels']",
     };
 
@@ -71,6 +73,9 @@ export default class Page extends EventEmitter {
 
     this.animationsImages = toArray(this.elements.animationsImages).map(
       (element) => new Image({ element })
+    );
+    this.animationsParagraphs = toArray(this.elements.animationsParagraphs).map(
+      (element) => new Paragraph({ element })
     );
 
     this.animationsReels = toArray(this.elements.animationsReels).map(
