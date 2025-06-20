@@ -9,9 +9,9 @@ export default class Title extends Animation {
   constructor({ element, elements }) {
     super({ element, elements });
     this.chars = SplitText.create(element, { type: "chars" });
-    console.log(this.chars);
   }
-
+  //Idée random je sais pas ou : paragraph blabla avec dedans un (des?) mots clefs
+  //  genre "Brutalisme?" et au scroll tout se blur pour laisser que ce mot clef
   animateIn() {
     gsap.fromTo(
       this.chars.chars,
@@ -27,7 +27,7 @@ export default class Title extends Animation {
           start: "top 85%",
           end: "top top",
           scrub: true,
-          markers: true,
+          markers: false,
         },
         scaleY: 1,
         scaleX: 1,

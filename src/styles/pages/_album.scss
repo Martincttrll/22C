@@ -27,8 +27,16 @@ h1.album__title {
 }
 .album__back__link {
   position: relative;
+  display: flex;
+  align-items: center;
+  gap: 5px;
   text-decoration: none;
+  text-transform: uppercase;
   color: white;
+  & img {
+    transform: rotateZ(-90deg);
+    width: 2.5rem;
+  }
 }
 table.album__tracklist__table {
   box-sizing: border-box;

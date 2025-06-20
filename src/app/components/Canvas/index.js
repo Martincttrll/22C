@@ -3,6 +3,7 @@ import * as THREE from "three";
 import Home from "./Home";
 import Discography from "./Discography";
 import Album from "./Album";
+import Transition from "./Transition";
 export default class Canvas {
   constructor({ template }) {
     this.template = template;
@@ -64,6 +65,7 @@ export default class Canvas {
       scene: this.scene,
       sizes: this.sizes,
       camera: this.camera,
+      transition: this.transition,
     });
   }
 
@@ -73,7 +75,12 @@ export default class Canvas {
       sizes: this.sizes,
       camera: this.camera,
       group: this.discography.group,
+      transition: this.transition,
     });
+  }
+
+  createTransitions() {
+    this.transition = new Transition({ scene: this.scene, sizes: this.sizes });
   }
 
   /**
@@ -81,6 +88,7 @@ export default class Canvas {
    */
 
   onPreloaded() {
+    this.createTransitions();
     this.createHome();
     this.createDiscography();
     this.createAlbum();
@@ -109,9 +117,19 @@ export default class Canvas {
   }
 
   onChange({ template, isPreloaded }) {
+    const isDiscographyToAlbum =
+      this.template === "discography" && template === "album";
+    const isAlbumToDiscography =
+      this.template === "album" && template === "discography";
+
     if (this.home) this.home.hide();
-    if (this.discography && template !== "album") this.discography.hide();
-    if (this.album && template !== "discography") this.album.hide();
+
+    if (this.discography && template !== "album" && !isDiscographyToAlbum) {
+      this.discography.hide();
+    }
+    if (this.album && template !== "discography" && !isAlbumToDiscography) {
+      this.album.hide();
+    }
 
     if (template === "home") {
       this.canvasPage = this.home;
@@ -126,6 +144,5 @@ export default class Canvas {
     }
 
     this.template = template;
-    console.log(this.canvasPage, this.template);
   }
 }

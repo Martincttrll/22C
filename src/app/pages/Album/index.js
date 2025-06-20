@@ -7,6 +7,7 @@ export class Album extends Page {
       elements: {
         wrapper: ".album__wrapper",
         tableRow: "tbody tr",
+        backBtn: ".album__back__link",
       },
     });
   }
@@ -17,6 +18,7 @@ export class Album extends Page {
       new TextScramble(element);
     });
     this.createBackground();
+    this.addEventListeners();
   }
 
   createBackground() {
@@ -35,9 +37,17 @@ export class Album extends Page {
     bg.style.transform = "scaleX(-1)";
     bg.style.zIndex = "0";
     bg.style.pointerEvents = "none";
-    bg.style.filter = "brightness(0.5)";
+    bg.style.filter = "brightness(0.5) grayscale(1)";
 
     this.elements.wrapper.style.position = "relative";
     this.elements.wrapper.prepend(bg);
+  }
+
+  addEventListeners() {
+    super.addEventListeners();
+    this.elements.backBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      this.canvasPage.onClickBack();
+    });
   }
 }

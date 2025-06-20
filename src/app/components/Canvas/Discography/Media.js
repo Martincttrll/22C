@@ -29,6 +29,7 @@ export default class Media {
     });
     this.mesh = new THREE.Mesh(this.geometry, this.material);
     this.mesh.position.set(0, 0, 0);
+    this.mesh.userData = { url: this.slug };
     this.mesh.material.opacity = 1;
     this.group.add(this.mesh);
   }

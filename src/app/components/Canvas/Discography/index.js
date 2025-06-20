@@ -5,10 +5,11 @@ import * as THREE from "three";
 import gsap from "gsap";
 
 export default class Discography {
-  constructor({ scene, sizes, camera }) {
+  constructor({ scene, sizes, camera, transition }) {
     this.scene = scene;
     this.camera = camera;
     this.sizes = sizes;
+    this.transition = transition;
     this.group = new THREE.Group();
   }
 
@@ -64,9 +65,7 @@ export default class Discography {
       if (intersects.length > 0) {
         const mesh = intersects[0].object;
         const media = this.mediaInstances.find((m) => m.mesh === mesh);
-        const url = `/discography/${media.slug}/`;
-        //Animate trasition to the album page
-        this.onClick(mesh, url);
+        this.onClick(mesh);
       }
     });
   }
@@ -133,14 +132,15 @@ export default class Discography {
     });
   }
 
-  onClick(mesh, url) {
-    this.transition = new Transition({
-      mesh,
-      url,
-      mediaInstaces: this.mediaInstances,
-      sizes: this.sizes,
+  onClick(mesh) {
+    this.mediaInstances.forEach((media) => {
+      gsap.to(media.mesh.position, {
+        y: media.mesh.position.y - 3,
+        duration: 1,
+        ease: "power2.inOut",
+      });
     });
-    this.transition.playFromDiscography();
+    this.transition.playFromDiscography(mesh);
   }
 
   onResize(sizes) {
