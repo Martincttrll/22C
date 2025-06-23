@@ -80,7 +80,11 @@ export default class Canvas {
   }
 
   createTransitions() {
-    this.transition = new Transition({ scene: this.scene, sizes: this.sizes });
+    this.transition = new Transition({
+      scene: this.scene,
+      sizes: this.sizes,
+      camera: this.camera,
+    });
   }
 
   /**
@@ -124,10 +128,21 @@ export default class Canvas {
 
     if (this.home) this.home.hide();
 
-    if (this.discography && template !== "album" && !isDiscographyToAlbum) {
+    if (
+      this.discography &&
+      template !== "album" &&
+      !isDiscographyToAlbum &&
+      !isAlbumToDiscography
+    ) {
+      console.log(this.template, template, isDiscographyToAlbum);
       this.discography.hide();
     }
-    if (this.album && template !== "discography" && !isAlbumToDiscography) {
+    if (
+      this.album &&
+      template !== "discography" &&
+      !isDiscographyToAlbum &&
+      !isAlbumToDiscography
+    ) {
       this.album.hide();
     }
 
@@ -139,7 +154,7 @@ export default class Canvas {
       this.canvasPage = this.album;
     }
 
-    if (this.canvasPage) {
+    if (!isDiscographyToAlbum && !isAlbumToDiscography && this.canvasPage) {
       this.canvasPage.show(isPreloaded);
     }
 

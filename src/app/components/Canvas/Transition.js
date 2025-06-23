@@ -1,54 +1,49 @@
 import gsap from "gsap";
 import * as THREE from "three";
 export default class Transition {
-  constructor({ scene, sizes }) {
-    // this.mediaInstances = mediaInstaces; /// Change to this.group.children ?
+  constructor({ scene, sizes, camera }) {
     this.scene = scene;
     this.sizes = sizes;
+    this.camera = camera;
     this.meshCopy = null;
+    this.mesh = null;
   }
 
   createTimeline() {
-    let targetScale;
-    this.meshCopy.material.side = THREE.DoubleSide;
-    const isMobile = window.innerWidth < 768;
-    if (isMobile) {
-      targetScale = this.sizes.width * 0.8;
-    } else {
-      targetScale = this.sizes.height * 0.8;
-    }
-
     this.tl = gsap.timeline({
-      onComplete: () => {
-        window.app.onChange({
-          url: "/discography/" + this.meshCopy.userData.url + "/",
-        });
-      },
       onReverseComplete: () => {
-        window.app.onChange({
-          url: "/discography/",
-        });
+        this.destroyCopyMesh();
+        this.tl.kill();
+        this.tl = null;
       },
     });
-
     this.tl
-      .to(this.meshCopy.position, {
-        y: 2,
-        z: -2,
-        duration: 0.7,
+      .call(() => {
+        if (!this.tl.reversed()) {
+          this.hideAlbums();
+        }
+      })
+      .to(this.meshCopy.rotation, {
+        x: 0,
+        duration: 0.4,
         ease: "power2.inOut",
       })
-
       .to(
-        this.meshCopy.scale,
+        this.meshCopy.position,
         {
-          x: targetScale,
-          y: targetScale,
+          y: 0,
+          z: -2,
           duration: 0.7,
           ease: "power2.inOut",
         },
         "<"
       )
+      .call(() => {
+        if (this.tl.reversed()) {
+          this.showAlbums();
+        }
+      })
+
       .to(
         this.meshCopy.rotation,
         {
@@ -56,38 +51,95 @@ export default class Transition {
           duration: 0.8,
           ease: "power2.inOut",
         },
-        "+=0.4"
-      );
-
-    this.tl.to(this.meshCopy.scale, {
-      x: 32,
-      y: 32,
-      delay: 0.4,
-      duration: 0.6,
-      ease: "power2.inOut",
-    });
-
-    this.tl.to(
-      this.meshCopy.material,
-      {
-        opacity: 0,
+        "+=0.2"
+      )
+      .to(this.meshCopy.scale, {
+        x: () => this.getTargetScale(),
+        y: () => this.getTargetScale(),
         delay: 0.2,
         duration: 0.6,
         ease: "power2.inOut",
-      },
-      "<"
-    );
+      })
+      .call(() => {
+        if (this.tl.reversed()) {
+          window.app.onChange({ url: "/discography/" });
+        } else {
+          window.app.onChange({
+            url: "/discography/" + this.meshCopy.userData.url + "/",
+          });
+        }
+      })
+      .to(
+        this.meshCopy.material,
+        {
+          opacity: 0,
+          delay: 0.2,
+          duration: 0.6,
+          ease: "power2.inOut",
+        },
+        "<"
+      );
+  }
+
+  getTargetScale() {
+    const cameraZ = this.camera.position.z;
+    const meshZ = this.meshCopy.position.z;
+    const distance = Math.abs(cameraZ - meshZ);
+
+    const fov = this.camera.fov * (Math.PI / 180);
+    const heightAtDistance = 2 * Math.tan(fov / 2) * distance;
+    const widthAtDistance = heightAtDistance * this.camera.aspect;
+
+    return Math.max(widthAtDistance, heightAtDistance);
+  }
+
+  createMeshCopy(mesh) {
+    this.mesh = mesh;
+    this.meshCopy = mesh.clone();
+    this.meshCopy.material = mesh.material.clone();
+    this.meshCopy.material.side = THREE.DoubleSide;
+    mesh.material.transparent = true;
+    mesh.material.opacity = 0;
+  }
+
+  destroyCopyMesh() {
+    if (this.meshCopy) {
+      this.scene.remove(this.meshCopy);
+      this.meshCopy.geometry.dispose();
+      this.meshCopy.material.dispose();
+      this.meshCopy = null;
+    }
+    if (this.mesh) {
+      this.mesh.material.transparent = false;
+      this.mesh.material.opacity = 1;
+      this.mesh = null;
+    }
+  }
+
+  hideAlbums() {
+    this.scene.traverse((album) => {
+      if (!album.isMesh || album === this.meshCopy) return;
+      gsap.to(album.position, {
+        y: album.position.y - this.sizes.height * 0.5,
+        duration: 1,
+        ease: "power2.inOut",
+      });
+    });
+  }
+
+  showAlbums() {
+    this.scene.traverse((album) => {
+      if (!album.isMesh || album === this.meshCopy) return;
+      gsap.to(album.position, {
+        y: album.position.y + this.sizes.height * 0.5,
+        duration: 1,
+        ease: "power2.inOut",
+      });
+    });
   }
 
   playFromDiscography(mesh) {
-    this.meshCopy = mesh.clone();
-    this.meshCopy.material = mesh.material.clone();
-    this.meshCopy.material.map = null;
-    this.meshCopy.material.color.set(0xff0000);
-    this.meshCopy.material.needsUpdate = true;
-    mesh.material.transparent = true;
-    mesh.material.opacity = 0;
-    //Cacher le mesh original dans discography
+    this.createMeshCopy(mesh);
     this.scene.add(this.meshCopy);
 
     if (!this.tl) {
@@ -98,10 +150,8 @@ export default class Transition {
   playFromAlbum() {
     if (!this.tl) {
       this.createTimeline();
-      this.tl.progress(1);
     }
+    this.tl.progress(1);
     this.tl.reverse();
   }
 }
-
-/////Supprimer les copy de mesh quand ???

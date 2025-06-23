@@ -43,6 +43,7 @@ export default class Media {
     });
   }
   updateScale() {
+    if (!document.body.contains(this.element)) return;
     this.height = this.bounds.height / window.innerHeight;
     this.width = this.bounds.width / window.innerWidth;
     this.mesh.scale.x = this.sizes.width * this.width;
@@ -50,6 +51,7 @@ export default class Media {
   }
 
   updatePosition() {
+    if (!document.body.contains(this.element)) return;
     this.x = (this.bounds.x + this.bounds.width / 2) / window.innerWidth;
     this.y = (this.bounds.y + this.bounds.height / 2) / window.innerHeight;
     this.mesh.position.x = this.x * this.sizes.width - this.sizes.width / 2;

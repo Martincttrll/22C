@@ -50,7 +50,6 @@ export default class Discography {
       );
       if (intersects.length > 0) {
         document.body.style.cursor = "pointer";
-        const mesh = intersects[0].object;
       } else {
         document.body.style.cursor = "";
       }
@@ -64,7 +63,6 @@ export default class Discography {
       );
       if (intersects.length > 0) {
         const mesh = intersects[0].object;
-        const media = this.mediaInstances.find((m) => m.mesh === mesh);
         this.onClick(mesh);
       }
     });
@@ -133,13 +131,6 @@ export default class Discography {
   }
 
   onClick(mesh) {
-    this.mediaInstances.forEach((media) => {
-      gsap.to(media.mesh.position, {
-        y: media.mesh.position.y - 3,
-        duration: 1,
-        ease: "power2.inOut",
-      });
-    });
     this.transition.playFromDiscography(mesh);
   }
 

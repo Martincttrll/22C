@@ -10,7 +10,7 @@ extends ./_layouts/layout.pug
 block content
     .album
         .album__wrapper(data-cover=album.cover)
-            a.album__back__link(href="/discography/")
+            .album__back__link
                 img(src="src/assets/pictos/chevron.svg", alt="Retour")
                 | Retour
             h1.album__title #{album.name} 
