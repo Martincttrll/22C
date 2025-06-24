@@ -83,6 +83,60 @@ export default class Transition {
       );
   }
 
+  animateFallbackMesh(mesh) {
+    const targetScale = Math.max(this.sizes.width, this.sizes.height) * 0.5;
+    const tl = gsap.timeline({
+      onComplete: () => {
+        this.scene.remove(mesh);
+        tl.kill();
+      },
+    });
+
+    tl.to(mesh.material, {
+      opacity: 1,
+      delay: 0.2,
+      duration: 0.6,
+      ease: "power2.inOut",
+    })
+      .call(() => {
+        window.app.onChange({ url: "/discography/" });
+      })
+      .to(mesh.position, {
+        y: 0,
+        z: -3,
+        delay: 0.2,
+        duration: 0.6,
+        ease: "power2.inOut",
+      })
+      .to(
+        mesh.rotation,
+        {
+          y: 0,
+          duration: 0.8,
+          ease: "power2.inOut",
+        },
+        "+=0.2"
+      )
+      .to(mesh.position, {
+        y: -5,
+        duration: 0.7,
+        ease: "power2.inOut",
+      })
+      .to(
+        mesh.material,
+        {
+          opacity: 0,
+          duration: 0.5,
+          ease: "power2.inOut",
+        },
+        "<"
+      )
+      .call(() => {
+        this.showAlbums();
+      });
+    tl.play();
+  }
+
   getTargetScale() {
     const cameraZ = this.camera.position.z;
     const meshZ = this.meshCopy.position.z;

@@ -23,11 +23,9 @@ export class Album extends Page {
   createBackground() {
     this.cover = this.elements.wrapper.dataset.cover;
 
-    // Supprime l'ancien background si déjà présent
     const oldBg = this.elements.wrapper.querySelector(".bg-mirror");
     if (oldBg) oldBg.remove();
 
-    // Crée un nouvel élément pour le background
     const bg = document.createElement("div");
     bg.className = "bg-mirror";
     bg.style.position = "absolute";
@@ -48,7 +46,6 @@ export class Album extends Page {
       "click",
       (e) => {
         e.stopPropagation();
-        console.log("teoeooe");
         this.canvasPage.onClickBack();
       },
       { once: true }

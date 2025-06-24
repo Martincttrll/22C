@@ -22,17 +22,22 @@ async function getToken() {
 }
 
 async function getAlbums(artistId, token) {
-  const response = await fetch(
-    `https://api.spotify.com/v1/artists/${artistId}/albums?limit=50`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+  try {
+    const response = await fetch(
+      `https://api.spotify.com/v1/artists/${artistId}/albums?limit=50`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-  const data = await response.json();
-  return data.items;
+    const data = await response.json();
+    return data.items;
+  } catch (error) {
+    console.error("Error fetching albums:", error);
+    throw error; // Propagate the error to be handled by the caller
+  }
 }
 
 async function getTracks(albumId, token) {
@@ -135,7 +140,6 @@ module.exports = async function () {
     }
   }
   if (collaborationTracks.length > 0) {
-    console.log();
     albumsWithTracks.push({
       id: "collaborations",
       name: "Collaborations",
