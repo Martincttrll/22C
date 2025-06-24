@@ -134,7 +134,6 @@ export default class Canvas {
       !isDiscographyToAlbum &&
       !isAlbumToDiscography
     ) {
-      console.log(this.template, template, isDiscographyToAlbum);
       this.discography.hide();
     }
     if (
@@ -154,7 +153,7 @@ export default class Canvas {
       this.canvasPage = this.album;
     }
 
-    if (!isDiscographyToAlbum && !isAlbumToDiscography && this.canvasPage) {
+    if (this.canvasPage) {
       this.canvasPage.show(isPreloaded);
     }
 

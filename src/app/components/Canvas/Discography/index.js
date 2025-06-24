@@ -11,6 +11,7 @@ export default class Discography {
     this.sizes = sizes;
     this.transition = transition;
     this.group = new THREE.Group();
+    this.addDebug();
   }
 
   createMedia() {
@@ -141,10 +142,12 @@ export default class Discography {
   }
 
   show(isPreloaded) {
-    this.createMedia();
-    this.createGallery();
-    this.createRaycaster();
-    this.scene.add(this.group);
+    if (!this.mediaInstances) {
+      this.createMedia();
+      this.createGallery();
+      this.createRaycaster();
+      this.scene.add(this.group);
+    }
     if (this.mediaInstances) {
       const delay = isPreloaded ? 2 : 0;
       this.mediaInstances.forEach((media, i) => media.show(delay + i * 0.2));
@@ -157,5 +160,18 @@ export default class Discography {
     if (this.mediaInstances) {
       this.mediaInstances.forEach((media) => media.hide());
     }
+  }
+
+  //debug
+  addDebug() {
+    window.addEventListener("keydown", (event) => {
+      if (event.key === "d") {
+        if (!this.mediaInstances) return;
+        this.mediaInstances.forEach((media) => {
+          media.mesh.material.wireframe = !media.mesh.material.wireframe;
+          console.log(media.mesh.position);
+        });
+      }
+    });
   }
 }

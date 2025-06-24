@@ -7,6 +7,7 @@ export default class Transition {
     this.camera = camera;
     this.meshCopy = null;
     this.mesh = null;
+    this.shouldCallCallbacks = true;
   }
 
   createTimeline() {
@@ -61,9 +62,10 @@ export default class Transition {
         ease: "power2.inOut",
       })
       .call(() => {
-        if (this.tl.reversed()) {
+        console.log("Transition complete is reversed: ", this.tl.reversed());
+        if (this.tl.reversed() && this.shouldCallCallbacks) {
           window.app.onChange({ url: "/discography/" });
-        } else {
+        } else if (this.shouldCallCallbacks) {
           window.app.onChange({
             url: "/discography/" + this.meshCopy.userData.url + "/",
           });
@@ -147,11 +149,18 @@ export default class Transition {
     }
     this.tl.play();
   }
+
   playFromAlbum() {
     if (!this.tl) {
+      console.log("1");
       this.createTimeline();
     }
+    console.log("2");
+    this.shouldCallCallbacks = false;
     this.tl.progress(1);
+    this.shouldCallCallbacks = true;
+    console.log("3");
     this.tl.reverse();
+    console.log("Playing from album (transition.js)");
   }
 }

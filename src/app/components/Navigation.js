@@ -49,15 +49,18 @@ export class Navigation {
           opacity: 1,
           duration: 0.3,
           ease: "power2.out",
-        },
-        0.2
+        }
       )
-      .to(this.menuWrapper, {
-        duration: 0.5,
-        autoAlpha: 1,
-        y: 0,
-        ease: "power2.out",
-      })
+      .to(
+        this.menuWrapper,
+        {
+          duration: 0.5,
+          autoAlpha: 1,
+          y: 0,
+          ease: "power2.out",
+        },
+        ">"
+      )
       .fromTo(
         document.querySelectorAll(".nav__menu__link:not(.disabled)"),
         { y: 30, opacity: 0 },

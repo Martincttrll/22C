@@ -18,7 +18,6 @@ export class Album extends Page {
       new TextScramble(element);
     });
     this.createBackground();
-    this.addEventListeners();
   }
 
   createBackground() {
@@ -45,9 +44,14 @@ export class Album extends Page {
 
   addEventListeners() {
     super.addEventListeners();
-    this.elements.backBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      this.canvasPage.onClickBack();
-    });
+    this.elements.backBtn.addEventListener(
+      "click",
+      (e) => {
+        e.stopPropagation();
+        console.log("teoeooe");
+        this.canvasPage.onClickBack();
+      },
+      { once: true }
+    );
   }
 }

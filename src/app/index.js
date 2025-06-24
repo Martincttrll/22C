@@ -148,7 +148,7 @@ class App {
   addEventListeners() {
     window.addEventListener("popstate", this.onPopState, { passive: true });
     window.addEventListener("resize", this.onResize.bind(this));
-    // window.oncontextmenu = this.onContextMenu; Disable right click
+    window.oncontextmenu = this.onContextMenu; //Disable right click
   }
 }
 

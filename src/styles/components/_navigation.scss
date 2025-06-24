@@ -57,34 +57,7 @@ a.nav__logo {
   .close {
     pointer-events: none;
   }
-  // &::before {
-  //   content: "";
-  //   width: 8px;
-  //   height: 8px;
-  //   position: absolute;
-  //   left: -30px;
-  //   top: 50%;
-  //   transform: scale(0) translate(-50%, -50%);
-  //   transform-origin: center center;
-  //   border-radius: 50px;
-  //   background-color: $primary;
-  //   transition: transform 0.3s ease;
-  // }
-  // &:hover::before {
-  //   transform: scale(1) translate(-50%, -50%);
-  // }
 }
-// .nav__menu__btn::before,
-// .nav__menu__btn::after {
-//   content: "";
-//   position: absolute;
-//   background-color: $primary;
-//   height: 2px;
-//   width: 100%;
-// }
-// .nav__menu__btn::after {
-//   bottom: 0px;
-// }
 
 .nav__menu__wrapper {
   @extend %cover;
