@@ -5,6 +5,8 @@ export class Navigation {
   constructor(template, displayed = true) {
     this.navigation = document.querySelector(".nav__wrapper");
     this.menuBtn = document.querySelector(".nav__menu__btn");
+    this.menuText = document.querySelector(".nav__menu__btn__text.menu");
+    this.closeText = document.querySelector(".nav__menu__btn__text.close");
     this.menuWrapper = document.querySelector(".nav__menu__wrapper");
     this.links = document.querySelectorAll(".nav__menu__link");
     this.disabled = document.querySelectorAll(".nav__menu__link.disabled");
@@ -26,6 +28,30 @@ export class Navigation {
       .add(() => {
         this.menuWrapper.style.display = "flex";
       })
+      .to(
+        this.menuText,
+        {
+          y: -20,
+          opacity: 0,
+          duration: 0.3,
+          ease: "power2.in",
+        },
+        0
+      )
+      .fromTo(
+        this.closeText,
+        {
+          y: 20,
+          opacity: 0,
+        },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.3,
+          ease: "power2.out",
+        },
+        0.2
+      )
       .to(this.menuWrapper, {
         duration: 0.5,
         autoAlpha: 1,

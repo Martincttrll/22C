@@ -4,7 +4,7 @@ nav.nav__wrapper {
   position: sticky;
   z-index: 4;
   justify-content: space-between;
-  padding: 2rem;
+  padding: 2.5rem;
   display: none;
   @include media("<tablet") {
     padding: 20px;
@@ -30,21 +30,61 @@ a.nav__logo {
   position: relative;
   width: 30px;
   height: 10px;
+  font-weight: bold;
+  color: white;
+  font-size: 14px;
+  text-transform: uppercase;
+  .nav__menu__btn__text {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    pointer-events: none;
+
+    span {
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+  }
+  &:hover .nav__menu__btn__text span {
+    opacity: 1;
+  }
+  .close {
+    pointer-events: none;
+  }
+  // &::before {
+  //   content: "";
+  //   width: 8px;
+  //   height: 8px;
+  //   position: absolute;
+  //   left: -30px;
+  //   top: 50%;
+  //   transform: scale(0) translate(-50%, -50%);
+  //   transform-origin: center center;
+  //   border-radius: 50px;
+  //   background-color: $primary;
+  //   transition: transform 0.3s ease;
+  // }
+  // &:hover::before {
+  //   transform: scale(1) translate(-50%, -50%);
+  // }
 }
-.nav__menu__btn::before,
-.nav__menu__btn::after {
-  content: "";
-  position: absolute;
-  background-color: $primary;
-  height: 2px;
-  width: 100%;
-}
-.nav__menu__btn::before {
-  top: 0px;
-}
-.nav__menu__btn::after {
-  bottom: 0px;
-}
+// .nav__menu__btn::before,
+// .nav__menu__btn::after {
+//   content: "";
+//   position: absolute;
+//   background-color: $primary;
+//   height: 2px;
+//   width: 100%;
+// }
+// .nav__menu__btn::after {
+//   bottom: 0px;
+// }
 
 .nav__menu__wrapper {
   @extend %cover;
