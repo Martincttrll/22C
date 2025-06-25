@@ -14,7 +14,10 @@ block content
             h1.home__title 22Carbone 
             .home__video__wrapper
                 .home__video__filter
-                img.home__video(src="src/assets/img/home-video-placeholder.png", alt="Présentation 22Carbone")
+                video.home__video(autoplay,muted,loop,playsinline,preload="auto")
+                    source(src="src/assets/videos/homepage_presentation.mp4", type="video/mp4")
+                    img( src="src/assets/img/home-video-placeholder.png", alt="Aperçu vidéo")
+
                 //- video.home__video(src="")
             .home__main__wrapper
                 .home__who__wrapper 
