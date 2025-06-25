@@ -17,11 +17,17 @@
   transform-origin: 60px 55%;
   font-family: "baunk";
   font-size: 15rem;
+  @include media("<tablet") {
+    font-size: 40rem;
+  }
 }
 
 .preloader__bar {
   position: relative;
   width: calc(30rem - 30px);
+  @include media("<tablet") {
+    width: calc(80rem - 30px);
+  }
   height: 2px;
   border-radius: 10px;
   background-color: rgb(black, 0.5);

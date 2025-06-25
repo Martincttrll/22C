@@ -71,17 +71,21 @@ export class Preloader extends Component {
         "-=0.8"
       );
       this.animateOut.to(this.elements.title, {
-        scale: 100,
+        scale: 300,
         x: deltaX,
         y: deltaY,
         duration: 1,
-        ease: "power2.inOut",
+        ease: "power4.in",
       });
-      this.animateOut.to(this.element, {
-        autoAlpha: 0,
-        duration: 0.5,
-        ease: "power2.inOut",
-      });
+      this.animateOut.to(
+        this.element,
+        {
+          autoAlpha: 0,
+          duration: 0.5,
+          ease: "power2.inOut",
+        },
+        "-=0.3"
+      );
     });
   }
 
