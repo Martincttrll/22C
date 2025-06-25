@@ -59,7 +59,7 @@ export class Navigation {
           y: 0,
           ease: "power2.out",
         },
-        ">"
+        "<"
       )
       .fromTo(
         document.querySelectorAll(".nav__menu__link:not(.disabled)"),
