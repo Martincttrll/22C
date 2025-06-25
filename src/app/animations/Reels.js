@@ -53,7 +53,7 @@ export default class Reels extends Animation {
   animateIn() {
     if (Detection.isMobile) {
       const tap = document.createElement("div");
-      tap.className = "tap-anim";
+      tap.className = "reels__tap-anim tap-anim";
       this.element.appendChild(tap);
 
       gsap.fromTo(
@@ -72,8 +72,8 @@ export default class Reels extends Animation {
   }
 
   animateOut() {
-    if (document.querySelector(".tap-anim")) {
-      document.querySelector(".tap-anim").remove();
+    if (document.querySelector(".reels__tap-anim")) {
+      document.querySelector(".reels__tap-anim").remove();
     }
     this.elements.reels.forEach((reel) => {
       reel.muted = true;
