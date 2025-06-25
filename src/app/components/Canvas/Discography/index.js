@@ -1,6 +1,5 @@
 import { each } from "lodash";
 import Media from "./Media.js";
-import Transition from "../Transition.js";
 import * as THREE from "three";
 import gsap from "gsap";
 
@@ -55,6 +54,7 @@ export default class Discography {
         document.body.style.cursor = "";
       }
     });
+
     window.addEventListener("click", (event) => {
       this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
       this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
@@ -142,16 +142,24 @@ export default class Discography {
   }
 
   show(isPreloaded) {
-    if (!this.mediaInstances) {
-      this.createMedia();
-      this.createGallery();
-      this.createRaycaster();
-      this.scene.add(this.group);
-    }
-    if (this.mediaInstances) {
-      const delay = isPreloaded ? 2 : 0;
-      this.mediaInstances.forEach((media, i) => media.show(delay + i * 0.2));
-    }
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          if (!this.mediaInstances) {
+            this.createMedia();
+            this.createGallery();
+            this.createRaycaster();
+            this.scene.add(this.group);
+          }
+          if (this.mediaInstances) {
+            const delay = isPreloaded ? 2.5 : 0;
+            this.mediaInstances.forEach((media, i) =>
+              media.show(delay + i * 0.05)
+            );
+          }
+        });
+      });
+    });
   }
 
   hide() {

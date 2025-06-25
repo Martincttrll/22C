@@ -62,7 +62,6 @@ export default class Transition {
         ease: "power2.inOut",
       })
       .call(() => {
-        console.log("Transition complete is reversed: ", this.tl.reversed());
         if (this.tl.reversed() && this.shouldCallCallbacks) {
           window.app.onChange({ url: "/discography/" });
         } else if (this.shouldCallCallbacks) {
@@ -84,7 +83,6 @@ export default class Transition {
   }
 
   animateFallbackMesh(mesh) {
-    const targetScale = Math.max(this.sizes.width, this.sizes.height) * 0.5;
     const tl = gsap.timeline({
       onComplete: () => {
         this.scene.remove(mesh);
@@ -130,10 +128,8 @@ export default class Transition {
           ease: "power2.inOut",
         },
         "<"
-      )
-      .call(() => {
-        this.showAlbums();
-      });
+      );
+
     tl.play();
   }
 
@@ -206,15 +202,11 @@ export default class Transition {
 
   playFromAlbum() {
     if (!this.tl) {
-      console.log("1");
       this.createTimeline();
     }
-    console.log("2");
     this.shouldCallCallbacks = false;
     this.tl.progress(1);
     this.shouldCallCallbacks = true;
-    console.log("3");
     this.tl.reverse();
-    console.log("Playing from album (transition.js)");
   }
 }

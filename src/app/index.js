@@ -107,7 +107,6 @@ class App {
       document.title = newTitle;
 
       this.navigation.onChange(this.template);
-      this.canvas.onChange({ template: this.template, url });
 
       if (push) {
         window.history.pushState({}, "", url);
@@ -116,10 +115,12 @@ class App {
       this.page = this.pages[this.template];
       this.page.create();
 
-      this.page.setCanvasPage(this.canvas.canvasPage);
-
       this.onResize();
       this.page.show();
+
+      this.canvas.onChange({ template: this.template, url });
+      this.page.setCanvasPage(this.canvas.canvasPage);
+
       this.isFetching = false;
       this.addLinkListeners();
     } else {
@@ -148,7 +149,7 @@ class App {
   addEventListeners() {
     window.addEventListener("popstate", this.onPopState, { passive: true });
     window.addEventListener("resize", this.onResize.bind(this));
-    window.oncontextmenu = this.onContextMenu; //Disable right click
+    // window.oncontextmenu = this.onContextMenu; //Disable right click
   }
 }
 

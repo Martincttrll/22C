@@ -61,31 +61,32 @@ export default class Media {
   onResize(sizes) {
     this.sizes = sizes;
     this.createBounds();
+    console.log("this.onResize");
   }
   show(delay) {
-    // requestAnimationFrame(() => {
-    //   console.log(this.mesh.position.y);
-    //   gsap.fromTo(
-    //     this.mesh.position,
-    //     { y: this.mesh.position.y - 1 },
-    //     {
-    //       y: this.mesh.position.y,
-    //       duration: 0.6,
-    //       delay: delay,
-    //       ease: "power2.out",
-    //     }
-    //   );
-    //   gsap.fromTo(
-    //     this.mesh.material,
-    //     { opacity: 0 },
-    //     {
-    //       opacity: 1,
-    //       duration: 0.2,
-    //       delay: delay,
-    //       ease: "power2.out",
-    //     }
-    //   );
-    // });
+    requestAnimationFrame(() => {
+      console.log("showing media");
+      gsap.fromTo(
+        this.mesh.position,
+        { y: this.mesh.position.y - 1 },
+        {
+          y: this.mesh.position.y,
+          duration: 0.6,
+          delay: delay,
+          ease: "power2.out",
+        }
+      );
+      gsap.fromTo(
+        this.mesh.material,
+        { opacity: 0 },
+        {
+          opacity: 1,
+          duration: 0.6,
+          delay: delay,
+          ease: "power2.out",
+        }
+      );
+    });
   }
   hide() {}
 }
