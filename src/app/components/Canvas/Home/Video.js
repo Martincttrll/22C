@@ -1,15 +1,20 @@
 import * as THREE from "three";
 import vertexShader from "@shaders/video-vertex.glsl";
 import fragmentShader from "@shaders/video-fragment.glsl";
+import { mouse } from "@utils/mousePos";
 
 export default class Video {
   constructor({ element, group, sizes }) {
+    this.mouse = mouse;
     this.element = element;
     this.group = group;
     this.sizes = sizes;
+    this.mouseAbsolute = { x: 0, y: 0 };
+
     this.createTextures();
     this.createMesh();
     this.createBounds();
+    this.addEventListeners();
   }
 
   createTextures() {
@@ -19,7 +24,7 @@ export default class Video {
   createMesh() {
     this.uniforms = {
       uTexture: { value: this.texture },
-      uMouse: { value: this.mouse },
+      uMouse: { value: new THREE.Vector2() },
       uTime: { value: 0 },
     };
     this.geometry = new THREE.PlaneGeometry(1, 1);
@@ -75,9 +80,31 @@ export default class Video {
   }
 
   update(scroll) {
+    this.uniforms.uTime.value += 0.5;
+
     this.createBounds();
+    if (this.bounds) {
+      const mouseX = this.mouseAbsolute.x / window.innerWidth;
+
+      const elementTop = this.bounds.y;
+      const elementHeight = this.bounds.height;
+
+      const mouseYRelativeToElement =
+        (this.mouseAbsolute.y - elementTop) / elementHeight;
+
+      const mouseY = 1 - mouseYRelativeToElement;
+
+      this.uniforms.uMouse.value.set(mouseX, mouseY);
+    }
   }
 
   show() {}
   hide() {}
+
+  addEventListeners() {
+    window.addEventListener("mousemove", (event) => {
+      this.mouseAbsolute.x = event.clientX + window.scrollX;
+      this.mouseAbsolute.y = event.clientY + window.scrollY;
+    });
+  }
 }
