@@ -1,5 +1,6 @@
 import EleventyVitePlugin from "@11ty/eleventy-plugin-vite";
 import pugPlugin from "@11ty/eleventy-plugin-pug";
+import glsl from "vite-plugin-glsl";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -15,6 +16,8 @@ export default function (eleventyConfig) {
     viteOptions: {
       publicDir: "public",
       root: "src",
+
+      plugins: [glsl()],
 
       resolve: {
         alias: {

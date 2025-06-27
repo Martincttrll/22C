@@ -69,6 +69,8 @@ export default class Discography {
     });
   }
 
+  update() {}
+
   onScroll(next) {
     const tl = gsap.timeline();
     const total = this.mediaInstances.length;

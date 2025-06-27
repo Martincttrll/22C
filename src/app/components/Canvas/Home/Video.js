@@ -1,9 +1,10 @@
 import * as THREE from "three";
-import gsap from "gsap";
-export default class Media {
+import vertexShader from "@shaders/video-vertex.glsl";
+import fragmentShader from "@shaders/video-fragment.glsl";
+
+export default class Video {
   constructor({ element, group, sizes }) {
     this.element = element;
-    this.slug = element.getAttribute("data-slug");
     this.group = group;
     this.sizes = sizes;
     this.createTextures();
@@ -12,25 +13,23 @@ export default class Media {
   }
 
   createTextures() {
-    const image = this.element;
-    this.texture = image.getAttribute("src");
+    this.texture = new THREE.VideoTexture(this.element);
   }
 
   createMesh() {
+    this.uniforms = {
+      uTexture: { value: this.texture },
+      uMouse: { value: this.mouse },
+      uTime: { value: 0 },
+    };
     this.geometry = new THREE.PlaneGeometry(1, 1);
-    this.material = new THREE.MeshBasicMaterial({
-      map: null,
-      transparent: true,
-    });
-    this.loader = new THREE.TextureLoader();
-    this.loader.load(this.texture, (texture) => {
-      this.material.map = texture;
-      this.material.needsUpdate = true;
+    this.material = new THREE.ShaderMaterial({
+      uniforms: this.uniforms,
+      vertexShader,
+      fragmentShader,
     });
     this.mesh = new THREE.Mesh(this.geometry, this.material);
     this.mesh.position.set(0, 0, 0);
-    this.mesh.userData = { url: this.slug };
-    this.mesh.material.opacity = 1;
     this.group.add(this.mesh);
   }
 
@@ -44,10 +43,22 @@ export default class Media {
   }
   updateScale() {
     if (!document.body.contains(this.element)) return;
-    this.height = this.bounds.height / window.innerHeight;
-    this.width = this.bounds.width / window.innerWidth;
-    this.mesh.scale.x = this.sizes.width * this.width;
-    this.mesh.scale.y = this.sizes.height * this.height;
+
+    const meshWidth =
+      this.sizes.width * (this.bounds.width / window.innerWidth);
+    const meshHeight =
+      this.sizes.height * (this.bounds.height / window.innerHeight);
+
+    const videoRatio = this.element.videoWidth / this.element.videoHeight;
+    const containerRatio = meshWidth / meshHeight;
+
+    if (containerRatio < videoRatio) {
+      this.mesh.scale.y = meshHeight;
+      this.mesh.scale.x = meshHeight * videoRatio;
+    } else {
+      this.mesh.scale.x = meshWidth;
+      this.mesh.scale.y = meshWidth / videoRatio;
+    }
   }
 
   updatePosition() {
@@ -62,29 +73,11 @@ export default class Media {
     this.sizes = sizes;
     this.createBounds();
   }
-  show(delay) {
-    requestAnimationFrame(() => {
-      gsap.fromTo(
-        this.mesh.position,
-        { y: this.mesh.position.y - 1 },
-        {
-          y: this.mesh.position.y,
-          duration: 0.6,
-          delay: delay,
-          ease: "power2.out",
-        }
-      );
-      gsap.fromTo(
-        this.mesh.material,
-        { opacity: 0 },
-        {
-          opacity: 1,
-          duration: 0.6,
-          delay: delay,
-          ease: "power2.out",
-        }
-      );
-    });
+
+  update(scroll) {
+    this.createBounds();
   }
+
+  show() {}
   hide() {}
 }

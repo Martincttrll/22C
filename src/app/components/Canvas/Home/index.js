@@ -2,17 +2,20 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/Addons.js";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
+import Video from "./Video";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const SCROLL_DURATION = 800;
 
 export default class Home {
-  constructor({ scene, addUpdate }) {
+  constructor({ scene, sizes }) {
     this.scene = scene;
+    this.sizes = sizes;
     this.group = new THREE.Group();
-    this.addUpdate = addUpdate;
     this.loader = new GLTFLoader();
+
+    this.createVideo();
 
     this.models = [];
     this.steps = [
@@ -69,12 +72,6 @@ export default class Home {
     });
 
     await Promise.all(modelPromises);
-
-    this.addUpdate(() => {
-      this.steps.forEach((step) => {
-        if (step.model) step.model.rotation.y += 0.01;
-      });
-    });
   }
 
   setupScrollAnimation() {
@@ -89,6 +86,7 @@ export default class Home {
         end: `+=${scrollDuration}`,
         scrub: true,
         pin: true,
+
         onUpdate: (self) => {
           const index = Math.round(self.progress * (this.steps.length - 1));
           const step = this.steps[index];
@@ -144,9 +142,26 @@ export default class Home {
     });
   }
 
+  createVideo() {
+    this.video = new Video({
+      element: document.querySelector(".home__video"),
+      group: this.group,
+      sizes: this.sizes,
+    });
+  }
+
+  update(scroll) {
+    this.steps.forEach((step) => {
+      if (step.model) step.model.rotation.y += 0.01;
+    });
+
+    this.video.update(scroll);
+  }
+
   async show() {
     await this.modelsPromise;
     this.modelGroup.position.set(0, -2.5, 0);
+
     this.setupScrollAnimation();
     this.scene.add(this.group);
   }

@@ -62,7 +62,6 @@ export class Archives {
   }
 
   createTapHelper() {
-    console.log("Creating tap helper for mobile devices");
     if (Detection.isMobile) {
       const tap = document.createElement("div");
       tap.className = "archives__tap-anim tap-anim";

@@ -7,11 +7,9 @@ import Transition from "./Transition";
 export default class Canvas {
   constructor({ template }) {
     this.template = template;
-    this.updateCallbacks = [];
     this.createRenderer();
     this.createScene();
     this.createCamera();
-    this.update();
   }
 
   createRenderer() {
@@ -43,20 +41,18 @@ export default class Canvas {
     this.scene = new THREE.Scene();
   }
 
-  update() {
-    requestAnimationFrame(() => this.update());
-    this.updateCallbacks.forEach((update) => update());
-    this.renderer.render(this.scene, this.camera);
-  }
+  update(scroll) {
+    if (this.canvasPage) {
+      this.canvasPage.update(scroll);
+    }
 
-  addUpdate(updateFunction) {
-    this.updateCallbacks.push(updateFunction);
+    this.renderer.render(this.scene, this.camera);
   }
 
   createHome() {
     this.home = new Home({
       scene: this.scene,
-      addUpdate: this.addUpdate.bind(this),
+      sizes: this.sizes,
     });
   }
 

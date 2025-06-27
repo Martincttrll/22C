@@ -45,6 +45,7 @@ export default class Album {
 
     this.scene.add(this.fakeMesh);
   }
+  update() {}
   hide() {
     this.group.clear();
     this.scene.remove(this.group);

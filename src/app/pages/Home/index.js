@@ -1,6 +1,5 @@
 import Page from "@classes/Page";
 import { TextCursor } from "@components/TextCursor";
-import { Parallax } from "@animations/Parallax";
 import { Archives } from "./Archives";
 
 export default class Home extends Page {
@@ -50,7 +49,6 @@ export default class Home extends Page {
 
   create() {
     super.create();
-    new Parallax(this.elements.videoWrapper, this.smoothScroll.lenis);
     new Archives({ element: this.elements.archivesWrapper });
   }
 }

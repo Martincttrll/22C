@@ -6,6 +6,7 @@ import { Navigation } from "@components/Navigation";
 import { each } from "lodash";
 import { Preloader } from "@components/Preloader";
 import Canvas from "@components/Canvas";
+import gsap from "gsap";
 class App {
   constructor() {
     console.log("©2025 - 22Carbone by MartinCtrl");
@@ -17,6 +18,8 @@ class App {
     this.addEventListeners();
     this.addLinkListeners();
     this.onResize();
+
+    gsap.ticker.add(this.update.bind(this));
   }
 
   createContent() {
@@ -49,6 +52,12 @@ class App {
     this.canvas = new Canvas({ template: this.template });
   }
 
+  update() {
+    if (this.canvas) {
+      this.canvas.update(this.page.smoothScroll.progress);
+    }
+  }
+
   /*
    * Events
    */
@@ -57,6 +66,8 @@ class App {
     this.onResize();
 
     this.canvas.onPreloaded();
+
+    this.update();
 
     this.page.show();
 

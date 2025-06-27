@@ -8,7 +8,7 @@ import Reels from "@animations/Reels";
 import Paragraph from "@animations/Paragraph";
 
 export default class Page extends EventEmitter {
-  constructor({ element, elements, isScrollable = true }) {
+  constructor({ element, elements }) {
     super();
 
     this.selectors = {
@@ -20,10 +20,6 @@ export default class Page extends EventEmitter {
       animationsParagraphs: "[data-animation='paragraph']",
       animationsReels: "[data-animation='reels']",
     };
-
-    this.isScrollable = isScrollable;
-    this.smoothScroll = null;
-    this.textCursor = null;
   }
 
   create() {
@@ -46,13 +42,8 @@ export default class Page extends EventEmitter {
         }
       }
     });
-
-    if (this.isScrollable) {
-      this.smoothScroll = new SmoothScroll(this.element, this.elements.wrapper);
-    }
-
+    this.createSmoothScroll();
     this.createAnimations();
-    this.createTextCursor();
   }
 
   createAnimations() {
@@ -87,11 +78,8 @@ export default class Page extends EventEmitter {
     );
   }
 
-  createTextCursor() {}
-  destroyTextCursor() {
-    if (this.textCursor && this.textCursor.cursor) {
-      this.textCursor.cursor.remove();
-    }
+  createSmoothScroll() {
+    this.smoothScroll = new SmoothScroll(this.element, this.elements.wrapper);
   }
 
   setCanvasPage(canvasPage) {
@@ -107,10 +95,7 @@ export default class Page extends EventEmitter {
 
   hide(_url) {
     this.isVisible = false;
-
     this.removeEventListeners();
-    this.destroyTextCursor();
-
     return Promise.resolve();
   }
 
