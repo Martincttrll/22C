@@ -47,8 +47,13 @@ export default class Home extends Page {
     });
   }
 
+  createArchives() {
+    new Archives({ element: this.elements.archivesWrapper });
+  }
+
   create() {
     super.create();
-    new Archives({ element: this.elements.archivesWrapper });
+    this.createTextCursor();
+    this.createArchives();
   }
 }
