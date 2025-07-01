@@ -67,7 +67,6 @@ export class Archives {
       tap.className = "archives__tap-anim tap-anim";
       this.element.appendChild(tap);
 
-      console.log("tap");
       gsap.fromTo(
         tap,
         { scale: 1, opacity: 1 },

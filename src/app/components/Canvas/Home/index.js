@@ -15,8 +15,6 @@ export default class Home {
     this.group = new THREE.Group();
     this.loader = new GLTFLoader();
 
-    this.createVideo();
-
     this.models = [];
     this.steps = [
       {
@@ -159,6 +157,7 @@ export default class Home {
   }
 
   async show() {
+    this.createVideo();
     await this.modelsPromise;
     this.modelGroup.position.set(0, -2.5, 0);
 

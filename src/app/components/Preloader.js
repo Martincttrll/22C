@@ -12,6 +12,10 @@ export class Preloader extends Component {
       },
     });
 
+    this.animateIn();
+
+    document.body.style.visibility = "visible";
+
     this.minDisplayTime = 1000;
     this.entryStartTime = performance.now();
     this.loadAssets().then(() => {
@@ -87,6 +91,26 @@ export class Preloader extends Component {
         "-=0.3"
       );
     });
+  }
+
+  animateIn() {
+    gsap.fromTo(
+      [
+        this.elements.title,
+        this.elements.bar,
+        this.elements.barOuter,
+        this.elements.percent,
+      ],
+      {
+        autoAlpha: 0,
+      },
+      {
+        autoAlpha: 1,
+
+        duration: 0.5,
+        ease: "power2.inOut",
+      }
+    );
   }
 
   updateCounter(value) {

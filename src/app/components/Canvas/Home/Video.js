@@ -39,6 +39,8 @@ export default class Video {
     this.mesh = new THREE.Mesh(this.geometry, this.material);
     this.mesh.position.set(0, 0, 0);
     this.group.add(this.mesh);
+
+    this.element.style.visibility = "hidden";
   }
 
   createBounds() {
