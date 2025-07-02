@@ -66,9 +66,9 @@ const slugify = (str) => {
   return str
     .toLowerCase()
     .trim()
-    .replace(/['"]/g, "") // Supprime les apostrophes et guillemets
-    .replace(/[^a-z0-9]+/g, "-") // Remplace les caractères non alphanumériques par des tirets
-    .replace(/^-+|-+$/g, ""); // Supprime les tirets en début ou fin de chaîne
+    .replace(/['"]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
 };
 
 module.exports = async function () {

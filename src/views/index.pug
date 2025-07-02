@@ -11,23 +11,18 @@ block content
             .home__vertical__line
             .home__vertical__line
             .home__vertical__line
-            h1.home__title 22Carbone 
+            h1.home__title=prismic.homepage.data.h1[0].text
             .home__video__wrapper
                 .home__video__filter
                 video.home__video(autoplay,muted,loop,playsinline,preload="auto")
                     source(src="src/assets/videos/homepage_presentation.mp4", type="video/mp4")
                     img( src="src/assets/img/home-video-placeholder.png", alt="Aperçu vidéo")
-
-                //- video.home__video(src="")
             .home__main__wrapper
                 .home__who__wrapper 
                     .home__who__text__section
-                        h2.home__h2.home__who__title(data-animation="title") Qui ?
-                        p.home__who__p(data-animation="paragraph")
-                            | Né dans l'effervescence marseillaise fin 2022, 22Carbone est un trio audacieux composé du rappeur Gabi et des producteurs Hatlas et Sphinx. Leur signature ? Un mélange explosif de rap, techno et rock, porté par une esthétique visuelle cinématographique. 
-                            br
-                            br
-                            | Leur premier EP DISTORSION (décembre 2022) marque immédiatement les esprits avec le clip Prophétie, plongeant l'auditeur dans un univers post-apocalyptique à la Mad Max. Ce titre hybride devient leur morceau le plus streamé, révélant leur capacité à fusionner les genres avec maestria.
+                        h2.home__h2.home__who__title(data-animation="title")=prismic.homepage.data.who_title[0].text
+                        p.home__who__p(data-animation="paragraph")=prismic.homepage.data.who_text[0].text
+                            
                     .home__who__hover__section
                         span 22ARCHIVES22.
                         .delimiter__group.delimiter__group--top-left 
@@ -37,7 +32,7 @@ block content
                 .home__three__wrapper
                     .home__three__label 
                 .home__reels__title
-                    h2.home__h2(data-animation="title") Récement 
+                    h2.home__h2(data-animation="title")=prismic.homepage.data.news_title[0].text 
                 .home__reels__wrapper
                     .home__reels__video__wrapper(data-animation="reels")
                         video.home__reels__video(autoplay loop muted playsinline preload="auto")
@@ -50,37 +45,16 @@ block content
                             source(src="src/assets/videos/reels_trashtalking.mp4" type="video/mp4")
                             | Votre navigateur ne supporte pas les vidéos.
                 .home__news__wrapper
-                    .home__news__separator(data-animation="separator") 
-                    .home__news__item(data-animation="title")
-                        .home__news__info__wrapper
-                            .home__news__item__title
-                                .home__news__item__date 22/10/2023 
-                                .home__news__item__label Nouvel EP - DISTORSION
-                            p.home__news__item__text 22Carbone sort son premier EP "DISTORSION" sur toutes les plateformes de streaming.
-                        img.home__news__item__img(src="src/assets/img/carousel-gabi.png",width="100%",data-animation="image")
-                    .home__news__separator(data-animation="separator") 
-                    .home__news__item(data-animation="title")
-                        .home__news__info__wrapper
-                            .home__news__item__title
-                                .home__news__item__date 22/10/2023 
-                                .home__news__item__label Concert à La Cigale
-                            p.home__news__item__text(data-animation="paragraph") 22Carbone sort son premier EP "DISTORSION" sur toutes les plateformes de streaming. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi aliquam vero enim! Quis modi libero a dolorem reiciendis laudantium consectetur, dolor tempora quam eum repellat hic iure! Error, nam laborum?
-                        img.home__news__item__img(src="src/assets/img/carousel-hatlas.png",width="100%",data-animation="image")
-                    .home__news__separator(data-animation="separator") 
-                    .home__news__item(data-animation="title")
-                        .home__news__info__wrapper
-                            .home__news__item__title
-                                .home__news__item__date 22/10/2023 
-                                .home__news__item__label Festival Les Trans-Musicales
-                            p.home__news__item__text(data-animation="paragraph") 22Carbone sort son premier EP "DISTORSION" sur toutes les plateformes de streaming.
-                        img.home__news__item__img(src="src/assets/img/carousel-sphinx.png",width="100%",data-animation="image")
-                    .home__news__separator(data-animation="separator") 
-                    .home__news__item(data-animation="title")
-                        .home__news__info__wrapper
-                            .home__news__item__title
-                                .home__news__item__date 22/10/2023 
-                                .home__news__item__label 22Carbone sort son premier EP "DISTORSION"
-                            p.home__news__item__text(data-animation="paragraph") 22Carbone sort son premier EP "DISTORSION" sur toutes les plateformes de streaming.
-                        img.home__news__item__img(src="src/assets/img/carousel-gabi.png",width="100%",data-animation="image")
+
+                    each news in prismic.homepage.data.news_list
+                        .home__news__separator(data-animation="separator") 
+                        .home__news__item(data-animation="title")
+                            .home__news__info__wrapper
+                                .home__news__item__title
+                                    .home__news__item__date=new Date(news.news_item.data.date).toLocaleDateString('fr-FR', { year: 'numeric', month: 'numeric', day: 'numeric' })
+                                    .home__news__item__label=news.news_item.data.titre[0].text
+                                p.home__news__item__text=news.news_item.data.text[0].text
+                            img.home__news__item__img(src=news.news_item.data.image.url,width="100%",data-animation="image")
+                    
     
 
