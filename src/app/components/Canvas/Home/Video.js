@@ -26,9 +26,9 @@ export default class Video {
       uTexture: { value: this.texture },
       uMouse: { value: new THREE.Vector2() },
       uTime: { value: 0 },
-      uAmpliture: 0.5,
-      uSpeed: 1,
-      uFrequence: 3,
+      uAmpliture: 30,
+      uSpeed: 10,
+      uFrequence: 40,
     };
     this.geometry = new THREE.PlaneGeometry(1, 1);
     this.material = new THREE.ShaderMaterial({
@@ -85,7 +85,7 @@ export default class Video {
   }
 
   update(scroll) {
-    this.uniforms.uTime.value += 0.5;
+    this.uniforms.uTime.value += 0.01;
 
     this.createBounds();
     if (this.bounds) {
