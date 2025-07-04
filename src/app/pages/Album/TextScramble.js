@@ -10,7 +10,7 @@ export default class TextScramble {
     this.addEventListeners();
   }
   initOriginalText() {
-    this.element.querySelectorAll("td a").forEach((el) => {
+    this.element.querySelectorAll("td").forEach((el) => {
       if (!el.dataset.original) {
         el.dataset.original = el.innerText;
       }
@@ -19,7 +19,7 @@ export default class TextScramble {
 
   addEventListeners() {
     this.element.addEventListener("mouseover", () => {
-      this.element.querySelectorAll("td a").forEach((element) => {
+      this.element.querySelectorAll("td").forEach((element) => {
         gsap.to(element, {
           duration: 1,
           scrambleText: {

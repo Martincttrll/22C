@@ -8,7 +8,6 @@ export default class Album {
     this.sizes = sizes;
     this.group = group;
     this.transition = transition;
-    this.addDebug();
   }
 
   onClickBack() {
@@ -16,6 +15,29 @@ export default class Album {
       this.transition.animateFallbackMesh(this.fakeMesh);
     } else {
       this.transition.playFromAlbum();
+    }
+  }
+
+  onAudioPlay({ data, analyser }) {
+    console.log(data, analyser);
+    this.audioData = data;
+    this.analyser = analyser;
+
+    this.audioMesh = new THREE.Mesh(
+      new THREE.BoxGeometry(2, 2, 2),
+      new THREE.MeshBasicMaterial({ color: 0xd2d2d2 })
+    );
+
+    this.audioMesh.position.set(0, 0, 0);
+
+    this.scene.add(this.audioMesh);
+  }
+
+  update() {
+    if (this.audioData && this.analyser && this.audioMesh) {
+      console.log("z");
+      this.audioMesh.rotation.x += 0.5;
+      this.audioMesh.rotation.y += 0.5;
     }
   }
 
@@ -45,17 +67,9 @@ export default class Album {
 
     this.scene.add(this.fakeMesh);
   }
-  update() {}
+
   hide() {
     this.group.clear();
     this.scene.remove(this.group);
-  }
-  //debug
-  addDebug() {
-    window.addEventListener("keydown", (event) => {
-      if (event.key === "d") {
-        this.fakeMesh.material.wireframe = !this.fakeMesh.material.wireframe;
-      }
-    });
   }
 }

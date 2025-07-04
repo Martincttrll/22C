@@ -15,6 +15,9 @@
   background: black;
   color: white;
   padding-top: 10rem;
+  @include media("<tablet") {
+    padding-top: 40rem;
+  }
   // font-size: 1.6rem;
 }
 
@@ -37,7 +40,27 @@ h1.album__title {
   font-weight: 700;
   & img {
     transform: rotateZ(-90deg);
-    width: 2.5rem;
+    width: 25px;
+  }
+  @include media("<tablet") {
+    position: absolute;
+    bottom: 15px;
+    // background-color: white;
+    color: white;
+    border-radius: 50px;
+    font-size: 7rem;
+    padding: 6px 10px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    &::after {
+      content: "]";
+    }
+    &::before {
+      content: "[";
+    }
+    & img {
+      display: none;
+    }
   }
 }
 table.album__tracklist__table {
@@ -74,6 +97,9 @@ tr {
   font-size: 2rem;
   font-weight: 700;
   padding-bottom: 1rem;
+  @include media("<tablet") {
+    display: none;
+  }
 }
 .album__tracklist__table tbody {
 }
@@ -82,14 +108,14 @@ tr {
 .album__tracklist__table td {
   height: 100%;
 }
-.album__tracklist__table td a {
-  display: flex;
-  align-items: center;
-  width: 100%;
+.album__tracklist__table td {
   height: 100%;
   color: inherit;
   text-decoration: none;
   padding: 2rem 0;
+  @include media("<tablet") {
+    padding: 6rem 2rem;
+  }
 }
 td.album__track__name {
 }
