@@ -1,6 +1,9 @@
 import Transition from "../Transition.js";
 import * as THREE from "three";
 import gsap from "gsap";
+import vertexShader from "@shaders/audio-vertex.glsl";
+import fragmentShader from "@shaders/audio-fragment.glsl";
+
 export default class Album {
   constructor({ scene, sizes, camera, group, transition }) {
     this.scene = scene;
@@ -18,14 +21,49 @@ export default class Album {
     }
   }
 
-  onAudioPlay({ data, analyser }) {
-    console.log(data, analyser);
+  onAudioPlay(audio) {
+    if (!this.audioListener) {
+      this.audioListener = new THREE.AudioListener();
+    }
+    if (this.camera && !this.camera.children.includes(this.audioListener)) {
+      this.camera.add(this.audioListener);
+    }
+
+    const threeAudio = new THREE.Audio(this.audioListener);
+
+    // 4. Connecte la source audio
+    const audioContext = this.audioListener.context;
+    const source = audioContext.createMediaElementSource(audio);
+    threeAudio.setNodeSource(source);
+
+    this.analyser = new THREE.AudioAnalyser(threeAudio, 64);
+    const size = this.analyser.analyser.frequencyBinCount;
+
+    const data = new Uint8Array(size);
+    const audioDataTex = new THREE.DataTexture(
+      data,
+      size,
+      1,
+      THREE.RedFormat,
+      THREE.UnsignedByteType
+    );
+    audioDataTex.needsUpdate = true;
+
     this.audioData = data;
-    this.analyser = analyser;
+
+    this.uniforms = {
+      uTime: { value: 0 },
+      uAudioData: { value: audioDataTex },
+      uAudioTextureSize: { value: size },
+    };
 
     this.audioMesh = new THREE.Mesh(
       new THREE.BoxGeometry(2, 2, 2),
-      new THREE.MeshBasicMaterial({ color: 0xa2a2a2 })
+      new THREE.ShaderMaterial({
+        uniforms: this.uniforms,
+        vertexShader,
+        fragmentShader,
+      })
     );
 
     this.audioMesh.position.set(0, 0, 0);
@@ -34,10 +72,16 @@ export default class Album {
   }
 
   update() {
-    if (this.audioData && this.analyser && this.audioMesh) {
-      console.log("z");
-      this.audioMesh.rotation.x += 0.5;
-      this.audioMesh.rotation.y += 0.5;
+    if (this.analyser && this.audioMesh) {
+      this.analyser.getFrequencyData(this.audioData);
+
+      // Met à jour la texture pour le shader
+      this.uniforms.uAudioData.value.needsUpdate = true;
+
+      this.uniforms.uTime.value += 0.05;
+
+      this.audioMesh.rotation.x += 0.01;
+      this.audioMesh.rotation.y += 0.01;
     }
   }
 

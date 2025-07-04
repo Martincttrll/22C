@@ -2,6 +2,7 @@ import Page from "@classes/Page";
 import TextScramble from "./textScramble";
 import { Detection } from "@classes/Detection";
 import { each } from "lodash";
+
 export class Album extends Page {
   constructor() {
     super({
@@ -73,16 +74,6 @@ export class Album extends Page {
       if (data?.data?.length > 0 && data.data[0].preview) {
         this.audio = new Audio(data.data[0].preview);
         this.audio.crossOrigin = "anonymous";
-        const context = new AudioContext();
-        const source = context.createMediaElementSource(this.audio);
-        const analyser = context.createAnalyser();
-        analyser.fftSize = 64;
-
-        source.connect(analyser);
-        analyser.connect(context.destination);
-        const dataArray = new Uint8Array(analyser.frequencyBinCount);
-
-        return { dataArray, analyser };
       } else {
         console.warn("Aucun extrait trouvé");
       }
@@ -96,8 +87,8 @@ export class Album extends Page {
       this.audio.pause();
       this.audio = null;
     }
-    const { audioData, analyser } = await this.fetchTrack(btn);
-    this.canvasPage.onAudioPlay({ data: audioData, analyser }); // passer url ?
+    await this.fetchTrack(btn);
+    this.canvasPage.onAudioPlay(this.audio);
     this.audio.play();
   }
 

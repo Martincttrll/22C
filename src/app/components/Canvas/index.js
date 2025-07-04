@@ -1,4 +1,3 @@
-//Class qui permet de génerer tous les canvas du site (preloader ????)
 import * as THREE from "three";
 import Home from "./Home";
 import Discography from "./Discography";
