@@ -3,11 +3,11 @@
 html {
   @extend %cover;
   font-size: calc(100vw / 1920 * 10);
+  touch-action: manipulation;
 
   @include media("<phone") {
     font-size: calc(100vw / 750 * 10);
   }
-  touch-action: manipulation;
 }
 
 body {
