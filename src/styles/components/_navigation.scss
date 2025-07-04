@@ -34,7 +34,7 @@ a.nav__logo {
   color: white;
   font-size: 14px;
   text-transform: uppercase;
-  .nav__menu__btn__text {
+  & .nav__menu__btn__text {
     position: absolute;
     left: 0;
     right: 0;
@@ -75,14 +75,12 @@ a.nav__logo {
   text-decoration: none;
   font-family: "baunk";
   font-size: 5rem;
-  @include media("<tablet") {
-    font-size: 8rem;
-  }
   mix-blend-mode: difference;
   text-transform: uppercase;
   margin-bottom: 50px;
   pointer-events: none;
   opacity: 0;
+
   &:not(.disabled)::before {
     content: "";
     height: 0.8rem;
@@ -118,5 +116,8 @@ a.nav__logo {
     &:hover::after {
       transform: scale(1) rotateZ(13deg);
     }
+  }
+  @include media("<tablet") {
+    font-size: 8rem;
   }
 }
