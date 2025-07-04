@@ -25,7 +25,7 @@ export default class Album {
 
     this.audioMesh = new THREE.Mesh(
       new THREE.BoxGeometry(2, 2, 2),
-      new THREE.MeshBasicMaterial({ color: 0xd2d2d2 })
+      new THREE.MeshBasicMaterial({ color: 0xa2a2a2 })
     );
 
     this.audioMesh.position.set(0, 0, 0);
