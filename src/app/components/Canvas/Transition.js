@@ -71,12 +71,17 @@ export default class Transition {
         }
       })
       .to(
-        this.meshCopy.material,
+        this.meshCopy.material.map((mat) => mat),
         {
           opacity: 0,
           delay: 0.2,
           duration: 0.6,
           ease: "power2.inOut",
+          onUpdate: function () {
+            this.targets().forEach((mat) => {
+              mat.needsUpdate = true;
+            });
+          },
         },
         "<"
       );
@@ -90,12 +95,15 @@ export default class Transition {
       },
     });
 
-    tl.to(mesh.material, {
-      opacity: 1,
-      delay: 0.2,
-      duration: 0.6,
-      ease: "power2.inOut",
-    })
+    tl.to(
+      mesh.material.map((mat) => mat),
+      {
+        opacity: 1,
+        delay: 0.2,
+        duration: 0.6,
+        ease: "power2.inOut",
+      }
+    )
       .call(() => {
         window.app.onChange({ url: "/discography/" });
       })
@@ -121,7 +129,7 @@ export default class Transition {
         ease: "power2.inOut",
       })
       .to(
-        mesh.material,
+        mesh.material.map((mat) => mat),
         {
           opacity: 0,
           duration: 0.5,
@@ -148,22 +156,54 @@ export default class Transition {
   createMeshCopy(mesh) {
     this.mesh = mesh;
     this.meshCopy = mesh.clone();
-    this.meshCopy.material = mesh.material.clone();
-    this.meshCopy.material.side = THREE.DoubleSide;
-    mesh.material.transparent = true;
-    mesh.material.opacity = 0;
+
+    if (Array.isArray(mesh.material)) {
+      this.meshCopy.material = mesh.material.map((mat) => {
+        const cloned = mat.clone();
+        cloned.side = THREE.DoubleSide;
+        cloned.transparent = true;
+        return cloned;
+      });
+      mesh.material.forEach((mat) => {
+        mat.transparent = true;
+        mat.opacity = 0;
+      });
+      console.log(this.meshCopy.material);
+    } else {
+      const cloned = mesh.material.clone();
+      cloned.side = THREE.DoubleSide;
+      mesh.material.transparent = true;
+      mesh.material.opacity = 0;
+      this.meshCopy.material = cloned;
+    }
   }
 
   destroyCopyMesh() {
     if (this.meshCopy) {
       this.scene.remove(this.meshCopy);
       this.meshCopy.geometry.dispose();
-      this.meshCopy.material.dispose();
+
+      // Si le material est un tableau, dispose chaque élément
+      if (Array.isArray(this.meshCopy.material)) {
+        this.meshCopy.material.forEach((mat) => mat.dispose());
+      } else {
+        this.meshCopy.material.dispose();
+      }
+
       this.meshCopy = null;
     }
+
     if (this.mesh) {
-      this.mesh.material.transparent = false;
-      this.mesh.material.opacity = 1;
+      if (Array.isArray(this.mesh.material)) {
+        this.mesh.material.forEach((mat) => {
+          mat.transparent = false;
+          mat.opacity = 1;
+        });
+      } else {
+        this.mesh.material.transparent = false;
+        this.mesh.material.opacity = 1;
+      }
+
       this.mesh = null;
     }
   }

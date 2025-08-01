@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import gsap from "gsap";
+
 export default class Media {
   constructor({ element, group, sizes }) {
     this.element = element;
@@ -8,7 +9,7 @@ export default class Media {
     this.sizes = sizes;
     this.createTextures();
     this.createMesh();
-    this.createBounds();
+    this.onResize(this.sizes);
   }
 
   createTextures() {
@@ -17,51 +18,54 @@ export default class Media {
   }
 
   createMesh() {
-    this.geometry = new THREE.PlaneGeometry(1, 1);
-    this.material = new THREE.MeshBasicMaterial({
+    this.geometry = new THREE.BoxGeometry(1, 1, 0.1);
+    const frontMaterial = new THREE.MeshBasicMaterial({
       map: null,
       transparent: true,
     });
+    const backMaterial = new THREE.MeshBasicMaterial({
+      map: null,
+      transparent: true,
+    });
+    const edgeMaterial = new THREE.MeshBasicMaterial({
+      color: 0xe5e5e5,
+      transparent: true,
+    });
+    this.material = [
+      edgeMaterial, // droite
+      edgeMaterial, // gauche
+      edgeMaterial, // haut
+      edgeMaterial, // bas
+      frontMaterial, // face avant
+      backMaterial, // face arrière
+    ];
+
     this.loader = new THREE.TextureLoader();
     this.loader.load(this.texture, (texture) => {
-      this.material.map = texture;
-      this.material.needsUpdate = true;
+      frontMaterial.map = texture;
+      frontMaterial.needsUpdate = true;
+
+      const mirrored = texture.clone();
+      mirrored.repeat.x = -1;
+      mirrored.center.x = 0.5;
+      mirrored.needsUpdate = true;
+      backMaterial.map = mirrored;
+      backMaterial.needsUpdate = true;
     });
+
     this.mesh = new THREE.Mesh(this.geometry, this.material);
-    this.mesh.position.set(0, 0, 0);
     this.mesh.userData = { url: this.slug };
     this.mesh.material.opacity = 1;
     this.group.add(this.mesh);
   }
 
-  createBounds() {
-    requestAnimationFrame(() => {
-      const { width, height, x, y } = this.element.getBoundingClientRect();
-      this.bounds = { width, height, x, y };
-      this.updateScale();
-      this.updatePosition();
-    });
-  }
-  updateScale() {
-    if (!document.body.contains(this.element)) return;
-    this.height = this.bounds.height / window.innerHeight;
-    this.width = this.bounds.width / window.innerWidth;
-    this.mesh.scale.x = this.sizes.width * this.width;
-    this.mesh.scale.y = this.sizes.height * this.height;
-  }
-
-  updatePosition() {
-    if (!document.body.contains(this.element)) return;
-    this.x = (this.bounds.x + this.bounds.width / 2) / window.innerWidth;
-    this.y = (this.bounds.y + this.bounds.height / 2) / window.innerHeight;
-    this.mesh.position.x = this.x * this.sizes.width - this.sizes.width / 2;
-    this.mesh.position.y = -this.y * this.sizes.height + this.sizes.height / 2;
-  }
-
   onResize(sizes) {
     this.sizes = sizes;
-    this.createBounds();
+    const scaleFactor = window.innerWidth < window.innerHeight ? 0.8 : 0.6;
+    const meshWidth = this.sizes.width * scaleFactor;
+    this.mesh.scale.set(meshWidth, meshWidth, meshWidth * 0.1);
   }
+
   show(delay) {
     requestAnimationFrame(() => {
       gsap.fromTo(
@@ -74,16 +78,18 @@ export default class Media {
           ease: "power2.out",
         }
       );
-      gsap.fromTo(
-        this.mesh.material,
-        { opacity: 0 },
-        {
-          opacity: 1,
-          duration: 0.6,
-          delay: delay,
-          ease: "power2.out",
-        }
-      );
+      this.mesh.material.forEach((material) => {
+        gsap.fromTo(
+          material,
+          { opacity: 0 },
+          {
+            opacity: 1,
+            duration: 0.6,
+            delay: delay,
+            ease: "power2.out",
+          }
+        );
+      });
     });
   }
   hide() {}

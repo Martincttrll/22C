@@ -13,13 +13,9 @@ void main() {
     vec2 displacedUv = vUv + direction * ripple * smoothstep(0.3, 0.0, dist);
 
     vec4 color = texture2D(uTexture, displacedUv);
-    vec3 invertedColor = vec3(1.0 - color.rgb);
-
-    // Influence selon la distance
-    float influence = smoothstep(0.2, 0.0, dist);
 
     // Appliquer la couleur inversée uniquement autour de la souris
-    vec3 finalColor = mix(color.rgb, invertedColor, influence);
+    vec3 finalColor = color.rgb;
 
     gl_FragColor = vec4(finalColor, 1.0);
 }

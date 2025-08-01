@@ -2,7 +2,6 @@ import { each } from "lodash";
 import Media from "./Media.js";
 import * as THREE from "three";
 import gsap from "gsap";
-
 export default class Discography {
   constructor({ scene, sizes, camera, transition }) {
     this.scene = scene;
@@ -29,13 +28,17 @@ export default class Discography {
   }
 
   createGallery() {
+    const spacing = this.mediaInstances[0].mesh.scale.y * (1 / 18);
     this.mediaInstances.forEach((media, i) => {
-      media.mesh.position.z -= i * 0.5;
-      media.mesh.position.y += i * 0.5;
+      media.mesh.position.z = -i * 0.5;
+      media.mesh.position.y = i * spacing;
       media.mesh.rotation.x = 0.1;
     });
 
-    this.group.position.y = -1;
+    const ratio = window.innerWidth / window.innerHeight;
+    // On mappe ce ratio vers une plage raisonnable, par ex : 0.4 à 0.8
+    const offsetMultiplier = THREE.MathUtils.clamp(1.2 - ratio, 0.4, 0.8);
+    this.group.position.y = -this.sizes.height * offsetMultiplier;
   }
 
   createRaycaster() {
@@ -102,19 +105,23 @@ export default class Discography {
       },
       "<"
     );
-    tl.to(
-      edgeMedia.mesh.material,
-      {
-        opacity: 0,
-        duration: 0.4,
+    this.mesh.material.forEach((material) => {
+      tl.to(
+        material,
+        {
+          opacity: 0,
+          duration: 0.4,
+          ease: "power2.inOut",
+        },
+        "<"
+      );
+    });
+    this.mesh.material.forEach((material) => {
+      tl.to(material, {
+        opacity: 1,
+        duration: 0.3,
         ease: "power2.inOut",
-      },
-      "<"
-    );
-    tl.to(edgeMedia.mesh.material, {
-      opacity: 1,
-      duration: 0.3,
-      ease: "power2.inOut",
+      });
     });
     this.mediaInstances.forEach((media, i) => {
       let targetIndex = next ? (i - 1 + total) % total : (i + 1) % total;
@@ -138,9 +145,11 @@ export default class Discography {
   }
 
   onResize(sizes) {
-    each(this.mediaInstances, (media) => {
+    if (!this.mediaInstances) return;
+    this.mediaInstances.forEach((media, i) => {
       media.onResize(sizes);
     });
+    this.createGallery();
   }
 
   show(isPreloaded) {
@@ -149,7 +158,7 @@ export default class Discography {
         requestAnimationFrame(() => {
           if (!this.mediaInstances) {
             this.createMedia();
-            this.createGallery();
+            this.createGallery(this.sizes);
             this.createRaycaster();
             this.scene.add(this.group);
           }

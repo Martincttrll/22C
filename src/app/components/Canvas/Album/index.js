@@ -90,11 +90,36 @@ export default class Album {
     //arrivé direct sur album,
     const coverUrl = document.querySelector(".album__wrapper").dataset.cover;
 
-    const geometry = new THREE.PlaneGeometry(1, 1, 1, 1);
+    const geometry = new THREE.BoxGeometry(1, 1, 0.1);
     const texture = new THREE.TextureLoader().load(coverUrl);
-    const material = new THREE.MeshBasicMaterial({ map: texture });
+    const mirrored = texture.clone();
+    mirrored.repeat.x = -1;
+    mirrored.center.x = 0.5;
+    mirrored.needsUpdate = true;
+
+    const frontMaterial = new THREE.MeshBasicMaterial({
+      map: texture,
+      transparent: true,
+    });
+    const backMaterial = new THREE.MeshBasicMaterial({
+      map: mirrored,
+      transparent: true,
+    });
+    const edgeMaterial = new THREE.MeshBasicMaterial({
+      color: 0xe5e5e5,
+      transparent: true,
+    });
+    const material = [
+      edgeMaterial, // droite
+      edgeMaterial, // gauche
+      edgeMaterial, // haut
+      edgeMaterial, // bas
+      frontMaterial, // face avant
+      backMaterial, // face arrière
+    ];
+
     this.fakeMesh = new THREE.Mesh(geometry, material);
-    this.fakeMesh.material.side = THREE.DoubleSide;
+
     this.fakeMesh.rotation.y = Math.PI;
 
     const cameraZ = this.camera.position.z;
@@ -104,8 +129,10 @@ export default class Album {
     const widthAtDistance = heightAtDistance * this.camera.aspect;
     const scaleTarget = Math.max(widthAtDistance, heightAtDistance);
     this.fakeMesh.scale.set(scaleTarget, scaleTarget, 1);
-    this.fakeMesh.material.transparent = true;
-    this.fakeMesh.material.opacity = 0;
+    this.fakeMesh.material.forEach((mat) => {
+      mat.transparent = true;
+      mat.opacity = 0;
+    });
 
     this.fakeMesh.position.set(0, 0, 0);
 
