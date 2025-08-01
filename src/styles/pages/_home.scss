@@ -128,6 +128,7 @@
   @extend %content-padding;
   display: flex;
   margin-bottom: 35rem;
+  min-height: 400px;
   @include media("<tablet") {
     flex-direction: column;
   }
@@ -186,6 +187,7 @@
     }
   }
 }
+
 .home__who__title {
   margin-bottom: 20px;
 }
@@ -193,7 +195,7 @@
 p.home__who__p {
   max-width: 60rem;
   @include media("<tablet") {
-    max-width: 80%;
+    max-width: none;
   }
 }
 
