@@ -105,24 +105,22 @@ export default class Discography {
       },
       "<"
     );
-    this.mesh.material.forEach((material) => {
-      tl.to(
-        material,
-        {
-          opacity: 0,
-          duration: 0.4,
-          ease: "power2.inOut",
-        },
-        "<"
-      );
-    });
-    this.mesh.material.forEach((material) => {
-      tl.to(material, {
-        opacity: 1,
-        duration: 0.3,
+    console.log(edgeMedia.material);
+    tl.to(
+      edgeMedia.material,
+      {
+        opacity: 0,
+        duration: 0.4,
         ease: "power2.inOut",
-      });
+      },
+      "<"
+    );
+    tl.to(edgeMedia.material, {
+      opacity: 1,
+      duration: 0.3,
+      ease: "power2.inOut",
     });
+
     this.mediaInstances.forEach((media, i) => {
       let targetIndex = next ? (i - 1 + total) % total : (i + 1) % total;
       const target = targetPositions[targetIndex];
