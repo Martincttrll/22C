@@ -31,6 +31,7 @@ export default class Media {
       color: 0xe5e5e5,
       transparent: true,
     });
+
     this.material = [
       edgeMaterial, // droite
       edgeMaterial, // gauche

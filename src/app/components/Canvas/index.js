@@ -3,6 +3,7 @@ import Home from "./Home";
 import Discography from "./Discography";
 import Album from "./Album";
 import Transition from "./Transition";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 export default class Canvas {
   constructor({ template }) {
     this.template = template;
@@ -52,6 +53,7 @@ export default class Canvas {
     this.home = new Home({
       scene: this.scene,
       sizes: this.sizes,
+      camera: this.camera,
     });
   }
 

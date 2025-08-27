@@ -3,15 +3,17 @@ import { GLTFLoader } from "three/examples/jsm/Addons.js";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import Video from "./Video";
+import Reels from "./Reels";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const SCROLL_DURATION = 800;
 
 export default class Home {
-  constructor({ scene, sizes }) {
+  constructor({ scene, sizes, camera }) {
     this.scene = scene;
     this.sizes = sizes;
+    this.camera = camera;
     this.group = new THREE.Group();
     this.loader = new GLTFLoader();
 
@@ -148,16 +150,27 @@ export default class Home {
     });
   }
 
+  createReels() {
+    this.reels = new Reels({
+      elements: document.querySelectorAll(".home__reels__video"),
+      group: this.group,
+      camera: this.camera,
+      sizes: this.sizes,
+    });
+  }
+
   update(scroll) {
     this.steps.forEach((step) => {
       if (step.model) step.model.rotation.y += 0.01;
     });
 
     this.video.update(scroll);
+    this.reels.update(scroll);
   }
 
   async show() {
     this.createVideo();
+    this.createReels();
     await this.modelsPromise;
     this.modelGroup.position.set(0, -2.5, 0);
 
