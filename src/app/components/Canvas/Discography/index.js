@@ -105,7 +105,6 @@ export default class Discography {
       },
       "<"
     );
-    console.log(edgeMedia.material);
     tl.to(
       edgeMedia.material,
       {
@@ -150,7 +149,7 @@ export default class Discography {
     this.createGallery();
   }
 
-  show(isPreloaded) {
+  show(isPreloaded, isAlbumToDiscography) {
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
@@ -161,7 +160,12 @@ export default class Discography {
             this.scene.add(this.group);
           }
           if (this.mediaInstances) {
-            const delay = isPreloaded ? 2.5 : 0;
+            let delay = 0;
+            if (isPreloaded) {
+              delay = 2.5;
+            } else if (isAlbumToDiscography) {
+              delay = 1.4;
+            }
             this.mediaInstances.forEach((media, i) =>
               media.show(delay + i * 0.05)
             );

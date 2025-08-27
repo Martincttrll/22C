@@ -149,7 +149,7 @@ export default class Canvas {
     }
 
     if (this.canvasPage) {
-      this.canvasPage.show(isPreloaded);
+      this.canvasPage.show(isPreloaded, isAlbumToDiscography);
     }
 
     this.template = template;

@@ -18,6 +18,7 @@ export default class Transition {
         this.tl = null;
       },
     });
+
     this.tl
       .call(() => {
         if (!this.tl.reversed()) {
@@ -39,12 +40,6 @@ export default class Transition {
         },
         "<"
       )
-      .call(() => {
-        if (this.tl.reversed()) {
-          this.showAlbums();
-        }
-      })
-
       .to(
         this.meshCopy.rotation,
         {
@@ -71,7 +66,8 @@ export default class Transition {
         }
       })
       .to(
-        this.meshCopy.material.map((mat) => mat),
+        //////FIX OPACITY ON MATERIAL (CUZ BOX GEOMETRY)
+        this.meshCopy.material,
         {
           opacity: 0,
           delay: 0.2,
@@ -157,25 +153,16 @@ export default class Transition {
     this.mesh = mesh;
     this.meshCopy = mesh.clone();
 
-    if (Array.isArray(mesh.material)) {
-      this.meshCopy.material = mesh.material.map((mat) => {
-        const cloned = mat.clone();
-        cloned.side = THREE.DoubleSide;
-        cloned.transparent = true;
-        return cloned;
-      });
-      mesh.material.forEach((mat) => {
-        mat.transparent = true;
-        mat.opacity = 0;
-      });
-      console.log(this.meshCopy.material);
-    } else {
-      const cloned = mesh.material.clone();
+    this.meshCopy.material = mesh.material.map((mat) => {
+      const cloned = mat.clone();
       cloned.side = THREE.DoubleSide;
-      mesh.material.transparent = true;
-      mesh.material.opacity = 0;
-      this.meshCopy.material = cloned;
-    }
+      cloned.transparent = true;
+      return cloned;
+    });
+    mesh.material.forEach((mat) => {
+      mat.transparent = true;
+      mat.opacity = 0;
+    });
   }
 
   destroyCopyMesh() {
@@ -183,26 +170,16 @@ export default class Transition {
       this.scene.remove(this.meshCopy);
       this.meshCopy.geometry.dispose();
 
-      // Si le material est un tableau, dispose chaque élément
-      if (Array.isArray(this.meshCopy.material)) {
-        this.meshCopy.material.forEach((mat) => mat.dispose());
-      } else {
-        this.meshCopy.material.dispose();
-      }
+      this.meshCopy.material.forEach((mat) => mat.dispose());
 
       this.meshCopy = null;
     }
 
     if (this.mesh) {
-      if (Array.isArray(this.mesh.material)) {
-        this.mesh.material.forEach((mat) => {
-          mat.transparent = false;
-          mat.opacity = 1;
-        });
-      } else {
-        this.mesh.material.transparent = false;
-        this.mesh.material.opacity = 1;
-      }
+      this.mesh.material.forEach((mat) => {
+        mat.transparent = false;
+        mat.opacity = 1;
+      });
 
       this.mesh = null;
     }
@@ -216,16 +193,12 @@ export default class Transition {
         duration: 1,
         ease: "power2.inOut",
       });
-    });
-  }
-
-  showAlbums() {
-    this.scene.traverse((album) => {
-      if (!album.isMesh || album === this.meshCopy) return;
-      gsap.to(album.position, {
-        y: album.position.y + this.sizes.height * 0.5,
-        duration: 1,
-        ease: "power2.inOut",
+      album.material.forEach((material) => {
+        gsap.to(material, {
+          opacity: 0,
+          duration: 1,
+          ease: "power2.inOut",
+        });
       });
     });
   }
