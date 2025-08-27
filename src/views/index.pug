@@ -14,8 +14,8 @@ block content
             h1.home__title=prismic.homepage.data.h1[0].text
             .home__video__wrapper
                 .home__video__filter
-                video.home__video(autoplay,muted,loop,playsinline,preload="auto")
-                    source(src="src/assets/videos/homepage_presentation.mp4", type="video/mp4")
+                video.home__video(autoplay,muted,loop,playsinline,preload="auto",crossorigin="anonymous")
+                    source(src=prismic.homepage.data.home_video.url, type="video/mp4")
                     img( src="src/assets/img/home-video-placeholder.png", alt="Aperçu vidéo")
             .home__main__wrapper
                 .home__who__wrapper 
@@ -35,15 +35,10 @@ block content
                     h2.home__h2(data-animation="title")=prismic.homepage.data.news_title[0].text 
                 .home__reels__wrapper
                     .home__reels__video__wrapper(data-animation="reels")
-                        video.home__reels__video(autoplay loop muted playsinline preload="auto")
-                            source(src="src/assets/videos/reels_freestyle_bon_marche.mp4" type="video/mp4")
-                            | Votre navigateur ne supporte pas les vidéos.
-                        video.home__reels__video(autoplay loop muted playsinline preload="auto")
-                            source(src="src/assets/videos/reels_digicode.mp4" type="video/mp4")
-                            | Votre navigateur ne supporte pas les vidéos.
-                        video.home__reels__video(autoplay loop muted playsinline preload="auto")
-                            source(src="src/assets/videos/reels_trashtalking.mp4" type="video/mp4")
-                            | Votre navigateur ne supporte pas les vidéos.
+                        each reels in prismic.homepage.data.reels_list
+                            video.home__reels__video(autoplay loop muted playsinline preload="auto",crossorigin="anonymous")
+                            source(src=reels.reels_item.url type="video/mp4")
+                            | Votre navigateur ne supporte pas les vidéos.                    
                 .home__news__wrapper
                     each news in prismic.homepage.data.news_list
                         .home__news__separator(data-animation="separator") 
