@@ -6,7 +6,6 @@ export default class Transition {
     this.sizes = sizes;
     this.camera = camera;
     this.meshCopy = null;
-    this.mesh = null;
     this.shouldCallCallbacks = true;
   }
 
@@ -150,8 +149,9 @@ export default class Transition {
   }
 
   createMeshCopy(mesh) {
-    this.mesh = mesh;
     this.meshCopy = mesh.clone();
+
+    this.meshCopy.position.y = mesh.parent.position.y + mesh.position.y; //Apply group y displacement too
 
     this.meshCopy.material = mesh.material.map((mat) => {
       const cloned = mat.clone();
@@ -174,15 +174,6 @@ export default class Transition {
 
       this.meshCopy = null;
     }
-
-    if (this.mesh) {
-      this.mesh.material.forEach((mat) => {
-        mat.transparent = false;
-        mat.opacity = 1;
-      });
-
-      this.mesh = null;
-    }
   }
 
   hideAlbums() {
@@ -198,8 +189,12 @@ export default class Transition {
           opacity: 0,
           duration: 1,
           ease: "power2.inOut",
+          onComplete: function () {
+            // material.dispose();
+          },
         });
       });
+      // this.scene.remove(album);
     });
   }
 

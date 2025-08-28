@@ -67,7 +67,7 @@ export default class Media {
   }
 
   show(delay) {
-    console.log();
+    console.log("show (from media)");
     requestAnimationFrame(() => {
       gsap.fromTo(
         this.mesh.position,

@@ -9,6 +9,7 @@ export default class Discography {
     this.sizes = sizes;
     this.transition = transition;
     this.group = new THREE.Group();
+
     this.addDebug();
   }
 
@@ -75,6 +76,7 @@ export default class Discography {
   update() {}
 
   onScroll(next) {
+    if (window.location.pathname !== "/discography/") return;
     const tl = gsap.timeline();
     const total = this.mediaInstances.length;
     if (total < 2) return;
@@ -187,6 +189,7 @@ export default class Discography {
   addDebug() {
     window.addEventListener("keydown", (event) => {
       if (event.key === "d") {
+        console.log(this.scene);
         if (!this.mediaInstances) return;
         this.mediaInstances.forEach((media) => {
           media.mesh.material.wireframe = !media.mesh.material.wireframe;
