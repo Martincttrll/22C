@@ -189,12 +189,8 @@ export default class Transition {
           opacity: 0,
           duration: 1,
           ease: "power2.inOut",
-          onComplete: function () {
-            // material.dispose();
-          },
         });
       });
-      // this.scene.remove(album);
     });
   }
 

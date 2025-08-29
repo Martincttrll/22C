@@ -152,29 +152,21 @@ export default class Discography {
   }
 
   show(isPreloaded, isAlbumToDiscography) {
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          if (!this.mediaInstances) {
-            this.createMedia();
-            this.createGallery(this.sizes);
-            this.createRaycaster();
-            this.scene.add(this.group);
-          }
-          if (this.mediaInstances) {
-            let delay = 0;
-            if (isPreloaded) {
-              delay = 2.5;
-            } else if (isAlbumToDiscography) {
-              delay = 1.4;
-            }
-            this.mediaInstances.forEach((media, i) =>
-              media.show(delay + i * 0.05)
-            );
-          }
-        });
-      });
-    });
+    if (!this.mediaInstances) {
+      this.createMedia();
+      this.createGallery(this.sizes);
+      this.createRaycaster();
+      this.scene.add(this.group);
+    }
+    if (this.mediaInstances) {
+      let delay = 0;
+      if (isPreloaded) {
+        delay = 2.5;
+      } else if (isAlbumToDiscography) {
+        delay = 1.4;
+      }
+      this.mediaInstances.forEach((media, i) => media.show(delay + i * 0.05));
+    }
   }
 
   hide() {

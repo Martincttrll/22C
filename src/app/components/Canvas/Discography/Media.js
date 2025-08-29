@@ -67,30 +67,27 @@ export default class Media {
   }
 
   show(delay) {
-    console.log("show (from media)");
-    requestAnimationFrame(() => {
+    gsap.fromTo(
+      this.mesh.position,
+      { y: this.mesh.position.y - 1 },
+      {
+        y: this.mesh.position.y,
+        duration: 0.6,
+        delay: delay,
+        ease: "power2.out",
+      }
+    );
+    this.mesh.material.forEach((material) => {
       gsap.fromTo(
-        this.mesh.position,
-        { y: this.mesh.position.y - 1 },
+        material,
+        { opacity: 0 },
         {
-          y: this.mesh.position.y,
+          opacity: 1,
           duration: 0.6,
           delay: delay,
           ease: "power2.out",
         }
       );
-      this.mesh.material.forEach((material) => {
-        gsap.fromTo(
-          material,
-          { opacity: 0 },
-          {
-            opacity: 1,
-            duration: 0.6,
-            delay: delay,
-            ease: "power2.out",
-          }
-        );
-      });
     });
   }
   hide() {}
