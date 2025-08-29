@@ -17,7 +17,6 @@
 
 .discography__album {
   position: absolute;
-  @extend %center;
   height: 100dvh;
   width: 100vw;
   visibility: hidden;
@@ -35,12 +34,15 @@
     bottom: 10vw;
   }
 }
+.discography__album__wrapper {
+  text-align: center;
+  position: relative;
+  top: 25rem;
+}
 .discography__album__label {
   position: relative;
-  top: -25rem;
-  @include media("<tablet") {
-    top: -100rem;
-  }
+  display: inline-flex;
+  justify-content: center;
 }
 .discography__album__title {
   @extend %title-96;
@@ -52,10 +54,6 @@
 
 .discography__album__date {
   @extend %text-16;
-  position: absolute;
-  top: 0;
-  transform: translate(0, -50%);
-  left: 100%;
   font-family: "robotoMono";
   white-space: nowrap;
   & .before {
@@ -72,6 +70,8 @@
   display: inline-flex;
   gap: 2rem;
   position: absolute;
+  bottom: -1rem;
+  left: 0;
   font-family: "robotoMono";
   & .before {
     content: "";
@@ -80,11 +80,14 @@
     background-color: white;
     position: absolute;
   }
+  @include media("<tablet") {
+    bottom: -6rem;
+  }
 }
 .discography__instructions {
   position: absolute;
   transform: translate(-50%, -50%);
-  top: 50%;
+  top: 200px;
   left: 50%;
   display: flex;
   font-weight: bold;
