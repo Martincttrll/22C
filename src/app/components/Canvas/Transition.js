@@ -152,7 +152,7 @@ export default class Transition {
     this.meshCopy = mesh.clone();
 
     this.meshCopy.position.y = mesh.parent.position.y + mesh.position.y; //Apply group y displacement too
-
+    this.meshCopy.rotation.z = 0;
     this.meshCopy.material = mesh.material.map((mat) => {
       const cloned = mat.clone();
       cloned.side = THREE.DoubleSide;

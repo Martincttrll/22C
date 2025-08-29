@@ -156,6 +156,10 @@ export default class Home {
     this.video.update(scroll);
   }
 
+  onResize(sizes) {
+    this.sizes = sizes;
+  }
+
   async show() {
     this.createVideo();
     await this.modelsPromise;

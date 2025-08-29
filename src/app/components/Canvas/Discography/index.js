@@ -29,17 +29,18 @@ export default class Discography {
   }
 
   createGallery() {
+    // console.log(this.sizes);
     const spacing = this.mediaInstances[0].mesh.scale.y * (1 / 18);
     this.mediaInstances.forEach((media, i) => {
       media.mesh.position.z = -i * 0.5;
       media.mesh.position.y = i * spacing;
       media.mesh.rotation.x = 0.1;
     });
-
-    const ratio = window.innerWidth / window.innerHeight;
-    // On mappe ce ratio vers une plage raisonnable, par ex : 0.4 à 0.8
-    const offsetMultiplier = THREE.MathUtils.clamp(1.2 - ratio, 0.4, 0.8);
-    this.group.position.y = -this.sizes.height * offsetMultiplier;
+    const groupHeight =
+      this.mediaInstances.length -
+      1 * spacing +
+      this.mediaInstances[0].mesh.scale.y;
+    this.group.position.y = -groupHeight / 2;
   }
 
   createRaycaster() {
@@ -54,8 +55,10 @@ export default class Discography {
       );
       if (intersects.length > 0) {
         document.body.style.cursor = "pointer";
+        this.onMouseOver(intersects[0].object);
       } else {
         document.body.style.cursor = "";
+        this.onMouseOut();
       }
     });
 
@@ -67,8 +70,7 @@ export default class Discography {
         this.mediaInstances.map((media) => media.mesh)
       );
       if (intersects.length > 0) {
-        const mesh = intersects[0].object;
-        this.onClick(mesh);
+        this.onClick(intersects[0].object);
       }
     });
   }
@@ -143,10 +145,39 @@ export default class Discography {
     this.transition.playFromDiscography(mesh);
   }
 
+  onMouseOver(mesh) {
+    this.mediaInstances.forEach((media) => {
+      if (media != mesh) {
+        gsap.to(media.mesh.rotation, {
+          z: 0,
+          duration: 0.3,
+          ease: "power4.inOut",
+        });
+      }
+    });
+
+    gsap.to(mesh.rotation, {
+      z: 0.03,
+      duration: 0.3,
+      ease: "power2.inOut",
+    });
+  }
+
+  onMouseOut() {
+    this.mediaInstances.forEach((media) => {
+      gsap.to(media.mesh.rotation, {
+        z: 0,
+        duration: 0.3,
+        ease: "power2.inOut",
+      });
+    });
+  }
+
   onResize(sizes) {
+    this.sizes = sizes;
     if (!this.mediaInstances) return;
     this.mediaInstances.forEach((media, i) => {
-      media.onResize(sizes);
+      media.onResize(this.sizes);
     });
     this.createGallery();
   }
@@ -154,7 +185,7 @@ export default class Discography {
   show(isPreloaded, isAlbumToDiscography) {
     if (!this.mediaInstances) {
       this.createMedia();
-      this.createGallery(this.sizes);
+      this.createGallery();
       this.createRaycaster();
       this.scene.add(this.group);
     }
