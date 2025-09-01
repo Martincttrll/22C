@@ -1,5 +1,5 @@
 import Page from "@classes/Page";
-import TextScramble from "./textScramble";
+import TextScramble from "./TextScramble";
 import { Detection } from "@classes/Detection";
 import { each } from "lodash";
 
