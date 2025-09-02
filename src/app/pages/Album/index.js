@@ -15,7 +15,6 @@ export class Album extends Page {
         duration: ".album__track__duration",
       },
     });
-    this.audio = null;
   }
 
   create() {
@@ -25,6 +24,9 @@ export class Album extends Page {
     });
     this.createBackground();
     this.formatForMobile();
+
+    this.tracks = new Map();
+    this.fetchTracks();
   }
 
   createBackground() {
@@ -59,36 +61,63 @@ export class Album extends Page {
     }
   }
 
-  async fetchTrack(btn) {
-    const trackName = btn.parentElement.querySelector(
-      ".album__track__name"
-    ).innerText;
+  async fetchTracks() {
+    const trackNames = Array.from(this.elements.tableRow).map(
+      (tr) => tr.querySelector(".album__track__name").innerText
+    );
 
-    const query = `22carbone+${trackName}`;
-    const url = `https://api.deezer.com/search?q=${query}`;
+    for (const name of trackNames) {
+      const query = `22carbone+${name}`;
+      const url = `https://api.deezer.com/search?q=${query}`;
 
-    try {
-      const res = await fetch(`https://proxy.corsfix.com/?${url}`);
-      const data = await res.json();
+      try {
+        const res = await fetch(`https://proxy.corsfix.com/?${url}`);
+        const data = await res.json();
 
-      if (data?.data?.length > 0 && data.data[0].preview) {
-        this.audio = new Audio(data.data[0].preview);
-        this.audio.crossOrigin = "anonymous";
-      } else {
-        console.warn("Aucun extrait trouvé");
+        if (data?.data?.length > 0 && data.data[0].preview) {
+          const audio = new Audio(data.data[0].preview);
+          audio.crossOrigin = "anonymous";
+          this.tracks.set(name, audio);
+        } else {
+          console.warn(`Aucun extrait trouvé pour "${name}"`);
+        }
+      } catch (err) {
+        console.error(`Erreur pour "${name}":`, err);
       }
-    } catch (err) {
-      console.error("Erreur lors de la récupération de l'extrait :", err);
     }
+
+    console.log("all tracks loaded");
   }
 
   async playTrack(btn) {
+    const trackName = btn.parentElement
+      .querySelector(".album__track__name")
+      .getAttribute("data-track-name");
+
+    const audio = this.tracks.get(trackName);
+
+    if (!audio) {
+      console.warn(`Aucun audio préchargé pour "${trackName}"`);
+      return;
+    }
+
+    if (this.audio === audio) {
+      if (!audio.paused) {
+        audio.pause();
+      } else {
+        audio.play();
+      }
+      return;
+    }
+
     if (this.audio) {
       this.audio.pause();
-      this.audio = null;
+      this.audio.currentTime = 0;
     }
-    await this.fetchTrack(btn);
-    this.canvasPage.onAudioPlay(this.audio);
+
+    this.audio = audio;
+    console.log(this.audio);
+    // this.canvasPage.onAudioPlay(this.audio);
     this.audio.play();
   }
 
@@ -108,5 +137,17 @@ export class Album extends Page {
         this.playTrack(btn);
       });
     });
+  }
+
+  show() {
+    super.show();
+  }
+
+  hide() {
+    super.hide();
+    if (this.audio) {
+      this.audio.pause();
+      this.audio.currentTime = 0;
+    }
   }
 }

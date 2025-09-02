@@ -1,6 +1,4 @@
-import Transition from "../Transition.js";
 import * as THREE from "three";
-import gsap from "gsap";
 import vertexShader from "@shaders/audio-vertex.glsl";
 import fragmentShader from "@shaders/audio-fragment.glsl";
 
