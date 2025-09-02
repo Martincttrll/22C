@@ -14,7 +14,7 @@ export default function (eleventyConfig) {
     tempFolderName: ".11ty-vite",
 
     viteOptions: {
-      publicDir: "public",
+      publicDir: "src/assets",
       root: "src",
 
       plugins: [glsl()],
