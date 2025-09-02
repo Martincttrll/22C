@@ -6,16 +6,16 @@ gsap.registerPlugin(Physics2DPlugin);
 export class Archives {
   constructor({ element }) {
     this.paths = [
-      "/src/assets/archives/10.png",
-      "/src/assets/archives/1.png",
-      "/src/assets/archives/2.png",
-      "/src/assets/archives/3.png",
-      "/src/assets/archives/4.png",
-      "/src/assets/archives/5.png",
-      "/src/assets/archives/6.png",
-      "/src/assets/archives/7.png",
-      "/src/assets/archives/8.png",
-      "/src/assets/archives/9.png",
+      "/archives/10.PNG",
+      "/archives/1.PNG",
+      "/archives/2.PNG",
+      "/archives/3.PNG",
+      "/archives/4.PNG",
+      "/archives/5.PNG",
+      "/archives/6.PNG",
+      "/archives/7.PNG",
+      "/archives/8.PNG",
+      "/archives/9.PNG",
     ];
     this.element = element;
     this.images = [];
