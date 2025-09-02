@@ -116,6 +116,14 @@ td.album__track__action {
   text-align: center;
 }
 
+td.album__track__listen span {
+  cursor: pointer;
+  font-size: 2rem;
+  @include media("<tablet") {
+    font-size: 5rem;
+  }
+}
+
 @keyframes separator {
   0% {
     width: 0%;

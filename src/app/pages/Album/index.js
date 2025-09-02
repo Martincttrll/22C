@@ -101,24 +101,30 @@ export class Album extends Page {
       return;
     }
 
-    if (this.audio === audio) {
-      if (!audio.paused) {
-        audio.pause();
-      } else {
-        audio.play();
-      }
-      return;
-    }
-
     if (this.audio) {
+      if (this.audio === audio) {
+        if (!audio.paused) {
+          audio.pause();
+          btn.textContent = "▶";
+        } else {
+          audio.play();
+          btn.textContent = "⏸";
+        }
+        return;
+      }
+
       this.audio.pause();
       this.audio.currentTime = 0;
+      if (this.currentBtn) {
+        this.currentBtn.textContent = "▶";
+      }
     }
 
     this.audio = audio;
-    console.log(this.audio);
+    this.currentBtn = btn;
+    audio.play();
+    btn.textContent = "⏸";
     // this.canvasPage.onAudioPlay(this.audio);
-    this.audio.play();
   }
 
   addEventListeners() {

@@ -30,5 +30,5 @@ block content
                                 td.album__track__album #{track.album ? track.album : album.name}
                                 - const duration = new Date(track.duration_ms).toISOString().substr(11, 8);
                                 td.album__track__duration #{duration}
-                                td.album__track__listen(style="text-align:right;") Play
-                                    
+                                td.album__track__listen(style="text-align:right;")
+                                    span ▶
