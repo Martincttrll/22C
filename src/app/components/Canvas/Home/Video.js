@@ -54,10 +54,8 @@ export default class Video {
   updateScale() {
     if (!document.body.contains(this.element)) return;
 
-    const meshWidth =
-      this.sizes.width * (this.bounds.width / window.innerWidth);
-    const meshHeight =
-      this.sizes.height * (this.bounds.height / window.innerHeight);
+    const meshWidth = this.sizes.width;
+    const meshHeight = this.sizes.height;
 
     const videoRatio = this.element.videoWidth / this.element.videoHeight;
     const containerRatio = meshWidth / meshHeight;

@@ -1,21 +1,20 @@
 @use "../utils/" as *;
 /* Firefox */
 * {
-  scrollbar-width: thin;
+  scrollbar-width: none;
   scrollbar-color: $primary $cod-gray;
 }
 
 /* Chrome, Edge, and Safari */
 *::-webkit-scrollbar {
-  width: 16px;
+  width: 0px;
+  background: transparent;
 }
 
 *::-webkit-scrollbar-track {
-  background: $cod-gray;
+  background: transparent;
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: $primary;
-  border-radius: 10px;
-  border: 3px none $cod-gray;
+  background-color: transparent;
 }

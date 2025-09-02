@@ -158,6 +158,7 @@ export default class Home {
 
   onResize(sizes) {
     this.sizes = sizes;
+    this.video.onResize(this.sizes);
   }
 
   async show() {

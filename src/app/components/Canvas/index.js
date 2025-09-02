@@ -113,6 +113,9 @@ export default class Canvas {
     if (this.discography && this.discography.onResize) {
       this.discography.onResize(this.sizes);
     }
+    if (this.album && this.album.onResize) {
+      this.album.onResize(this.sizes);
+    }
   }
 
   onChange({ template, isPreloaded }) {
