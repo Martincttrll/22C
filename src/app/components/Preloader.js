@@ -59,6 +59,7 @@ export class Preloader extends Component {
         if (src.match(/\.(mp3|wav|ogg)$/)) {
           const audio = new Audio();
           audio.src = src;
+          audio.crossOrigin = "anonymous";
           audio.preload = "auto";
           audio.addEventListener(
             "canplaythrough",
@@ -73,6 +74,7 @@ export class Preloader extends Component {
           const video = document.createElement("video");
           video.src = src;
           video.preload = "auto";
+          video.crossOrigin = "anonymous";
           video.addEventListener(
             "loadeddata",
             () => {
@@ -85,6 +87,7 @@ export class Preloader extends Component {
         } else {
           const img = new Image();
           img.src = src;
+          img.crossOrigin = "anonymous";
           (img.onload = () => {
             window.PRELOADED[src] = img;
             onAssetLoad();

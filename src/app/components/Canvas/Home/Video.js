@@ -18,7 +18,8 @@ export default class Video {
   }
 
   createTextures() {
-    this.texture = new THREE.VideoTexture(this.element);
+    const video = window.PRELOADED[this.element.dataset.src];
+    this.texture = new THREE.VideoTexture(video);
   }
 
   createMesh() {

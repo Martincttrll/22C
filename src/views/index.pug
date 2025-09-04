@@ -14,9 +14,7 @@ block content
             h1.home__title=prismic.homepage.data.h1[0].text
             .home__video__wrapper
                 .home__video__filter
-                video.home__video(autoplay,muted,loop,playsinline,preload="auto",crossorigin="anonymous")
-                    source(src=prismic.homepage.data.home_video.url, type="video/mp4")
-                    img( src="/img/home-video-placeholder.png", alt="Aperçu vidéo")
+                video.home__video(autoplay,muted,loop,playsinline,preload="auto",crossorigin="anonymous",data-src=prismic.homepage.data.video.url)
             .home__main__wrapper
                 .home__who__wrapper 
                     .home__who__text__section
