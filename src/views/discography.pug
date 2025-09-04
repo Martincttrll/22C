@@ -6,7 +6,7 @@ extends ./_layouts/layout.pug
 block content
     .discography 
         .discography__wrapper
-                each album in spotify                        
+                each album in spotify.finalAlbums                       
                     .discography__album(data-cover=album.cover)
                         .discography__album__wrapper
                             .discography__album__label

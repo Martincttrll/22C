@@ -1,4 +1,4 @@
-doctype
+doctype html
 html(lang='fr')
     head
         meta(charset='utf-8')
@@ -22,4 +22,7 @@ html(lang='fr')
         .content(data-template=template)
             block content
 
-        script(type="module", src="/src/app/index.js")
+    script.
+        const allAssets = Array.from(new Set(!{JSON.stringify([...prismic.assets, ...spotify.assets])}));
+        window.ASSETS = JSON.stringify(allAssets)
+    script(type="module", src="/src/app/index.js")

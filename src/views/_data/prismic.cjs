@@ -7,27 +7,30 @@ const client = prismic.createClient(PRISMIC_REPO);
 async function fetchHomepage() {
   const homepage = await client.getSingle("homepage");
 
-  const newsIds = homepage.data.news_list
-    .map((item) => item.news_item?.id)
-    .filter(Boolean);
-
-  const newsDocuments =
-    newsIds.length > 0 ? await client.getAllByIDs(newsIds) : [];
-
-  homepage.data.news_list = homepage.data.news_list.map((item) => {
-    const fullNews = newsDocuments.find(
-      (news) => news.id === item.news_item?.id
-    );
-    return {
-      ...item,
-      news_item: fullNews || item.news_item,
-    };
-  });
+  homepage.data.news_list = await fetchLinkedDocuments(
+    homepage.data.news_list,
+    "news_item"
+  );
+  homepage.data.reels_list = await fetchLinkedDocuments(
+    homepage.data.reels_list,
+    "reels_item"
+  );
 
   return { homepage };
 }
+async function fetchLinkedDocuments(list, key) {
+  const ids = list.map((item) => item[key]?.id).filter(Boolean);
+  if (ids.length === 0) return [];
 
-function extractImagesFromData(data) {
+  const documents = await client.getAllByIDs(ids);
+
+  return list.map((item) => {
+    const fullDoc = documents.find((doc) => doc.id === item[key]?.id);
+    return { ...item, [key]: fullDoc || item[key] };
+  });
+}
+
+function extractAssetsFromData(data) {
   const urls = [];
 
   function scan(obj) {
@@ -38,12 +41,7 @@ function extractImagesFromData(data) {
     } else if (typeof obj === "object") {
       for (const key in obj) {
         const value = obj[key];
-        if (
-          value &&
-          typeof value === "object" &&
-          value.url &&
-          value.dimensions
-        ) {
+        if (value && typeof value === "object" && value.url) {
           urls.push(value.url);
         } else {
           scan(value);
@@ -59,7 +57,7 @@ function extractImagesFromData(data) {
 async function fetchPrismicData() {
   const { homepage } = await fetchHomepage();
 
-  const assets = extractImagesFromData(homepage.data);
+  const assets = extractAssetsFromData(homepage.data);
 
   return {
     homepage,

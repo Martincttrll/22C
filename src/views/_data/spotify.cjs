@@ -189,6 +189,11 @@ module.exports = async function () {
     (album) => !duplicateSingleIds.has(album.id)
   );
 
+  const assets = [];
+
+  finalAlbums.forEach((album) => {
+    if (album.cover) assets.push(album.cover);
+  });
   // console.log(finalAlbums);
-  return finalAlbums;
+  return { finalAlbums, assets };
 };
