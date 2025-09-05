@@ -80,7 +80,7 @@ export class Album extends Page {
     const url = `https://api.deezer.com/search?q=${query}`;
 
     try {
-      const res = await fetch(`https://proxy.corsfix.com/?${url}`);
+      const res = await fetch(url);
       const data = await res.json();
 
       if (data?.data?.length > 0 && data.data[0].preview) {
