@@ -58,11 +58,13 @@ async function fetchPrismicData() {
   const { homepage } = await fetchHomepage();
 
   const assets = extractAssetsFromData(homepage.data);
-
+  // console.log({
+  //   homepage,
+  //   assets,
+  // });
   return {
     homepage,
     assets,
   };
 }
-
 module.exports = fetchPrismicData;
