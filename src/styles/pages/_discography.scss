@@ -84,6 +84,14 @@
     bottom: -6rem;
   }
 }
+
+.discography__album__info .separator {
+  height: 1.4rem;
+  width: 1.4rem;
+  background-color: white;
+  border-radius: 9999px;
+}
+
 .discography__instructions {
   position: absolute;
   transform: translate(-50%, -50%);

@@ -14,7 +14,7 @@ block content
                                 .discography__album__date (#{album.release_date.slice(0,4)})
                                 .discography__album__info
                                     div #{album.total_tracks} tracks
-                                    div ⏺
+                                    .separator
                                     div #{Math.floor(album.total_ms / 60000)} min
 
                             .discography__instructions
