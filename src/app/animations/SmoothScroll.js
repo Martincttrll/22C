@@ -9,7 +9,6 @@ export class SmoothScroll {
     this.wrapper = wrapper;
     this.content = content;
     this.lenis = null;
-    this.progress = 0;
     this.create();
     this.initScrollTriggerProxy(this.lenis);
   }
@@ -22,8 +21,12 @@ export class SmoothScroll {
       autoRaf: false,
     });
 
+    this.scroll = this.lenis.scroll;
+    this.maxScroll = this.lenis.limit;
+
     this.lenis.on("scroll", () => {
-      this.updateScrollProgress();
+      this.scroll = this.lenis.scroll;
+      this.maxScroll = this.lenis.limit;
       ScrollTrigger.update();
     });
 
@@ -59,11 +62,5 @@ export class SmoothScroll {
     ScrollTrigger.defaults({
       scroller: scroller,
     });
-  }
-
-  updateScrollProgress() {
-    const scroll = this.lenis.scroll;
-    const maxScroll = this.lenis.limit;
-    this.progress = maxScroll === 0 ? 0 : (scroll / maxScroll) * 100;
   }
 }

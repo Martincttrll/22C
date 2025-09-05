@@ -54,7 +54,7 @@ class App {
 
   update() {
     if (this.canvas) {
-      this.canvas.update(this.page.smoothScroll.progress);
+      this.canvas.update(this.page.smoothScroll.scroll);
     }
   }
 

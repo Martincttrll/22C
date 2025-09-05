@@ -13,13 +13,18 @@ export default class Video {
 
     this.createTextures();
     this.createMesh();
-    this.createBounds();
     this.addEventListeners();
+    this.onResize(this.sizes);
   }
 
   createTextures() {
-    const video = window.PRELOADED[this.element.dataset.src];
-    this.texture = new THREE.VideoTexture(video);
+    this.video = window.PRELOADED[this.element.dataset.src];
+    this.video.muted = true;
+    this.video.playsInline = true;
+    this.video.loop = true;
+    this.video.play();
+
+    this.texture = new THREE.VideoTexture(this.video);
   }
 
   createMesh() {
@@ -27,6 +32,7 @@ export default class Video {
       uTexture: { value: this.texture },
       uMouse: { value: new THREE.Vector2() },
       uTime: { value: 0 },
+      uZoom: { value: 1.0 },
       uAmpliture: 30,
       uSpeed: 10,
       uFrequence: 40,
@@ -44,21 +50,12 @@ export default class Video {
     this.element.style.visibility = "hidden";
   }
 
-  createBounds() {
-    requestAnimationFrame(() => {
-      const { width, height, x, y } = this.element.getBoundingClientRect();
-      this.bounds = { width, height, x, y };
-      this.updateScale();
-      this.updatePosition();
-    });
-  }
-  updateScale() {
-    if (!document.body.contains(this.element)) return;
-
+  onResize(sizes) {
+    this.sizes = sizes;
     const meshWidth = this.sizes.width;
     const meshHeight = this.sizes.height;
 
-    const videoRatio = this.element.videoWidth / this.element.videoHeight;
+    const videoRatio = this.video.videoWidth / this.video.videoHeight;
     const containerRatio = meshWidth / meshHeight;
 
     if (containerRatio < videoRatio) {
@@ -68,38 +65,36 @@ export default class Video {
       this.mesh.scale.x = meshWidth;
       this.mesh.scale.y = meshWidth / videoRatio;
     }
+    this.baseScale = this.mesh.scale.clone();
   }
 
-  updatePosition() {
-    if (!document.body.contains(this.element)) return;
-    this.x = (this.bounds.x + this.bounds.width / 2) / window.innerWidth;
-    this.y = (this.bounds.y + this.bounds.height / 2) / window.innerHeight;
-    this.mesh.position.x = this.x * this.sizes.width - this.sizes.width / 2;
-    this.mesh.position.y = -this.y * this.sizes.height + this.sizes.height / 2;
-  }
-
-  onResize(sizes) {
-    this.sizes = sizes;
-    this.createBounds();
+  updateY(y = 0) {
+    const normalizedScroll = -y / window.innerHeight;
+    this.mesh.position.y =
+      this.sizes.height / 2 -
+      this.mesh.scale.y / 2 -
+      normalizedScroll * this.sizes.height;
   }
 
   update(scroll) {
     this.uniforms.uTime.value += 0.01;
+    //Zoom
+    const targetZoom = 1.0 + scroll * 0.001;
+    if (!this.currentZoom) this.currentZoom = 1.0;
 
-    this.createBounds();
-    if (this.bounds) {
-      const mouseX = this.mouseAbsolute.x / window.innerWidth;
+    this.currentZoom += (targetZoom - this.currentZoom) * 0.1;
 
-      const elementTop = this.bounds.y;
-      const elementHeight = this.bounds.height;
+    this.uniforms.uZoom.value = this.currentZoom;
 
-      const mouseYRelativeToElement =
-        (this.mouseAbsolute.y - elementTop) / elementHeight;
+    this.updateY(scroll);
 
-      const mouseY = 1 - mouseYRelativeToElement;
+    const mouseX = this.mouseAbsolute.x / window.innerWidth;
+    const mouseY = 1 - (this.mouseAbsolute.y + scroll) / window.innerHeight;
 
-      this.uniforms.uMouse.value.set(mouseX, mouseY);
-    }
+    this.uniforms.uMouse.value.set(
+      Math.max(0, Math.min(1, mouseX)),
+      Math.max(0, Math.min(1, mouseY))
+    );
   }
 
   show() {}
@@ -107,8 +102,8 @@ export default class Video {
 
   addEventListeners() {
     window.addEventListener("mousemove", (event) => {
-      this.mouseAbsolute.x = event.clientX + window.scrollX;
-      this.mouseAbsolute.y = event.clientY + window.scrollY;
+      this.mouseAbsolute.x = event.clientX;
+      this.mouseAbsolute.y = event.clientY;
     });
   }
 }
