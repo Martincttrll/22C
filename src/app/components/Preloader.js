@@ -57,6 +57,7 @@ export class Preloader extends Component {
 
       assets.forEach((src) => {
         if (src.match(/\.(mp3|wav|ogg)$/)) {
+          console.log(src);
           const audio = new Audio();
           audio.src = src;
           audio.crossOrigin = "anonymous";

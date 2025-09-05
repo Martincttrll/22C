@@ -54,6 +54,29 @@ async function getTracks(albumId, token) {
   return data.items;
 }
 
+async function fetchDeezerTracks(trackNames) {
+  const tracks = new Map();
+
+  for (const name of trackNames) {
+    const query = encodeURIComponent(`22carbone ${name}`);
+    const url = `https://api.deezer.com/search?q=${query}`;
+
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+
+      if (data?.data?.length > 0 && data.data[0].preview) {
+        tracks.set(name, data.data[0].preview); // stocke l'URL MP3
+      } else {
+        console.warn(`Aucun extrait trouvé pour "${name}"`);
+      }
+    } catch (err) {
+      console.error(`Erreur pour "${name}":`, err);
+    }
+  }
+  return tracks;
+}
+
 function normalize(str) {
   return str.trim().toLowerCase();
 }
@@ -194,6 +217,7 @@ module.exports = async function () {
   finalAlbums.forEach((album) => {
     if (album.cover) assets.push(album.cover);
   });
+
   // console.log(finalAlbums);
   return { finalAlbums, assets };
 };

@@ -20,7 +20,6 @@ export default class TextScramble {
   addEventListeners() {
     this.element.addEventListener("mouseover", () => {
       this.element.querySelectorAll("td").forEach((element) => {
-        console.log(element);
         if (element.classList.contains("album__track__listen")) return;
         gsap.to(element, {
           duration: 1,

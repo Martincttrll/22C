@@ -26,7 +26,7 @@ export class Album extends Page {
     this.formatForMobile();
 
     this.tracks = new Map();
-    this.fetchTracks();
+    // this.fetchTracks();
   }
 
   createBackground() {
@@ -61,46 +61,48 @@ export class Album extends Page {
     }
   }
 
-  async fetchTracks() {
-    const trackNames = Array.from(this.elements.tableRow).map(
-      (tr) => tr.querySelector(".album__track__name").innerText
-    );
-
-    for (const name of trackNames) {
-      const query = `22carbone+${name}`;
-      const url = `https://api.deezer.com/search?q=${query}`;
-
-      try {
-        const res = await fetch(`https://proxy.corsfix.com/?${url}`);
-        const data = await res.json();
-
-        if (data?.data?.length > 0 && data.data[0].preview) {
-          const audio = new Audio(data.data[0].preview);
-          audio.crossOrigin = "anonymous";
-          this.tracks.set(name, audio);
-        } else {
-          console.warn(`Aucun extrait trouvé pour "${name}"`);
-        }
-      } catch (err) {
-        console.error(`Erreur pour "${name}":`, err);
-      }
-    }
-
-    console.log("all tracks loaded");
-  }
-
   async playTrack(btn) {
     const trackName = btn.parentElement
       .querySelector(".album__track__name")
       .getAttribute("data-track-name");
 
-    const audio = this.tracks.get(trackName);
-
-    if (!audio) {
-      console.warn(`Aucun audio préchargé pour "${trackName}"`);
+    // Si l'audio est déjà chargé
+    if (this.tracks.has(trackName)) {
+      const audio = this.tracks.get(trackName);
+      this.toggleAudio(audio, btn);
       return;
     }
 
+    // Sinon, on affiche le loader
+    this.showLoader(btn);
+
+    const query = `22carbone+${trackName}`;
+    const url = `https://api.deezer.com/search?q=${query}`;
+
+    try {
+      const res = await fetch(`https://proxy.corsfix.com/?${url}`);
+      const data = await res.json();
+
+      if (data?.data?.length > 0 && data.data[0].preview) {
+        const audio = new Audio(data.data[0].preview);
+        audio.crossOrigin = "anonymous";
+
+        // On stocke l'audio pour ne pas le re-fetch
+        this.tracks.set(trackName, audio);
+
+        this.hideLoader(btn);
+        this.toggleAudio(audio, btn);
+      } else {
+        this.hideLoader(btn);
+        console.warn(`Aucun extrait trouvé pour "${trackName}"`);
+      }
+    } catch (err) {
+      this.hideLoader(btn);
+      console.error(`Erreur pour "${trackName}":`, err);
+    }
+  }
+
+  toggleAudio(audio, btn) {
     if (this.audio) {
       if (this.audio === audio) {
         if (!audio.paused) {
@@ -113,18 +115,29 @@ export class Album extends Page {
         return;
       }
 
+      // Stop l'audio précédent
       this.audio.pause();
       this.audio.currentTime = 0;
-      if (this.currentBtn) {
-        this.currentBtn.textContent = "▶";
-      }
+      if (this.currentBtn) this.currentBtn.textContent = "▶";
     }
 
+    // Play le nouvel audio
     this.audio = audio;
     this.currentBtn = btn;
     audio.play();
     btn.textContent = "⏸";
-    // this.canvasPage.onAudioPlay(this.audio);
+  }
+
+  showLoader(btn) {
+    // Si tu veux un simple loader CSS :
+    btn.dataset.originalText = btn.textContent;
+    btn.textContent = "…"; // ou mettre un SVG inline
+    btn.disabled = true;
+  }
+
+  hideLoader(btn) {
+    btn.textContent = btn.dataset.originalText || "▶";
+    btn.disabled = false;
   }
 
   addEventListeners() {
