@@ -13,18 +13,24 @@ export default class Media {
   }
 
   createTextures() {
-    const image = this.element;
-    this.texture = image.getAttribute("src");
+    const image = window.PRELOADED[this.element.getAttribute("src")];
+    this.texture = new THREE.Texture(image);
+    this.texture.needsUpdate = true;
   }
 
   createMesh() {
     this.geometry = new THREE.BoxGeometry(1, 1, 0.1);
     const frontMaterial = new THREE.MeshBasicMaterial({
-      map: null,
+      map: this.texture,
       transparent: true,
+      needsUpdate: true,
     });
+    const mirrored = this.texture.clone();
+    mirrored.repeat.x = -1;
+    mirrored.center.x = 0.5;
+    mirrored.needsUpdate = true;
     const backMaterial = new THREE.MeshBasicMaterial({
-      map: null,
+      map: mirrored,
       transparent: true,
     });
     const edgeMaterial = new THREE.MeshBasicMaterial({
@@ -39,19 +45,6 @@ export default class Media {
       frontMaterial, // face avant
       backMaterial, // face arrière
     ];
-
-    this.loader = new THREE.TextureLoader();
-    this.loader.load(this.texture, (texture) => {
-      frontMaterial.map = texture;
-      frontMaterial.needsUpdate = true;
-
-      const mirrored = texture.clone();
-      mirrored.repeat.x = -1;
-      mirrored.center.x = 0.5;
-      mirrored.needsUpdate = true;
-      backMaterial.map = mirrored;
-      backMaterial.needsUpdate = true;
-    });
 
     this.mesh = new THREE.Mesh(this.geometry, this.material);
     this.mesh.userData = { url: this.slug };
