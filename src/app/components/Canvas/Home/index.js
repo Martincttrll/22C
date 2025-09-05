@@ -158,6 +158,7 @@ export default class Home {
 
   onResize(sizes) {
     this.sizes = sizes;
+    if (!this.video || !this.video.onResize) return;
     this.video.onResize(this.sizes);
   }
 

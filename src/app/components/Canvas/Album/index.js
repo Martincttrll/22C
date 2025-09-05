@@ -89,7 +89,8 @@ export default class Album {
     const coverUrl = document.querySelector(".album__wrapper").dataset.cover;
 
     const geometry = new THREE.BoxGeometry(1, 1, 0.1);
-    const texture = new THREE.TextureLoader().load(coverUrl);
+    const texture = new THREE.Texture(window.PRELOADED[coverUrl]);
+    texture.needsUpdate = true;
     const mirrored = texture.clone();
     mirrored.repeat.x = -1;
     mirrored.center.x = 0.5;

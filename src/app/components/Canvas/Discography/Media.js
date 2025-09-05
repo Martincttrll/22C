@@ -23,7 +23,6 @@ export default class Media {
     const frontMaterial = new THREE.MeshBasicMaterial({
       map: this.texture,
       transparent: true,
-      needsUpdate: true,
     });
     const mirrored = this.texture.clone();
     mirrored.repeat.x = -1;
