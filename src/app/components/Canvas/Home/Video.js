@@ -63,9 +63,11 @@ export default class Video {
       this.mesh.scale.x = meshHeight * videoRatio;
     } else {
       this.mesh.scale.x = meshWidth;
-      this.mesh.scale.y = meshWidth / videoRatio;
+      this.mesh.scale.y = meshHeight;
     }
     this.baseScale = this.mesh.scale.clone();
+    console.log(this.sizes);
+    console.log(this.mesh.scale);
   }
 
   updateY(y = 0) {
