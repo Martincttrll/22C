@@ -8,7 +8,7 @@ gsap.registerPlugin(SplitText, ScrollTrigger);
 export default class Title extends Animation {
   constructor({ element, elements }) {
     super({ element, elements });
-    this.chars = SplitText.create(element, { type: "chars" });
+    // this.chars = SplitText.create(element, { type: "chars" });
   }
   //Idée random je sais pas ou : paragraph blabla avec dedans un (des?) mots clefs
   //  genre "Brutalisme?" et au scroll tout se blur pour laisser que ce mot clef

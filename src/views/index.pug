@@ -19,8 +19,9 @@ block content
                 .home__who__wrapper 
                     .home__who__text__section
                         h2.home__h2.home__who__title(data-animation="title")=prismic.homepage.data.who_title[0].text
-                        p.home__who__p(data-animation="paragraph")=prismic.homepage.data.who_text[0].text
-                            
+                        div.home__who__p(data-animation="paragraph")
+                            each paragraph in prismic.homepage.data.who_text
+                                p=paragraph.text                            
                     .home__who__hover__section
                         span 22ARCHIVES22.
                         .delimiter__group.delimiter__group--top-left 

@@ -182,7 +182,8 @@
   margin-bottom: 20px;
 }
 
-p.home__who__p {
+.home__who__p {
+  line-height: 16px;
   max-width: 60rem;
   @include media("<tablet") {
     max-width: none;
@@ -278,10 +279,13 @@ p.home__who__p {
   }
 }
 .home__news__item__text {
-  line-height: 20px;
+  line-height: 16px;
 }
 .home__news__item__img {
   @include media("<tablet") {
     margin: 4rem 0;
   }
+}
+.home p {
+  text-transform: uppercase;
 }
