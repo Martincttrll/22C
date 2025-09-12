@@ -52,6 +52,7 @@ export default class Canvas {
     this.home = new Home({
       scene: this.scene,
       sizes: this.sizes,
+      camera: this.camera,
     });
   }
 

@@ -66,8 +66,6 @@ export default class Video {
       this.mesh.scale.y = meshHeight;
     }
     this.baseScale = this.mesh.scale.clone();
-    console.log(this.sizes);
-    console.log(this.mesh.scale);
   }
 
   updateY(y = 0) {
