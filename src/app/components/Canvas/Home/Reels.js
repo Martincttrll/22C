@@ -11,22 +11,34 @@ export default class Reels {
     this.camera = camera;
     this.gui = new GUI();
     this.offset = 0;
-    this.speed = 0.05;
+    this.speed = 0.005;
 
+    this.createCurve();
     this.createMeshes();
+    this.createGUI();
     this.createBounds();
     this.updateScale();
     this.createRaycaster();
     this.addEventListeners();
   }
 
+  createCurve() {
+    this.curve = new THREE.QuadraticBezierCurve3(
+      new THREE.Vector3(-5, 0, -5),
+      new THREE.Vector3(0, 0, -10),
+      new THREE.Vector3(5, 0, -5)
+    );
+  }
+
   createMeshes() {
     this.planes = [];
     this.planesGroup = new THREE.Group();
     this.group.add(this.planesGroup);
+
     const videoEl = Array.from(this.elements);
     const geometry = new THREE.PlaneGeometry(1, 1, 32, 32);
     this.radius = 3.7;
+
     for (let i = 0; i < videoEl.length * 2; i++) {
       const currentVideo = videoEl[i % videoEl.length];
       const texture = new THREE.VideoTexture(currentVideo);
@@ -39,18 +51,44 @@ export default class Reels {
         },
         vertexShader,
         fragmentShader,
+        transparent: true,
+        side: THREE.DoubleSide,
       });
-      const plane = new THREE.Mesh(geometry, material);
-      plane.material.side = THREE.DoubleSide;
 
+      const plane = new THREE.Mesh(geometry, material);
       this.planesGroup.add(plane);
       plane.userData.isHovered = false;
       this.planes.push(plane);
     }
 
+    this.planesGroup.position.set(0, 0, 8.5);
+    this.gui
+      .add(this.planesGroup.position, "z", 0, 12, 0.001)
+      .name("planesGroup.z");
+
     this.elements.forEach((element) => {
-      // element.style.visibility = "hidden";
+      element.style.visibility = "hidden";
     });
+  }
+
+  createGUI() {
+    this.guiParams = {
+      follow: true,
+      y: this.planesGroup ? this.planesGroup.position.y : 0,
+    };
+
+    const folder = this.gui.addFolder("Reels position");
+    folder.add(this.guiParams, "follow").name("Follow scroll");
+
+    const range = Math.max(this.sizes.height, 1);
+    this.yController = folder
+      .add(this.guiParams, "y", -range, range, 0.01)
+      .name("planesGroup.y")
+      .onChange((v) => {
+        this.planesGroup.position.y = v;
+      });
+
+    folder.open();
   }
 
   createRaycaster() {
@@ -59,47 +97,20 @@ export default class Reels {
   }
 
   updateMeshesPosition(offset) {
-    const meshWidth = this.planes[0].scale.x;
-    if (!this.guiFolder) {
-      this.guiFolder = this.gui.addFolder("Carousel");
-      this.guiFolder
-        .add(this, "radius", 0, 5)
-        .step(0.001)
-        .name("Radius")
-        .onChange(() => this.updateMeshesPosition(offset));
-      this.guiFolder.add(this.planesGroup.position, "z", 0, 5, 0.0001).name;
-    }
-    const meshAngle = meshWidth / this.radius;
-    const arcAngle = meshAngle * this.planes.length - 1;
-    const startAngle = -arcAngle / 2; //centre
+    const count = this.planes.length;
 
     this.planes.forEach((plane, i) => {
-      const angle = startAngle + (i + offset) * meshAngle;
-      plane.material.uniforms.uRadius.value = this.radius;
-      plane.userData.angle = angle;
+      const t = ((i + offset) % count) / count;
+      const pos = this.curve.getPointAt(t);
 
-      plane.position.x = Math.sin(angle) * this.radius;
-      plane.position.z = -Math.cos(angle) * this.radius;
-
-      const tangentX = Math.cos(angle);
-      const tangentZ = Math.sin(angle);
-
-      const target = new THREE.Vector3(
-        plane.position.x,
-        plane.position.y,
-        plane.position.z + tangentZ
-      );
-
-      plane.lookAt(target);
+      plane.position.copy(pos);
     });
-
-    this.planesGroup.position.set(0, 0, 3.7);
   }
 
   createBounds() {
     const { width, height, x, y } = this.elements[0].getBoundingClientRect();
     this.bounds = { width, height, x, y };
-    this.updateY();
+    this.updateY(); // met en place la position initiale
   }
 
   updateScale() {
@@ -111,14 +122,56 @@ export default class Reels {
     });
   }
 
-  updateY() {
-    //A faire
+  updateY(y = 0) {
+    if (!this.guiParams || !this.guiParams.follow) return;
+
+    this.y = (this.bounds.y + 100 - y + 800 * 3) / window.innerHeight; //800 * 3 =  duration (px) of scroll animation component
+
+    const fov = THREE.MathUtils.degToRad(this.camera.fov);
+    const distance = Math.abs(
+      this.planesGroup.position.z - this.camera.position.z
+    );
+    const visibleHeight = 2 * Math.tan(fov / 2) * distance;
+
+    this.planesGroup.position.y =
+      visibleHeight / 2 - this.planes[0].scale.y / 2 - this.y * visibleHeight;
+
+    if (this.yController) {
+      this.yController.setValue(this.planesGroup.position.y);
+      this.guiParams.y = this.planesGroup.position.y;
+    }
   }
 
   onResize(sizes) {
     this.sizes = sizes;
     this.createBounds();
     this.updateScale();
+    this.updateY();
+
+    if (this.yController) {
+      const range = Math.max(this.sizes.height, 1);
+      const parent = this.yController.object;
+      this.yController.remove();
+      this.yController = this.gui.__folders["Reels position"]
+        ? this.gui.__folders["Reels position"].controllers.find(
+            (c) => c.property === "y"
+          )
+        : null;
+
+      if (!this.yController) {
+        const folder = this.gui.__folders
+          ? this.gui.__folders["Reels position"]
+          : null;
+        if (folder) {
+          this.yController = folder
+            .add(this.guiParams, "y", -range, range, 0.01)
+            .name("planesGroup.y")
+            .onChange((v) => {
+              this.planesGroup.position.y = v;
+            });
+        }
+      }
+    }
   }
 
   update(scroll) {
@@ -130,7 +183,7 @@ export default class Reels {
 
     this.updateMeshesPosition(this.offset);
 
-    this.updateY();
+    this.updateY(scroll);
 
     this.raycaster.setFromCamera(this.mouse, this.camera);
     const intersects = this.raycaster.intersectObjects(this.planes);
@@ -158,11 +211,7 @@ export default class Reels {
     });
     window.addEventListener("keydown", (event) => {
       if (event.key === "n") {
-        this.planes.forEach((plane) => {
-          console.log(plane);
-          plane.position.y = -2;
-        });
-        this.camera.lookAt(this.planes[0].position);
+        // this.camera.lookAt(this.planesGroup.position);
       }
     });
   }

@@ -17,6 +17,7 @@ class App {
     this.createCanvas();
     this.addEventListeners();
     this.addLinkListeners();
+    this.addDebug();
     this.onResize();
 
     gsap.ticker.add(this.update.bind(this));
@@ -161,6 +162,19 @@ class App {
     window.addEventListener("popstate", this.onPopState, { passive: true });
     window.addEventListener("resize", this.onResize.bind(this));
     // window.oncontextmenu = this.onContextMenu; //Disable right click
+  }
+
+  addDebug() {
+    if (window.location.protocol !== "https:") {
+      each(this.pages, (page) => {
+        if (page && typeof page.addDebug === "function") {
+          page.addDebug();
+        }
+      });
+      if (this.canvasPage && typeof this.canvasPage.addDebug === "function") {
+        this.canvasPage.addDebug();
+      }
+    }
   }
 }
 

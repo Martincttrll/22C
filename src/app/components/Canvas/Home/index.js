@@ -164,8 +164,12 @@ export default class Home {
       if (step.model) step.model.rotation.y += 0.01;
     });
 
-    this.video.update(scroll);
-    this.reels.update(scroll);
+    if (this.video && this.video.update) {
+      this.video.update(scroll);
+    }
+    if (this.reels && this.reels.update) {
+      this.reels.update(scroll);
+    }
   }
 
   onResize(sizes) {
@@ -174,9 +178,18 @@ export default class Home {
     this.video.onResize(this.sizes);
   }
 
+  addDebug() {
+    if (this.video && this.video.addDebug) {
+      this.video.addDebug();
+    }
+    if (this.reels && this.reels.addDebug) {
+      this.video.addDebug();
+    }
+  }
+
   async show() {
     this.createVideo();
-    this.createReels();
+    // this.createReels(); // WIP
     await this.modelsPromise;
     this.modelGroup.position.set(0, -2.5, 0);
 

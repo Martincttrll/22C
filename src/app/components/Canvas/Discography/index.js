@@ -9,8 +9,6 @@ export default class Discography {
     this.sizes = sizes;
     this.transition = transition;
     this.group = new THREE.Group();
-
-    this.addDebug();
   }
 
   createMedia() {
