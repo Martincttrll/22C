@@ -23,6 +23,12 @@ html(lang='fr')
             block content
 
     script.
-        const allAssets = Array.from(new Set(!{JSON.stringify([...prismic.assets, ...spotify.assets])}));
-        window.ASSETS = JSON.stringify(allAssets)
+        const critical = Array.from(new Set([
+            ...!{JSON.stringify(prismic.assets).replace(/<\//g, "<\\/")},
+            ...!{JSON.stringify(spotify.assets).replace(/<\//g, "<\\/")}
+        ]));
+
+        const lazy = !{JSON.stringify(prismic.albums).replace(/<\//g, "<\\/")};
+
+        window.ASSETS = {critical,lazy};
     script(type="module", src="/src/app/index.js")

@@ -31,7 +31,7 @@ export class Preloader extends Component {
 
   loadAssets() {
     return new Promise((resolve) => {
-      const assets = JSON.parse(window.ASSETS || "[]");
+      const assets = window.ASSETS.critical || "[]";
 
       const totalSteps = assets.length;
       let loaded = 0;

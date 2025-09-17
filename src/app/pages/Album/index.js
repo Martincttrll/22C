@@ -8,6 +8,7 @@ export class Album extends Page {
     super({
       element: ".album",
       elements: {
+        albumTitle: ".album__title",
         wrapper: ".album__wrapper",
         tableRow: "tbody tr",
         backBtn: ".album__back__link",
@@ -19,14 +20,14 @@ export class Album extends Page {
 
   create() {
     super.create();
+    this.tracks = new Map();
+    this.loadTracks(this.elements.albumTitle.innerText);
+
     this.elements.tableRow.forEach((element) => {
       new TextScramble(element);
     });
     this.createBackground();
     this.formatForMobile();
-
-    this.tracks = new Map();
-    // this.fetchTracks();
   }
 
   createBackground() {
@@ -61,47 +62,33 @@ export class Album extends Page {
     }
   }
 
+  loadTracks(albumName) {
+    const tracks = window.ASSETS.lazy[albumName.toLowerCase()];
+    if (!tracks) {
+      console.warn(`Aucun track trouvé pour l'album "${albumName}"`);
+      return;
+    }
+    tracks.forEach(({ item_title, mp3_url }) => {
+      const audio = new Audio(mp3_url);
+      audio.crossOrigin = "anonymous";
+      audio.preload = "auto";
+      this.tracks.set(item_title, audio);
+    });
+  }
+
   async playTrack(btn) {
     const trackName = btn.parentElement
       .querySelector(".album__track__name")
       .getAttribute("data-track-name");
 
-    // Si l'audio est déjà chargé
-    if (this.tracks.has(trackName)) {
-      const audio = this.tracks.get(trackName);
-      this.toggleAudio(audio, btn);
+    const audio = this.tracks.get(trackName);
+
+    if (!audio) {
+      console.warn(`Track "${trackName}" non trouvé dans this.tracks`);
       return;
     }
 
-    // Sinon, on affiche le loader
-    this.showLoader(btn);
-
-    const query = `22carbone+${trackName}`;
-    const url = `https://api.deezer.com/search?q=${query}`;
-
-    try {
-      const res = await fetch(
-        `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`
-      );
-      const data = await res.json();
-
-      if (data?.data?.length > 0 && data.data[0].preview) {
-        const audio = new Audio(data.data[0].preview);
-        audio.crossOrigin = "anonymous";
-
-        // On stocke l'audio pour ne pas le re-fetch
-        this.tracks.set(trackName, audio);
-
-        this.hideLoader(btn);
-        this.toggleAudio(audio, btn);
-      } else {
-        this.hideLoader(btn);
-        console.warn(`Aucun extrait trouvé pour "${trackName}"`);
-      }
-    } catch (err) {
-      this.hideLoader(btn);
-      console.error(`Erreur pour "${trackName}":`, err);
-    }
+    this.toggleAudio(audio, btn);
   }
 
   toggleAudio(audio, btn) {
