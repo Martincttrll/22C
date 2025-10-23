@@ -48,8 +48,21 @@ h1.album__title {
   &::before {
     content: "[";
   }
+  &::after,
+  &::before {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  &:hover::after,
+  &:hover::before {
+    opacity: 1;
+  }
   @include media("<tablet") {
     font-size: 7rem;
+    &::after,
+    &::before {
+      opacity: 1;
+    }
   }
 }
 table.album__tracklist__table {
