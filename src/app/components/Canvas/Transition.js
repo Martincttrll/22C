@@ -74,6 +74,7 @@ export default class Transition {
           ease: "power2.inOut",
           onUpdate: function () {
             this.targets().forEach((mat) => {
+              mat.depthWrite = false;
               mat.needsUpdate = true;
             });
           },
@@ -161,6 +162,7 @@ export default class Transition {
     });
     mesh.material.forEach((mat) => {
       mat.transparent = true;
+      mat.depthWrite = false;
       mat.opacity = 0;
     });
   }
@@ -185,6 +187,7 @@ export default class Transition {
         ease: "power2.inOut",
       });
       album.material.forEach((material) => {
+        material.depthWrite = false;
         gsap.to(material, {
           opacity: 0,
           duration: 1,
