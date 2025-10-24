@@ -71,7 +71,6 @@ class App {
     this.update();
 
     this.page.show();
-
     this.page.setCanvasPage(this.canvas.canvasPage);
   }
 

@@ -18,6 +18,13 @@ export class Discography extends Page {
       },
     });
     this.isAnimating = false;
+
+    this.scrollInfo = {
+      position: 0,
+      velocity: 0,
+      friction: 0.92,
+      sensitivity: 0.00015,
+    };
   }
 
   create() {
@@ -25,7 +32,6 @@ export class Discography extends Page {
     this.currentIndex = 0;
     this.currentAlbum = this.elements.albums[this.currentIndex];
     this.currentAlbum.style.visibility = "visible";
-    this.addEventListeners();
   }
 
   wrapWithOverflowHidden(target) {
@@ -166,54 +172,30 @@ export class Discography extends Page {
       window.addEventListener(
         "wheel",
         (e) => {
-          this.direction = e.deltaY < 0 ? "up" : "down";
-          this.handleWheel();
+          this.scrollInfo.velocity += e.deltaY * this.scrollInfo.sensitivity;
         },
-        {
-          passive: true,
-        }
+        { passive: true }
       );
-    } else {
-      let startY = 0;
-      window.addEventListener("touchstart", (e) => {
-        startY = e.touches[0].clientY;
-      });
-      window.addEventListener("touchend", (e) => {
-        const endY = e.changedTouches[0].clientY;
-        if (endY > startY + 10) {
-          this.direction = "down";
-        } else if (endY < startY - 10) {
-          this.direction = "up";
-        }
-        this.handleWheel();
-      });
+      this.handleScroll();
     }
   }
 
-  handleWheel() {
-    if (this.direction === "down") {
-      if (this.currentIndex === this.elements.albums.length - 1) {
-        this.nextIndex = 0;
-      } else {
-        this.nextIndex = this.currentIndex + 1;
-      }
-      this.nextAlbum = this.elements.albums[this.nextIndex];
-      this.next();
-    } else if (this.direction === "up") {
-      if (this.currentIndex === 0) {
-        this.previousIndex = this.elements.albums.length - 1;
-      } else {
-        this.previousIndex = this.currentIndex - 1;
-      }
-      this.previousAlbum = this.elements.albums[this.previousIndex];
-      this.previous();
+  handleScroll() {
+    requestAnimationFrame(() => this.handleScroll());
+    this.scrollInfo.position += this.scrollInfo.velocity;
+    this.scrollInfo.velocity *= this.scrollInfo.friction;
+
+    const total = this.elements.albums.length;
+    if (this.scrollInfo.position < 0) this.scrollInfo.position += total;
+    if (this.scrollInfo.position >= total) this.scrollInfo.position -= total;
+
+    if (this.canvasPage) {
+      this.canvasPage.onScroll(this.scrollInfo);
     }
   }
 
-  next() {
-    this.animateCurrentAlbum(true);
-  }
-  previous() {
-    this.animateCurrentAlbum(false);
+  show() {
+    super.show();
+    this.addEventListeners();
   }
 }

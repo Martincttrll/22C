@@ -2,6 +2,7 @@ import { each } from "lodash";
 import Media from "./Media.js";
 import * as THREE from "three";
 import gsap from "gsap";
+import { mod, lerpVec } from "@utils/math.js";
 export default class Discography {
   constructor({ scene, sizes, camera, transition }) {
     this.scene = scene;
@@ -9,6 +10,7 @@ export default class Discography {
     this.sizes = sizes;
     this.transition = transition;
     this.group = new THREE.Group();
+    this.addDebug();
   }
 
   createMedia() {
@@ -27,18 +29,25 @@ export default class Discography {
   }
 
   createGallery() {
-    // console.log(this.sizes);
-    const spacing = this.mediaInstances[0].mesh.scale.y * (1 / 18);
+    this.spacing = this.mediaInstances[0].mesh.scale.y * (1 / 18);
     this.mediaInstances.forEach((media, i) => {
       media.mesh.position.z = -i * 0.5;
-      media.mesh.position.y = i * spacing;
+      media.mesh.position.y = i * this.spacing;
       media.mesh.rotation.x = 0.1;
     });
     const groupHeight =
       this.mediaInstances.length -
-      1 * spacing +
+      1 * this.spacing +
       this.mediaInstances[0].mesh.scale.y;
     this.group.position.y = -groupHeight / 2;
+
+    this.slotPositions = this.mediaInstances.map((media) => {
+      return {
+        x: media.mesh.position.x,
+        y: media.mesh.position.y,
+        z: media.mesh.position.z,
+      };
+    });
   }
 
   createRaycaster() {
@@ -75,67 +84,42 @@ export default class Discography {
 
   update() {}
 
-  onScroll(next) {
+  onScroll(scrollInfo) {
     if (window.location.pathname !== "/discography/") return;
-    const tl = gsap.timeline();
+
+    const { position } = scrollInfo;
     const total = this.mediaInstances.length;
-    if (total < 2) return;
-
-    if (next) {
-      const first = this.mediaInstances.shift();
-      this.mediaInstances.push(first);
-    } else {
-      const last = this.mediaInstances.pop();
-      this.mediaInstances.unshift(last);
-    }
-
-    const targetPositions = this.mediaInstances.map((media) => ({
-      x: media.mesh.position.x,
-      y: media.mesh.position.y,
-      z: media.mesh.position.z,
-    }));
-
-    const edgeMedia = next
-      ? this.mediaInstances[total - 1]
-      : this.mediaInstances[0];
-    tl.to(
-      edgeMedia.mesh.position,
-      {
-        y: edgeMedia.mesh.position.y - 8,
-        duration: 0.4,
-        ease: "power2.inOut",
-      },
-      "<"
-    );
-    tl.to(
-      edgeMedia.material,
-      {
-        opacity: 0,
-        duration: 0.4,
-        ease: "power2.inOut",
-      },
-      "<"
-    );
-    tl.to(edgeMedia.material, {
-      opacity: 1,
-      duration: 0.3,
-      ease: "power2.inOut",
-    });
-
     this.mediaInstances.forEach((media, i) => {
-      let targetIndex = next ? (i - 1 + total) % total : (i + 1) % total;
-      const target = targetPositions[targetIndex];
-      tl.to(
-        media.mesh.position,
-        {
-          x: target.x,
-          y: target.y,
-          z: target.z,
-          duration: 0.7,
-          ease: "power2.inOut",
-        },
-        "<"
-      );
+      let targetSlotIndex = i - position;
+      const lastIndex = total - 1;
+
+      targetSlotIndex = mod(targetSlotIndex, total);
+      const i0 = Math.floor(targetSlotIndex);
+      const t = targetSlotIndex - i0;
+      const i1 = (i0 + 1) % total;
+
+      const slotA = this.slotPositions[i0];
+      const slotB = this.slotPositions[i1];
+
+      const target = lerpVec(slotA, slotB, t);
+      let opacity = 1;
+      // Si l'album est exactement sur le premier ou dernier slot → invisible
+      if (
+        Math.round(targetSlotIndex) === 0 ||
+        Math.round(targetSlotIndex) === lastIndex
+      ) {
+        opacity = 0;
+      }
+
+      media.mesh.position.x = target.x;
+      media.mesh.position.y = target.y; // - dropY; // on le "descend" doucement
+      media.mesh.position.z = target.z;
+      // console.log(media.mesh.position);
+      if (media.mesh.material && "opacity" in media.mesh.material) {
+        media.mesh.material.forEach((material) => {
+          material.opacity = opacity;
+        });
+      }
     });
   }
 
@@ -211,11 +195,7 @@ export default class Discography {
     window.addEventListener("keydown", (event) => {
       if (event.key === "d") {
         console.log(this.scene);
-        if (!this.mediaInstances) return;
-        this.mediaInstances.forEach((media) => {
-          media.mesh.material.wireframe = !media.mesh.material.wireframe;
-          console.log(media.mesh.position);
-        });
+        this.camera.lookAt(this.group.position);
       }
     });
   }
