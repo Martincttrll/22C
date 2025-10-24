@@ -26,7 +26,7 @@ export default class TextScramble {
           scrambleText: {
             text: element.dataset.original,
             chars:
-              "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
+              "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!/:#?;&$%()-_=+*^",
             revealDelay: 0.5,
           },
         });
