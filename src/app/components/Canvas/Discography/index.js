@@ -1,4 +1,4 @@
-import { each } from "lodash";
+import { each, last } from "lodash";
 import Media from "./Media.js";
 import * as THREE from "three";
 import gsap from "gsap";
@@ -87,13 +87,18 @@ export default class Discography {
   onScroll(scrollInfo) {
     if (window.location.pathname !== "/discography/") return;
 
-    const { position } = scrollInfo;
+    const { position, velocity } = scrollInfo;
     const total = this.mediaInstances.length;
-    this.mediaInstances.forEach((media, i) => {
-      let targetSlotIndex = i - position;
-      const lastIndex = total - 1;
+    const lastIndex = total - 1;
 
-      targetSlotIndex = mod(targetSlotIndex, total);
+    this.mediaInstances.forEach((media, i) => {
+      const rawIndex = i - position; //Position courante dans le "carousel"
+      const targetSlotIndex = mod(rawIndex, total);
+
+      let opacity = 1;
+
+      const fadeZone = 0.35;
+
       const i0 = Math.floor(targetSlotIndex);
       const t = targetSlotIndex - i0;
       const i1 = (i0 + 1) % total;
@@ -101,25 +106,26 @@ export default class Discography {
       const slotA = this.slotPositions[i0];
       const slotB = this.slotPositions[i1];
 
-      const target = lerpVec(slotA, slotB, t);
-      let opacity = 1;
-      // Si l'album est exactement sur le premier ou dernier slot → invisible
-      if (
-        Math.round(targetSlotIndex) === 0 ||
-        Math.round(targetSlotIndex) === lastIndex
-      ) {
-        opacity = 0;
+      if (velocity != 0) {
+        if (targetSlotIndex < fadeZone && targetSlotIndex > -fadeZone) {
+          opacity = Math.max(0, targetSlotIndex / fadeZone);
+        }
+        const distToEnd = targetSlotIndex - lastIndex;
+        if (distToEnd > -fadeZone && distToEnd < 0) {
+          opacity = Math.min(1, Math.abs(distToEnd / fadeZone));
+        }
+        if (slotA.z < slotB.z) {
+          opacity = 0;
+        }
       }
 
-      media.mesh.position.x = target.x;
-      media.mesh.position.y = target.y; // - dropY; // on le "descend" doucement
-      media.mesh.position.z = target.z;
-      // console.log(media.mesh.position);
-      if (media.mesh.material && "opacity" in media.mesh.material) {
-        media.mesh.material.forEach((material) => {
-          material.opacity = opacity;
-        });
-      }
+      const target = lerpVec(slotA, slotB, t);
+
+      media.mesh.position.set(target.x, target.y, target.z);
+
+      media.mesh.material.forEach((material) => {
+        material.opacity = opacity;
+      });
     });
   }
 

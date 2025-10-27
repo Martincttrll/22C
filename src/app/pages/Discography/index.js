@@ -24,6 +24,7 @@ export class Discography extends Page {
       velocity: 0,
       friction: 0.92,
       sensitivity: 0.00015,
+      delta: 0,
     };
   }
 
