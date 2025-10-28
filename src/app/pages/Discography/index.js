@@ -18,6 +18,7 @@ export class Discography extends Page {
       },
     });
     this.isAnimating = false;
+    this.isDisplayUI = true;
 
     this.scrollInfo = {
       position: 0,
@@ -68,105 +69,6 @@ export class Discography extends Page {
     return container;
   }
 
-  animateCurrentAlbum(next = true) {
-    if (this.isAnimating) return;
-    this.isAnimating = true;
-
-    const newAlbum = next ? this.nextAlbum : this.previousAlbum;
-    const oldElems = [
-      this.currentAlbum.querySelector(".discography__album__title"),
-      this.currentAlbum.querySelector(".discography__album__info"),
-      this.currentAlbum.querySelector(".discography__album__date"),
-    ];
-    const newElems = [
-      newAlbum.querySelector(".discography__album__title"),
-      newAlbum.querySelector(".discography__album__info"),
-      newAlbum.querySelector(".discography__album__date"),
-    ];
-
-    [...oldElems, ...newElems].forEach((el) => {
-      if (el && el._splitText) el._splitText.revert();
-    });
-
-    const oldSplits = oldElems.map((el) =>
-      SplitText.create(el, { type: "chars" })
-    );
-    const newSplits = newElems.map((el) =>
-      SplitText.create(el, { type: "chars" })
-    );
-    this.wrapWithOverflowHidden(oldElems[0]);
-    this.wrapWithOverflowHidden(newElems[0]);
-    [1, 2].forEach((i) => {
-      this.wrapWithOverflowHidden(oldSplits[i].chars);
-      this.wrapWithOverflowHidden(newSplits[i].chars);
-    });
-    oldElems.forEach((el, i) => {
-      if (el) el._splitText = oldSplits[i];
-    });
-    newElems.forEach((el, i) => {
-      if (el) el._splitText = newSplits[i];
-    });
-
-    gsap.set(newSplits[0].chars, { y: next ? "-100%" : "100%" });
-    gsap.set([newSplits[1].chars, newSplits[2].chars], {
-      x: next ? "100%" : "-100%",
-    });
-
-    const tl = gsap.timeline({
-      onStart: () => {
-        this.canvasPage.onScroll(next);
-      },
-      onComplete: () => {
-        this.isAnimating = false;
-      },
-    });
-
-    tl.to(oldSplits[0].chars, {
-      y: next ? "100%" : "-100%",
-      duration: 0.3,
-      ease: "power2.inOut",
-      stagger: 0.04,
-    });
-    tl.to(
-      [oldSplits[1].chars, oldSplits[2].chars],
-      {
-        x: next ? "-100%" : "100%",
-        duration: 0.3,
-        ease: "power2.inOut",
-        stagger: 0.04,
-      },
-      "<"
-    );
-
-    tl.add(() => {
-      this.currentAlbum.style.visibility = "hidden";
-      this.currentAlbum = newAlbum;
-      this.currentIndex = next ? this.nextIndex : this.previousIndex;
-      this.currentAlbum.style.visibility = "visible";
-    });
-
-    tl.to(
-      newSplits[0].chars,
-      {
-        y: "0%",
-        duration: 0.3,
-        ease: "power2.inOut",
-        stagger: 0.04,
-      },
-      "+=0.05"
-    );
-    tl.to(
-      [newSplits[1].chars, newSplits[2].chars],
-      {
-        x: "0%",
-        duration: 0.3,
-        ease: "power2.inOut",
-        stagger: 0.04,
-      },
-      "<"
-    );
-  }
-
   addEventListeners() {
     super.addEventListeners();
     if (!Detection.isMobile) {
@@ -183,6 +85,10 @@ export class Discography extends Page {
 
   handleScroll() {
     requestAnimationFrame(() => this.handleScroll());
+
+    const movingDetection = 0.001;
+    const wasMoving = Math.abs(this.scrollInfo.velocity) >= movingDetection;
+
     this.scrollInfo.position += this.scrollInfo.velocity;
     this.scrollInfo.velocity *= this.scrollInfo.friction;
 
@@ -191,8 +97,160 @@ export class Discography extends Page {
     if (this.scrollInfo.position >= total) this.scrollInfo.position -= total;
 
     if (this.canvasPage) {
+      const isNowMoving = Math.abs(this.scrollInfo.velocity) >= movingDetection;
+      const isNowStopped =
+        wasMoving && Math.abs(this.scrollInfo.velocity) < movingDetection;
+
       this.canvasPage.onScroll(this.scrollInfo);
+
+      if (isNowMoving) {
+        this.hideUI();
+      }
+
+      if (isNowStopped) {
+        const current = this.canvasPage.getCurrentAlbum();
+        this.showUI(current);
+      }
     }
+  }
+
+  showUI(albumData) {
+    if (this.isAnimating || this.isDisplayUI) return;
+    this.isAnimating = true;
+    this.currentAlbum = Array.from(this.elements.albums).find(
+      (album) => album.dataset.title === albumData.title
+    );
+    this.currentAlbum.style.visibility = "visible";
+
+    const elements = [
+      this.currentAlbum.querySelector(".discography__album__title"),
+      this.currentAlbum.querySelector(".discography__album__info"),
+      this.currentAlbum.querySelector(".discography__album__date"),
+    ];
+
+    elements.forEach((el) => {
+      if (el && el._splitText) el._splitText.revert();
+    });
+
+    const splits = elements.map((el) =>
+      SplitText.create(el, { type: "chars" })
+    );
+
+    this.wrapWithOverflowHidden(elements[0]);
+    [1, 2].forEach((i) => {
+      this.wrapWithOverflowHidden(splits[i].chars);
+    });
+
+    elements.forEach((el, i) => {
+      if (el) el._splitText = splits[i];
+    });
+
+    gsap.set(splits[0].chars, { y: "-100%" });
+    gsap.set([splits[1].chars, splits[2].chars], { x: "100%" });
+
+    const tl = gsap.timeline({
+      onComplete: () => {
+        this.isAnimating = false;
+        this.isDisplayUI = true;
+      },
+    });
+
+    tl.to(
+      splits[0].chars,
+      {
+        y: "0%",
+        duration: 0.3,
+        ease: "power2.inOut",
+        stagger: 0.04,
+      },
+      "+=0.05"
+    );
+    tl.fromTo(
+      this.currentAlbum.querySelector(".separator"),
+      {
+        scaleX: 0,
+      },
+      {
+        scaleX: 1,
+        duration: 0.2,
+        ease: "power2.inOut",
+      },
+      "<"
+    );
+
+    tl.to(
+      [splits[1].chars, splits[2].chars],
+      {
+        x: "0%",
+        duration: 0.3,
+        ease: "power2.inOut",
+        stagger: 0.04,
+      },
+      "<"
+    );
+  }
+
+  hideUI() {
+    if (!this.currentAlbum || this.isAnimating || !this.isDisplayUI) return;
+    this.isAnimating = true;
+
+    const elements = [
+      this.currentAlbum.querySelector(".discography__album__title"),
+      this.currentAlbum.querySelector(".discography__album__info"),
+      this.currentAlbum.querySelector(".discography__album__date"),
+    ];
+
+    elements.forEach((el) => {
+      if (el && el._splitText) el._splitText.revert();
+    });
+
+    const splits = elements.map((el) =>
+      SplitText.create(el, { type: "chars" })
+    );
+
+    this.wrapWithOverflowHidden(elements[0]);
+    [1, 2].forEach((i) => {
+      this.wrapWithOverflowHidden(splits[i].chars);
+    });
+
+    elements.forEach((el, i) => {
+      if (el) el._splitText = splits[i];
+    });
+
+    const tl = gsap.timeline({
+      onComplete: () => {
+        this.isAnimating = false;
+        this.isDisplayUI = false;
+      },
+    });
+
+    tl.to(splits[0].chars, {
+      y: "100%",
+      duration: 0.3,
+      ease: "power2.inOut",
+      stagger: 0.04,
+    });
+
+    tl.to(
+      this.currentAlbum.querySelector(".separator"),
+      {
+        scaleX: 0,
+        duration: 0.2,
+        ease: "power2.inOut",
+      },
+      "<"
+    );
+
+    tl.to(
+      [splits[1].chars, splits[2].chars],
+      {
+        x: "-100%",
+        duration: 0.3,
+        ease: "power2.inOut",
+        stagger: 0.04,
+      },
+      "<"
+    );
   }
 
   show() {

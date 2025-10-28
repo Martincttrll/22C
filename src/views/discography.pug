@@ -7,7 +7,7 @@ block content
     .discography 
         .discography__wrapper
                 each album in spotify.finalAlbums                       
-                    .discography__album(data-cover=album.cover)
+                    .discography__album(data-cover=album.cover, data-title=album.name)
                         .discography__album__wrapper
                             .discography__album__label
                                 .discography__album__title #{album.name}
@@ -22,4 +22,4 @@ block content
                                 div scroll
                                 img(src="/pictos/chevron.svg", alt="arrow", width="18px")
                             a(href="/discography/"+album.slug+"/")
-                            img.discography__album__cover(src=album.cover, alt=album.name, data-slug=album.slug)
+                            img.discography__album__cover(src=album.cover, alt=album.name, data-slug=album.slug, data-title=album.name)

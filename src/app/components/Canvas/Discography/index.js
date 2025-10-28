@@ -82,6 +82,29 @@ export default class Discography {
     });
   }
 
+  getCurrentAlbum() {
+    const current = this.mediaInstances.reduce(
+      (closest, media) => {
+        if (!closest.media) {
+          closest = { dist: -Infinity, media: null };
+        }
+
+        const dist = media.mesh.position.z;
+        const isVisible = media.mesh.material[0].opacity > 0.3;
+
+        if (isVisible && dist > closest.dist) {
+          closest.dist = dist;
+          closest.media = media;
+        }
+
+        return closest;
+      },
+      { dist: -Infinity, media: null }
+    );
+
+    return current.media ? current.media.mesh.userData : null;
+  }
+
   update() {}
 
   onScroll(scrollInfo) {

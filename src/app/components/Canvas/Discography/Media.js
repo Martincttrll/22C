@@ -5,6 +5,10 @@ export default class Media {
   constructor({ element, group, sizes }) {
     this.element = element;
     this.slug = element.getAttribute("data-slug");
+    this.title = element.getAttribute("data-title");
+    this.date = element.getAttribute("data-date");
+    this.tracksNumber = element.getAttribute("data-tracks");
+    this.albumDuration = element.getAttribute("data-duration");
     this.group = group;
     this.sizes = sizes;
     this.createTextures();
@@ -46,9 +50,13 @@ export default class Media {
     ];
 
     this.mesh = new THREE.Mesh(this.geometry, this.material);
-    this.mesh.userData = { url: this.slug };
     this.mesh.material.opacity = 1;
     this.group.add(this.mesh);
+
+    this.mesh.userData = {
+      url: this.slug,
+      title: this.title,
+    };
   }
 
   onResize(sizes) {
