@@ -23,9 +23,11 @@ export class Discography extends Page {
     this.scrollInfo = {
       position: 0,
       velocity: 0,
-      friction: 0.94,
+      friction: Detection.isMobile ? 0.96 : 0.94,
       sensitivity: 0.00015,
       delta: 0,
+      touchStartY: 0,
+      isTouching: false,
     };
   }
 
@@ -79,14 +81,48 @@ export class Discography extends Page {
         },
         { passive: true }
       );
-      this.handleScroll();
+    } else {
+      window.addEventListener(
+        "touchstart",
+        (e) => {
+          this.scrollInfo.touchStartY = e.touches[0].clientY;
+          this.scrollInfo.isTouching = true;
+          this.scrollInfo.velocity = 0;
+        },
+        { passive: true }
+      );
+
+      window.addEventListener(
+        "touchmove",
+        (e) => {
+          if (!this.scrollInfo.isTouching) return;
+
+          const currentY = e.touches[0].clientY;
+          const deltaY = this.scrollInfo.touchStartY - currentY;
+          this.scrollInfo.touchStartY = currentY;
+
+          // Ajuste la sensibilité pour le touch
+          this.scrollInfo.velocity +=
+            deltaY * (this.scrollInfo.sensitivity * 2);
+        },
+        { passive: true }
+      );
+
+      window.addEventListener(
+        "touchend",
+        () => {
+          this.scrollInfo.isTouching = false;
+        },
+        { passive: true }
+      );
     }
+    this.handleScroll();
   }
 
   handleScroll() {
     requestAnimationFrame(() => this.handleScroll());
 
-    const movingDetection = 0.01;
+    const movingDetection = Detection.isMobile ? 0.05 : 0.01;
     const wasMoving = Math.abs(this.scrollInfo.velocity) >= movingDetection;
 
     this.scrollInfo.position += this.scrollInfo.velocity;
