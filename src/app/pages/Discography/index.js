@@ -23,7 +23,7 @@ export class Discography extends Page {
     this.scrollInfo = {
       position: 0,
       velocity: 0,
-      friction: 0.92,
+      friction: 0.94,
       sensitivity: 0.00015,
       delta: 0,
     };
@@ -86,7 +86,7 @@ export class Discography extends Page {
   handleScroll() {
     requestAnimationFrame(() => this.handleScroll());
 
-    const movingDetection = 0.001;
+    const movingDetection = 0.01;
     const wasMoving = Math.abs(this.scrollInfo.velocity) >= movingDetection;
 
     this.scrollInfo.position += this.scrollInfo.velocity;

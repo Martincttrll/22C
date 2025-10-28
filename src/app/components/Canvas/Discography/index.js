@@ -9,6 +9,7 @@ export default class Discography {
     this.camera = camera;
     this.sizes = sizes;
     this.transition = transition;
+    this.enableOpacityUpdate = true;
     this.group = new THREE.Group();
     this.addDebug();
   }
@@ -115,7 +116,7 @@ export default class Discography {
     const lastIndex = total - 1;
 
     this.mediaInstances.forEach((media, i) => {
-      const rawIndex = i - position; //Position courante dans le "carousel"
+      const rawIndex = i - position;
       const targetSlotIndex = mod(rawIndex, total);
 
       let opacity = 1;
@@ -146,13 +147,16 @@ export default class Discography {
 
       media.mesh.position.set(target.x, target.y, target.z);
 
-      media.mesh.material.forEach((material) => {
-        material.opacity = opacity;
-      });
+      if (this.enableOpacityUpdate) {
+        media.mesh.material.forEach((material) => {
+          material.opacity = opacity;
+        });
+      }
     });
   }
 
   onClick(mesh) {
+    this.enableOpacityUpdate = false;
     this.transition.playFromDiscography(mesh);
   }
 
@@ -194,6 +198,7 @@ export default class Discography {
   }
 
   show(isPreloaded, isAlbumToDiscography) {
+    this.enableOpacityUpdate = false;
     if (!this.mediaInstances) {
       this.createMedia();
       this.createGallery();
@@ -208,10 +213,14 @@ export default class Discography {
         delay = 1.4;
       }
       this.mediaInstances.forEach((media, i) => media.show(delay + i * 0.05));
+      setTimeout(() => {
+        this.enableOpacityUpdate = true;
+      }, (delay + this.mediaInstances.length * 0.05) * 1000);
     }
   }
 
   hide() {
+    this.enableOpacityUpdate = false;
     this.group.clear();
     this.scene.remove(this.group);
     if (this.mediaInstances) {
