@@ -20,7 +20,7 @@ export default class Canvas {
     this.renderer.domElement.style.boxSizing = "border-box";
     this.renderer.domElement.style.top = 0;
     this.renderer.domElement.style.left = 0;
-    this.renderer.domElement.style.zIndex = 0;
+    this.renderer.domElement.style.zIndex = 1;
 
     document.body.appendChild(this.renderer.domElement);
   }

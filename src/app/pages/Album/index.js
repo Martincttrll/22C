@@ -157,5 +157,16 @@ export class Album extends Page {
       this.audio.pause();
       this.audio.currentTime = 0;
     }
+
+    //Fake background to avoid content flash when AJAX taking too long
+    const bg = document.createElement("div");
+    bg.className = "transition-bg";
+    bg.style.position = "absolute";
+    bg.style.inset = "0";
+    bg.style.zIndex = "1";
+    bg.style.backgroundColor = "#000000";
+    bg.style.pointerEvents = "none";
+    this.elements.wrapper.style.position = "relative";
+    this.elements.wrapper.prepend(bg);
   }
 }
