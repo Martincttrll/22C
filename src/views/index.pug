@@ -11,7 +11,7 @@ block content
             //- .home__vertical__line
             //- .home__vertical__line
             //- .home__vertical__line
-            h1.home__title=prismic.homepage.data.h1[0].text
+            h1.home__title(data-animation="home-titlee")=prismic.homepage.data.h1[0].text
             .home__video__wrapper
                 .home__video__filter
                 video.home__video(autoplay,muted,loop,playsinline,preload="auto",crossorigin="anonymous",data-src=prismic.homepage.data.home_video.url)
@@ -19,7 +19,7 @@ block content
                 .home__who__wrapper 
                     .home__who__text__section
                         h2.home__h2.home__who__title(data-animation="title")=prismic.homepage.data.who_title[0].text
-                        div.home__who__p(data-animation="paragraph")
+                        div.home__who__p(data-animation="paragraph-falling")
                             each paragraph in prismic.homepage.data.who_text
                                 p=paragraph.text                            
                     .home__who__hover__section
@@ -41,7 +41,7 @@ block content
                 .home__news__wrapper
                     each news in prismic.homepage.data.news_list
                         .home__news__separator(data-animation="separator") 
-                        .home__news__item(data-animation="title")
+                        .home__news__item(data-animation="image")
                             .home__news__info__wrapper
                                 .home__news__item__title
                                     .home__news__item__date=new Date(news.news_item.data.date).toLocaleDateString('fr-FR', { year: 'numeric', month: 'numeric', day: 'numeric' })

@@ -41,9 +41,6 @@ export default class Image extends Animation {
         ease: "power2.out",
         // delay: 0.5,
         duration: 1.5,
-        onComplete: () => {
-          this.hasAnimatedIn = false;
-        },
       }
     );
   }

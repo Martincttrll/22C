@@ -3,7 +3,6 @@ export default class Animation extends Component {
   constructor({ element, elements, useObserver = true }) {
     super({ element, elements });
 
-    this.previousScroll = window.scrollY;
     this.isScrollingDown = true;
 
     if (useObserver && "IntersectionObserver" in window) {

@@ -36,6 +36,10 @@ class App {
     this.preloader = new Preloader();
 
     this.preloader.once("completed", this.onPreloaded.bind(this));
+    this.preloader.once(
+      "animationCompleted",
+      this.onPreloaderAnimationCompleted.bind(this)
+    );
   }
 
   createPages() {
@@ -70,8 +74,11 @@ class App {
 
     this.update();
 
-    this.page.show();
     this.page.setCanvasPage(this.canvas.canvasPage);
+  }
+
+  onPreloaderAnimationCompleted() {
+    this.page.show();
   }
 
   onResize() {

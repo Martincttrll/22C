@@ -106,6 +106,7 @@ export class Preloader extends Component {
       this.animateOut = gsap.timeline({
         delay: 0.5,
         onComplete: () => {
+          this.emit("animationCompleted");
           this.destroy();
           resolve();
         },

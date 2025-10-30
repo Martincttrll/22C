@@ -1,25 +1,29 @@
 import gsap from "gsap";
-import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
+import SplitText from "gsap/SplitText";
 import Animation from "@classes/Animation.js";
 
-gsap.registerPlugin(ScrambleTextPlugin);
+gsap.registerPlugin(SplitText);
 
 export default class Title extends Animation {
   constructor({ element, elements }) {
     super({ element, elements });
+    this.splits = SplitText.create(this.element, {
+      type: "chars",
+      mask: "chars",
+    });
+
+    gsap.set(this.splits.chars, {
+      y: "100%",
+    });
   }
 
   animateIn() {
-    gsap.fromTo(
-      this.element,
-      { filter: "blur(5px)" },
-      {
-        filter: "blur(0px)",
-        duration: 1,
-        delay: 0.5,
-        ease: "power2.out",
-      }
-    );
+    gsap.to(this.splits.chars, {
+      y: "0%",
+      duration: 1,
+      ease: "power2.inOut",
+      stagger: 0.1,
+    });
   }
   // animateIn() {
   //   gsap.to(this.element, {

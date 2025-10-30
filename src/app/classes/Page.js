@@ -6,6 +6,8 @@ import Title from "@animations/Title";
 import Image from "@animations/Image";
 import Reels from "@animations/Reels";
 import Paragraph from "@animations/Paragraph";
+import ParagraphFalling from "@animations/ParagraphFalling";
+import HomeTitle from "@animations/HomeTitle";
 
 export default class Page extends EventEmitter {
   constructor({ element, elements }) {
@@ -14,10 +16,12 @@ export default class Page extends EventEmitter {
     this.selectors = {
       element,
       ...elements,
+      animationsHomeTitle: "[data-animation='home-title']",
       animationsSeparators: "[data-animation='separator']",
       animationsTitles: "[data-animation='title']",
       animationsImages: "[data-animation='image']",
       animationsParagraphs: "[data-animation='paragraph']",
+      animationsParagraphsFalling: "[data-animation='paragraph-falling']",
       animationsReels: "[data-animation='reels']",
     };
   }
@@ -54,6 +58,9 @@ export default class Page extends EventEmitter {
         : [elements];
     };
 
+    this.animationsHomeTitle = toArray(this.elements.animationsHomeTitle).map(
+      (element) => new HomeTitle({ element })
+    );
     this.animationsSeparators = toArray(this.elements.animationsSeparators).map(
       (element) => new Separator({ element })
     );
@@ -68,6 +75,9 @@ export default class Page extends EventEmitter {
     this.animationsParagraphs = toArray(this.elements.animationsParagraphs).map(
       (element) => new Paragraph({ element })
     );
+    this.animationsParagraphsFalling = toArray(
+      this.elements.animationsParagraphsFalling
+    ).map((element) => new ParagraphFalling({ element }));
 
     this.animationsReels = toArray(this.elements.animationsReels).map(
       (element) =>

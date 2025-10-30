@@ -1,7 +1,10 @@
 import Page from "@classes/Page";
 import { TextCursor } from "@components/TextCursor";
 import { Archives } from "./Archives";
+import gsap from "gsap";
+import ScrambleTextPlugin from "gsap/ScrambleTextPlugin";
 
+gsap.registerPlugin(ScrambleTextPlugin);
 export default class Home extends Page {
   constructor() {
     super({
@@ -55,5 +58,24 @@ export default class Home extends Page {
     super.create();
     this.createTextCursor();
     this.createArchives();
+    gsap.set(this.elements.h1, {
+      autoAlpha: 0,
+    });
+  }
+
+  show() {
+    super.show();
+    console.log("show");
+
+    gsap.to(this.elements.h1, {
+      autoAlpha: 1,
+      duration: 3,
+      scrambleText: {
+        text: "22Carbone",
+        chars:
+          "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!/:#?;&$%()-_=+*^",
+        revealDelay: 0.5,
+      },
+    });
   }
 }
