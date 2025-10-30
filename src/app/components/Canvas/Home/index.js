@@ -22,17 +22,17 @@ export default class Home {
       {
         color: 0xb8ffa3,
         label: "sphinx",
-        modelPath: "/models/caracter/caracter.gltf",
+        modelPath: "/models/sphinx.gltf",
       },
       {
         color: 0x35b7cc,
         label: "gabi",
-        modelPath: "/models/caracter/caracter.gltf",
+        modelPath: "/models/gabi.gltf",
       },
       {
         color: 0xcc332d,
         label: "hatlas",
-        modelPath: "/models/caracter/caracter.gltf",
+        modelPath: "/models/hatlas.gltf",
       },
     ];
     this.createLights();
