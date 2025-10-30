@@ -7,7 +7,6 @@ import Image from "@animations/Image";
 import Reels from "@animations/Reels";
 import Paragraph from "@animations/Paragraph";
 import ParagraphFalling from "@animations/ParagraphFalling";
-import HomeTitle from "@animations/HomeTitle";
 
 export default class Page extends EventEmitter {
   constructor({ element, elements }) {
