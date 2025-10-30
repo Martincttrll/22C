@@ -11,7 +11,7 @@ block content
             //- .home__vertical__line
             //- .home__vertical__line
             //- .home__vertical__line
-            h1.home__title(data-animation="home-titlee")=prismic.homepage.data.h1[0].text
+            h1.home__title=prismic.homepage.data.h1[0].text
             .home__video__wrapper
                 .home__video__filter
                 video.home__video(autoplay,muted,loop,playsinline,preload="auto",crossorigin="anonymous",data-src=prismic.homepage.data.home_video.url)

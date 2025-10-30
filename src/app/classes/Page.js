@@ -16,7 +16,6 @@ export default class Page extends EventEmitter {
     this.selectors = {
       element,
       ...elements,
-      animationsHomeTitle: "[data-animation='home-title']",
       animationsSeparators: "[data-animation='separator']",
       animationsTitles: "[data-animation='title']",
       animationsImages: "[data-animation='image']",
@@ -58,9 +57,6 @@ export default class Page extends EventEmitter {
         : [elements];
     };
 
-    this.animationsHomeTitle = toArray(this.elements.animationsHomeTitle).map(
-      (element) => new HomeTitle({ element })
-    );
     this.animationsSeparators = toArray(this.elements.animationsSeparators).map(
       (element) => new Separator({ element })
     );
