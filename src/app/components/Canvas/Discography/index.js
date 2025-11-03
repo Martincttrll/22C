@@ -199,7 +199,7 @@ export default class Discography {
 
   show(isPreloaded, isAlbumToDiscography) {
     this.enableOpacityUpdate = false;
-    if (!this.mediaInstances) {
+    if (this.scene.children.length === 0) {
       this.createMedia();
       this.createGallery();
       this.createRaycaster();
@@ -221,7 +221,6 @@ export default class Discography {
 
   hide() {
     this.enableOpacityUpdate = false;
-    this.group.clear();
     this.scene.remove(this.group);
     if (this.mediaInstances) {
       this.mediaInstances.forEach((media) => media.hide());
