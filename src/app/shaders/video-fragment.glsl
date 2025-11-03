@@ -2,6 +2,7 @@ uniform sampler2D uTexture;
 uniform vec2 uMouse;
 uniform float uTime;
 uniform float uZoom;
+uniform float uScrollOffset;
 
 varying vec2 vUv;
 
@@ -12,6 +13,8 @@ void main() {
 
 
     float dist = distance(centeredUV, uMouse);
+
+    centeredUV.y += uScrollOffset;  
 
     // Ripple / déformation
     float ripple = 0.02 * sin(dist * 40.0 - uTime * 4.0);

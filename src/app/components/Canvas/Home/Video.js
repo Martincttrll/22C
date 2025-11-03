@@ -33,9 +33,7 @@ export default class Video {
       uMouse: { value: new THREE.Vector2() },
       uTime: { value: 0 },
       uZoom: { value: 1.0 },
-      uAmpliture: 30,
-      uSpeed: 10,
-      uFrequence: 40,
+      uScrollOffset: { value: 0.0 },
     };
     this.geometry = new THREE.PlaneGeometry(1, 1);
     this.material = new THREE.ShaderMaterial({
@@ -79,12 +77,14 @@ export default class Video {
   update(scroll) {
     this.uniforms.uTime.value += 0.01;
     //Zoom
-    const targetZoom = 1.0 + scroll * 0.001;
+    const targetZoom = 1.0 + scroll * 0.005;
     if (!this.currentZoom) this.currentZoom = 1.0;
-
     this.currentZoom += (targetZoom - this.currentZoom) * 0.1;
 
     this.uniforms.uZoom.value = this.currentZoom;
+
+    //Scroll parallax
+    this.uniforms.uScrollOffset.value = scroll * 0.0005;
 
     this.updateY(scroll);
 
