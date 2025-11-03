@@ -20,34 +20,19 @@ export default class Home {
     this.models = [];
     this.steps = [
       {
-        color: 0xb8ffa3,
         label: "sphinx",
         modelPath: "/models/sphinx.gltf",
       },
       {
-        color: 0x35b7cc,
         label: "gabi",
         modelPath: "/models/gabi.gltf",
       },
       {
-        color: 0xcc332d,
         label: "hatlas",
         modelPath: "/models/hatlas.gltf",
       },
     ];
-    this.createLights();
     this.modelsPromise = this.loadModels();
-  }
-
-  createLights() {
-    this.spotLight = new THREE.SpotLight(this.steps[0].color, 3);
-    this.spotLight.position.set(0.8, 2.5, -2);
-    this.spotLight.angle = 0.3;
-    this.spotLight.penumbra = 0.2;
-    this.group.add(this.spotLight);
-
-    this.directionalLight = new THREE.DirectionalLight(0xffffff, 0.2);
-    this.group.add(this.directionalLight);
   }
 
   async loadModels() {
@@ -91,7 +76,6 @@ export default class Home {
           const index = Math.round(self.progress * (this.steps.length - 1));
           const step = this.steps[index];
           this.label.innerText = step.label;
-          this.updateLightColor(step.color);
         },
       },
     });
@@ -103,7 +87,6 @@ export default class Home {
     }).call(() => {
       this.label.innerText = this.steps[0].label;
       this.updateLabel();
-      this.updateLightColor(this.steps[0].color);
     });
 
     this.steps.forEach((step, index) => {
@@ -114,7 +97,6 @@ export default class Home {
         duration: 1,
       }).call(() => {
         this.label.innerText = step.label;
-        this.updateLightColor(step.color);
       });
     });
 
@@ -127,19 +109,6 @@ export default class Home {
 
   updateLabel() {
     this.label.innerText = this.steps[0].label;
-  }
-
-  updateLightColor(hexColor) {
-    const r = ((hexColor >> 16) & 255) / 255;
-    const g = ((hexColor >> 8) & 255) / 255;
-    const b = (hexColor & 255) / 255;
-
-    gsap.to(this.spotLight.color, {
-      r,
-      g,
-      b,
-      duration: 0.5,
-    });
   }
 
   createVideo() {
@@ -188,7 +157,9 @@ export default class Home {
   }
 
   async show() {
-    this.createVideo();
+    if (!this.video) {
+      this.createVideo();
+    }
     // this.createReels(); // WIP
     await this.modelsPromise;
     this.modelGroup.position.set(0, -2.5, 0);
