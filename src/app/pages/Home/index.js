@@ -65,7 +65,6 @@ export default class Home extends Page {
 
   show() {
     super.show();
-    console.log("show");
 
     gsap.to(this.elements.h1, {
       autoAlpha: 1,

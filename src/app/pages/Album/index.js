@@ -23,7 +23,7 @@ export class Album extends Page {
     this.tracks = new Map();
     this.loadTracks(this.elements.albumTitle.innerText);
 
-    this.elements.tableRow.forEach((element) => {
+    Array.from(this.elements.tableRow).forEach((element) => {
       new TextScramble(element);
     });
     this.createBackground();
@@ -140,7 +140,7 @@ export class Album extends Page {
       { once: true }
     );
 
-    this.elements.playBtn.forEach((btn) => {
+    Array.from(this.elements.playBtn).forEach((btn) => {
       btn.addEventListener("click", () => {
         this.playTrack(btn);
       });

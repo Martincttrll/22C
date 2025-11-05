@@ -50,7 +50,7 @@ export default class Home {
       });
       model.position.z = 3;
       model.position.x = i * 3.5;
-      model.position.y = -model.scale.y / 2;
+      model.position.y = -model.scale.y / 2 - 0.3;
 
       step.model = model;
       this.modelGroup.add(model);
