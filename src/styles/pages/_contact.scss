@@ -1,0 +1,122 @@
+@use "../shared" as *;
+@use "../utils" as *;
+.contact {
+  @extend %page;
+  overflow-x: hidden;
+  color: white;
+}
+.contact__wrapper {
+  @extend %cover;
+  overflow: hidden;
+  width: 100vw;
+  height: 100dvh;
+  background: black;
+  position: relative;
+  mix-blend-mode: difference;
+}
+h1.contact__title {
+  font-size: 27rem;
+  font-family: "baunk";
+  font-weight: 700;
+  color: $primary;
+  position: absolute;
+  white-space: nowrap;
+  top: 100px;
+  left: 0;
+  text-transform: uppercase;
+  transform-origin: left bottom;
+}
+.contact__content__wrapper {
+  position: absolute;
+  top: 50%;
+  height: 50%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  @include media("<tablet") {
+    top: 30%;
+  }
+}
+.contact__socials__wrapper {
+  @extend %text-18;
+  display: flex;
+  justify-content: space-around;
+  @include media("<tablet") {
+    flex-direction: column;
+    gap: 70px;
+  }
+}
+.contact__socials {
+  letter-spacing: 4px;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  color: white !important;
+  &::after {
+    content: "]";
+  }
+  &::before {
+    content: "[";
+  }
+  &::after,
+  &::before {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  &:hover::after,
+  &:hover::before {
+    opacity: 1;
+  }
+  @include media("<tablet") {
+    font-size: 7rem;
+    &::after,
+    &::before {
+      opacity: 1;
+    }
+  }
+}
+
+.contact__email {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  font-size: 4rem;
+  text-align: center;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: white !important;
+  &::after {
+    content: "]";
+  }
+  &::before {
+    content: "[";
+  }
+  &::after,
+  &::before {
+    padding-left: 30px;
+    padding-right: 30px;
+    opacity: 0;
+    animation: blink 2.5s infinite ease-in-out;
+  }
+
+  @include media("<tablet") {
+    font-size: 12rem;
+  }
+}
+
+@keyframes blink {
+  0% {
+    opacity: 0;
+  }
+  33% {
+    opacity: 1;
+  }
+  66% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
