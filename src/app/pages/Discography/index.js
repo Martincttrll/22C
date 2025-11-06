@@ -48,6 +48,7 @@ export class Discography extends Page {
         container.classList.add("splittext-mask-char");
         container.style.display = "inline-block";
         container.style.overflow = "hidden";
+        container.style.whiteSpace = "pre";
         container.style.verticalAlign = "middle";
         char.parentNode.insertBefore(container, char);
         container.appendChild(char);
@@ -62,6 +63,7 @@ export class Discography extends Page {
 
     const container = document.createElement("div");
     container.classList.add("splittext-mask");
+    container.style.whiteSpace = "normal";
     container.style.overflow = "hidden";
     target.parentNode.insertBefore(container, target);
     container.appendChild(target);
@@ -168,7 +170,7 @@ export class Discography extends Page {
     });
 
     const splits = elements.map((el) =>
-      SplitText.create(el, { type: "chars" })
+      SplitText.create(el, { type: "chars", smartWrap: true })
     );
 
     this.wrapWithOverflowHidden(elements[0]);
@@ -180,7 +182,7 @@ export class Discography extends Page {
       if (el) el._splitText = splits[i];
     });
 
-    gsap.set(splits[0].chars, { y: "-100%" });
+    gsap.set(splits[0].chars, { yPercent: "-100" });
     gsap.set([splits[1].chars, splits[2].chars], { x: "100%" });
 
     const tl = gsap.timeline({
@@ -193,7 +195,7 @@ export class Discography extends Page {
     tl.to(
       splits[0].chars,
       {
-        y: "0%",
+        yPercent: "0",
         duration: 0.3,
         ease: "power2.inOut",
         stagger: 0.04,
@@ -240,7 +242,7 @@ export class Discography extends Page {
     });
 
     const splits = elements.map((el) =>
-      SplitText.create(el, { type: "chars" })
+      SplitText.create(el, { type: "chars", smartWrap: true })
     );
 
     this.wrapWithOverflowHidden(elements[0]);
@@ -260,7 +262,7 @@ export class Discography extends Page {
     });
 
     tl.to(splits[0].chars, {
-      y: "100%",
+      y: "200%",
       duration: 0.3,
       ease: "power2.inOut",
       stagger: 0.04,
