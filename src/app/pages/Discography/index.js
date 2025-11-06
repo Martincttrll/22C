@@ -18,7 +18,7 @@ export class Discography extends Page {
       },
     });
     this.isAnimating = false;
-    this.isDisplayUI = true;
+    this.isDisplayUI = false;
 
     this.scrollInfo = {
       position: 0,
@@ -33,9 +33,6 @@ export class Discography extends Page {
 
   create() {
     super.create();
-    this.currentIndex = 0;
-    this.currentAlbum = this.elements.albums[this.currentIndex];
-    this.currentAlbum.style.visibility = "visible";
   }
 
   wrapWithOverflowHidden(target) {
@@ -122,7 +119,7 @@ export class Discography extends Page {
   handleScroll() {
     requestAnimationFrame(() => this.handleScroll());
 
-    const movingDetection = Detection.isMobile ? 0.05 : 0.01;
+    const movingDetection = 0.005;
     const wasMoving = Math.abs(this.scrollInfo.velocity) >= movingDetection;
 
     this.scrollInfo.position += this.scrollInfo.velocity;
@@ -153,9 +150,11 @@ export class Discography extends Page {
   showUI(albumData) {
     if (this.isAnimating || this.isDisplayUI) return;
     this.isAnimating = true;
-    this.currentAlbum = Array.from(this.elements.albums).find(
+    const albums = Array.from(this.elements.albums);
+    this.currentAlbum = albums.find(
       (album) => album.dataset.title === albumData.title
     );
+    albums.forEach((album) => (album.style.visibility = "hidden"));
     this.currentAlbum.style.visibility = "visible";
 
     const elements = [
@@ -291,6 +290,13 @@ export class Discography extends Page {
 
   show() {
     super.show();
+    const firstAlbum = document.querySelectorAll(".discography__album")[0];
+    const firstAlbumData = {
+      title: firstAlbum.getAttribute("data-title"),
+      url: firstAlbum.querySelector("a").getAttribute("href"),
+    };
+
+    this.showUI(firstAlbumData);
     this.addEventListeners();
   }
 }

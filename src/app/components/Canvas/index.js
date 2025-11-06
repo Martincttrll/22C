@@ -155,7 +155,6 @@ export default class Canvas {
     if (this.canvasPage) {
       this.canvasPage.show(isPreloaded, isAlbumToDiscography);
     }
-    console.log("onchange canvas :", this.template, template);
     this.template = template;
   }
 }
