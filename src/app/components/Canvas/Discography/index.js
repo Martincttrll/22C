@@ -109,8 +109,8 @@ export default class Discography {
   update() {}
 
   onScroll(scrollInfo) {
-    if (window.location.pathname !== "/discography/") return;
-
+    if (window.location.pathname !== "/discography/" || !this.mediaInstances)
+      return;
     const { position, velocity } = scrollInfo;
     const total = this.mediaInstances.length;
     const lastIndex = total - 1;
@@ -199,7 +199,7 @@ export default class Discography {
 
   show(isPreloaded, isAlbumToDiscography) {
     this.enableOpacityUpdate = false;
-    if (this.scene.children.length === 0) {
+    if (!this.mediaInstances) {
       this.createMedia();
       this.createGallery();
       this.createRaycaster();
