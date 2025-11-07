@@ -2,6 +2,7 @@ import "@styles/style.scss";
 import Home from "@pages/Home";
 import { Discography } from "@pages/Discography";
 import { Album } from "@pages/Album";
+import { Contact } from "@pages/Contact";
 import { Navigation } from "@components/Navigation";
 import { each } from "lodash";
 import { Preloader } from "@components/Preloader";
@@ -47,6 +48,7 @@ class App {
       home: new Home(),
       discography: new Discography(),
       album: new Album(),
+      contact: new Contact(),
     };
 
     this.page = this.pages[this.template];
