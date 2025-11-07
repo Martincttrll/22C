@@ -13,7 +13,7 @@
   background: black;
   position: relative;
   mix-blend-mode: difference;
-  z-index: 5;
+  z-index: 2;
 }
 h1.contact__title {
   font-size: 27rem;
@@ -21,7 +21,7 @@ h1.contact__title {
   font-weight: 700;
   color: $primary;
   position: absolute;
-  z-index: 5;
+  z-index: 2;
   white-space: nowrap;
   top: 100px;
   left: 0;

@@ -136,6 +136,7 @@ export default class Canvas {
       this.template === "album" && template === "discography";
 
     if (this.home) this.home.hide();
+    if (this.contact) this.contact.hide();
 
     if (
       this.discography &&

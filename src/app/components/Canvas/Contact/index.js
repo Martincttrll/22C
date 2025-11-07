@@ -10,7 +10,6 @@ export class Contact {
     this.camera = camera;
     this.sizes = sizes;
     this.group = new THREE.Group();
-    this.createMesh();
 
     this.displacementFactor = 3;
     this.friction = 0.01;
@@ -63,6 +62,13 @@ export class Contact {
       this.mesh.rotation.y += 0.04;
     }
   }
-  show() {}
-  hide() {}
+  show() {
+    if (!this.mesh) {
+      this.createMesh();
+    }
+    this.scene.add(this.group);
+  }
+  hide() {
+    this.scene.remove(this.group);
+  }
 }
