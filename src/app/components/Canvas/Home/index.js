@@ -2,6 +2,7 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/Addons.js";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
+import SplitText from "gsap/SplitText";
 import Video from "./Video";
 import Reels from "./Reels";
 
@@ -51,6 +52,7 @@ export default class Home {
       model.position.z = 3;
       model.position.x = i * 3.5;
       model.position.y = -model.scale.y / 2 - 0.3;
+      // model.position.y = 0;
 
       step.model = model;
       this.modelGroup.add(model);
@@ -61,32 +63,35 @@ export default class Home {
 
   setupScrollAnimation() {
     ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-    const scrollDuration = this.steps.length * SCROLL_DURATION;
+    const scrollWrapper = document.querySelector(".home__three__wrapper");
     this.label = document.querySelector(".home__three__label");
 
     const tl = gsap.timeline({
       scrollTrigger: {
-        trigger: document.querySelector(".home__three__wrapper"),
+        trigger: scrollWrapper,
         start: "top center",
-        end: `+=${scrollDuration}`,
+        end: `+=${SCROLL_DURATION * this.steps.length}`,
         scrub: true,
         pin: true,
-
         onUpdate: (self) => {
-          const index = Math.round(self.progress * (this.steps.length - 1));
-          const step = this.steps[index];
-          this.label.innerText = step.label;
+          const totalAnim = this.steps.length + 2; // 1 entrée + steps + 1 sortie
+          let stepProgress =
+            (self.progress * totalAnim - 1) / this.steps.length;
+          stepProgress = Math.max(0, Math.min(1, stepProgress));
+
+          let stepIndex = Math.floor(stepProgress * this.steps.length);
+          stepIndex = Math.max(0, Math.min(this.steps.length - 1, stepIndex));
+          if (this.currentStep !== stepIndex) {
+            this.currentStep = stepIndex;
+            this.updateLabel(this.steps[stepIndex].label);
+          }
         },
       },
     });
-
     tl.to(this.modelGroup.position, {
       y: 0,
       duration: 1,
       ease: "power2.out",
-    }).call(() => {
-      this.label.innerText = this.steps[0].label;
-      this.updateLabel();
     });
 
     this.steps.forEach((step, index) => {
@@ -95,8 +100,6 @@ export default class Home {
       tl.to(this.modelGroup.position, {
         x: targetX,
         duration: 1,
-      }).call(() => {
-        this.label.innerText = step.label;
       });
     });
 
@@ -107,10 +110,27 @@ export default class Home {
     });
   }
 
-  updateLabel() {
-    this.label.innerText = this.steps[0].label;
-  }
+  updateLabel(newText) {
+    if (!newText) return;
 
+    if (this.label._splitText) this.label._splitText.revert();
+
+    this.label.innerText = newText;
+
+    const split = new SplitText(this.label, { type: "chars", mask: "chars" });
+    this.label._splitText = split;
+
+    gsap.fromTo(
+      split.chars,
+      { yPercent: -100 },
+      {
+        yPercent: 0,
+        duration: 0.7,
+        ease: "power2.out",
+        stagger: 0.04,
+      }
+    );
+  }
   createVideo() {
     this.video = new Video({
       element: document.querySelector(".home__video"),
