@@ -3,6 +3,7 @@ import Home from "./Home";
 import Discography from "./Discography";
 import Album from "./Album";
 import Transition from "./Transition";
+import { Contact } from "./Contact";
 export default class Canvas {
   constructor({ template }) {
     this.template = template;
@@ -83,6 +84,14 @@ export default class Canvas {
     });
   }
 
+  createContact() {
+    this.contact = new Contact({
+      scene: this.scene,
+      sizes: this.sizes,
+      camera: this.camera,
+    });
+  }
+
   /**
    * Events.
    */
@@ -92,6 +101,7 @@ export default class Canvas {
     this.createHome();
     this.createDiscography();
     this.createAlbum();
+    this.createContact();
 
     this.onChange({ template: this.template, isPreloaded: true });
   }
@@ -150,6 +160,8 @@ export default class Canvas {
       this.canvasPage = this.discography;
     } else if (template === "album") {
       this.canvasPage = this.album;
+    } else if (template == "contact") {
+      this.canvasPage = this.contact;
     }
 
     if (this.canvasPage) {
