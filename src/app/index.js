@@ -70,12 +70,10 @@ class App {
    */
 
   onPreloaded() {
+    //Canvas
     this.onResize();
-
     this.canvas.onPreloaded();
-
     this.update();
-
     this.page.setCanvasPage(this.canvas.canvasPage);
   }
 

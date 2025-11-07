@@ -84,7 +84,14 @@ async function fetchPrismicData() {
   const { homepage } = await fetchHomepage();
   const albums = await fetchAlbums();
 
-  const assets = extractAssetsFromData(homepage.data);
+  //On ne preload pas les reels ni les news
+  const homepageDataFiltered = {
+    ...homepage.data,
+    news_list: undefined,
+    reels_list: undefined,
+  };
+
+  const assets = extractAssetsFromData(homepageDataFiltered);
 
   return {
     homepage,
