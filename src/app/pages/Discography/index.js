@@ -18,7 +18,7 @@ export class Discography extends Page {
       },
     });
     this.isAnimating = false;
-    this.isDisplayUI = false;
+    this.isUIDisplayed = false;
 
     this.scrollInfo = {
       position: 0,
@@ -150,7 +150,6 @@ export class Discography extends Page {
   }
 
   showUI(albumData) {
-    if (this.isAnimating || this.isDisplayUI) return;
     this.isAnimating = true;
     const albums = Array.from(this.elements.albums);
     this.currentAlbum = albums.find(
@@ -188,7 +187,7 @@ export class Discography extends Page {
     const tl = gsap.timeline({
       onComplete: () => {
         this.isAnimating = false;
-        this.isDisplayUI = true;
+        this.isUIDisplayed = true;
       },
     });
 
@@ -228,7 +227,7 @@ export class Discography extends Page {
   }
 
   hideUI() {
-    if (!this.currentAlbum || this.isAnimating || !this.isDisplayUI) return;
+    if (!this.currentAlbum || this.isAnimating || !this.isUIDisplayed) return;
     this.isAnimating = true;
 
     const elements = [
@@ -257,7 +256,7 @@ export class Discography extends Page {
     const tl = gsap.timeline({
       onComplete: () => {
         this.isAnimating = false;
-        this.isDisplayUI = false;
+        this.isUIDisplayed = false;
       },
     });
 
