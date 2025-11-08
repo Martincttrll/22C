@@ -56,15 +56,23 @@ export class Preloader extends Component {
       };
 
       assets.forEach((src) => {
+        const TIMEOUT = 5000;
         if (src.match(/\.(mp3|wav|ogg)$/)) {
           console.log(src);
           const audio = new Audio();
           audio.src = src;
           audio.crossOrigin = "anonymous";
           audio.preload = "auto";
+
+          const timer = setTimeout(() => {
+            console.warn(`Audio timeout: ${src}`);
+            onAssetLoad();
+          }, TIMEOUT);
+
           audio.addEventListener(
             "canplaythrough",
             () => {
+              clearTimeout(timer);
               window.PRELOADED[src] = audio;
               onAssetLoad();
             },
@@ -76,9 +84,16 @@ export class Preloader extends Component {
           video.src = src;
           video.preload = "auto";
           video.crossOrigin = "anonymous";
+
+          const timer = setTimeout(() => {
+            console.warn(`Audio timeout: ${src}`);
+            onAssetLoad();
+          }, TIMEOUT);
+
           video.addEventListener(
             "loadeddata",
             () => {
+              clearTimeout(timer);
               window.PRELOADED[src] = video;
               onAssetLoad();
             },
@@ -89,7 +104,14 @@ export class Preloader extends Component {
           const img = new Image();
           img.src = src;
           img.crossOrigin = "anonymous";
+
+          const timer = setTimeout(() => {
+            console.warn(`Audio timeout: ${src}`);
+            onAssetLoad();
+          }, TIMEOUT);
+
           (img.onload = () => {
+            clearTimeout(timer);
             window.PRELOADED[src] = img;
             onAssetLoad();
           }),
