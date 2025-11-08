@@ -6,11 +6,9 @@ extends ./_layouts/layout.pug
 block content
     .contact
         .contact__wrapper
-            h1.contact__title Contact
+            h1.contact__title=prismic.contactpage.data.h1[0].text
             .contact__content__wrapper
                 .contact__socials__wrapper
-                    a(href="https://www.youtube.com/@22.Carbone",target="_blank").contact__socials.youtube Youtube
-                    a(href="https://open.spotify.com/intl-fr/artist/2Dhp7jauc3hfY1s5Of0bCU?si=zkbyDv9lQiCWFDi87me8nQ",target="_blank").contact__socials.spotify Spotify
-                    a(href="https://link.deezer.com/s/31x3qMaF1X035tHP85MIw",target="_blank").contact__socials.deezer Deezer
-                    a(href="https://music.apple.com/us/artist/22carbone/1656727981?l=fr-FR",target="_blank").contact__socials.apple Apple Music
-            a(href="mailto:contact@22carbone.com").contact__email hello@22carbone.com
+                    each social in prismic.contactpage.data.socials_list
+                        a(href=social.social_link.url,target="_blank").contact__socials=social.social_text
+            a(href=`mailto:${prismic.contactpage.data.email}`).contact__email=prismic.contactpage.data.email

@@ -43,6 +43,10 @@ async function fetchHomepage() {
 
   return { homepage };
 }
+async function fetchContactPage() {
+  const contactpage = await client.getSingle("contact_page");
+  return { contactpage };
+}
 
 async function fetchLinkedDocuments(list, key) {
   const ids = list.map((item) => item[key]?.id).filter(Boolean);
@@ -82,6 +86,7 @@ function extractAssetsFromData(data) {
 
 async function fetchPrismicData() {
   const { homepage } = await fetchHomepage();
+  const { contactpage } = await fetchContactPage();
   const albums = await fetchAlbums();
 
   //On ne preload pas les reels ni les news
@@ -95,6 +100,7 @@ async function fetchPrismicData() {
 
   return {
     homepage,
+    contactpage,
     assets,
     albums,
   };
