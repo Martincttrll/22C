@@ -66,6 +66,7 @@ h1.album__title {
   }
 }
 table.album__tracklist__table {
+  position: relative;
   box-sizing: border-box;
   width: 100%;
 }
@@ -87,6 +88,24 @@ tr {
     height: 1px;
     background-color: white;
     animation: separator 1s ease-out both;
+  }
+}
+
+td {
+  @include media("<tablet") {
+    position: relative;
+    width: 100%;
+    &::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      display: block;
+      width: 0;
+      height: 1px;
+      background-color: white;
+      animation: separator 1s ease-out both;
+    }
   }
 }
 @for $i from 1 through 50 {
