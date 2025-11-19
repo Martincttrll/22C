@@ -9,6 +9,8 @@ const DeviceType = {
 class DetectionManager {
   constructor() {
     this.parser = new UAParser();
+    this.os = this.parser.getOS();
+
     this.type = this.determineDeviceType(this.parser.getDevice().type);
 
     this.webGLAvailable = false;
@@ -51,6 +53,19 @@ class DetectionManager {
         );
     }
     return this.webGLAvailable;
+  }
+
+  isIOS() {
+    const ua = navigator.userAgent;
+    const os = this.parser.getOS();
+
+    // Vérifie iPhone / iPad / iPod
+    const isIOSDevice = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+
+    // Filtre Mac (Mac OS dans UA mais pas tactile)
+    const isMac = os.name === "macOS";
+
+    return isIOSDevice && !isMac;
   }
 
   isWebPSupported() {

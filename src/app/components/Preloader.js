@@ -30,97 +30,91 @@ export class Preloader extends Component {
   }
 
   loadAssets() {
-    return new Promise((resolve) => {
-      const assets = window.ASSETS.critical || "[]";
+    const assets = window.ASSETS.critical || [];
+    if (!Array.isArray(assets) || assets.length === 0) {
+      this.updateCounter(100);
+      return Promise.resolve();
+    }
 
-      const totalSteps = assets.length;
-      let loaded = 0;
+    const total = assets.length;
+    let counted = 0;
 
-      if (totalSteps === 0) {
-        this.updateCounter(100);
-        resolve();
-        return;
-      }
-
-      const onAssetLoad = () => {
-        loaded++;
-        const progress = Math.round((loaded / totalSteps) * 100);
-        gsap.to(this, {
-          dummy: progress,
-          duration: 0.3,
-          onUpdate: () => this.updateCounter(Math.round(this.dummy)),
-        });
-        if (loaded >= totalSteps) {
-          resolve();
-        }
-      };
-
-      assets.forEach((src) => {
-        const TIMEOUT = 5000;
-        if (src.match(/\.(mp3|wav|ogg)$/)) {
-          console.log(src);
-          const audio = new Audio();
-          audio.src = src;
-          audio.crossOrigin = "anonymous";
-          audio.preload = "auto";
-
-          const timer = setTimeout(() => {
-            console.warn(`Audio timeout: ${src}`);
-            onAssetLoad();
-          }, TIMEOUT);
-
-          audio.addEventListener(
-            "canplaythrough",
-            () => {
-              clearTimeout(timer);
-              window.PRELOADED[src] = audio;
-              onAssetLoad();
-            },
-            { once: true }
-          );
-          audio.addEventListener("error", onAssetLoad, { once: true });
-        } else if (src.match(/\.(mp4|webm)$/)) {
-          const video = document.createElement("video");
-          video.src = src;
-          video.preload = "auto";
-          video.crossOrigin = "anonymous";
-
-          const timer = setTimeout(() => {
-            console.warn(`Audio timeout: ${src}`);
-            onAssetLoad();
-          }, TIMEOUT);
-
-          video.addEventListener(
-            "loadeddata",
-            () => {
-              clearTimeout(timer);
-              window.PRELOADED[src] = video;
-              onAssetLoad();
-            },
-            { once: true }
-          );
-          video.addEventListener("error", onAssetLoad, { once: true });
-        } else {
-          const img = new Image();
-          img.src = src;
-          img.crossOrigin = "anonymous";
-
-          const timer = setTimeout(() => {
-            console.warn(`Audio timeout: ${src}`);
-            onAssetLoad();
-          }, TIMEOUT);
-
-          (img.onload = () => {
-            clearTimeout(timer);
-            window.PRELOADED[src] = img;
-            onAssetLoad();
-          }),
-            { once: true };
-          img.onerror = onAssetLoad;
-        }
+    const updateProgress = () => {
+      counted++;
+      const percent = Math.round((counted / total) * 100);
+      gsap.to(this, {
+        dummy: percent,
+        duration: 0.3,
+        onUpdate: () => this.updateCounter(Math.round(this.dummy)),
       });
-    });
+    };
+
+    const loadAsset = (src) => {
+      return new Promise((resolve) => {
+        let element;
+        let resolved = false;
+
+        const finishWait = () => {
+          if (!resolved) {
+            resolved = true;
+            updateProgress();
+            resolve(); // we stop WAITING, not LOADING
+          }
+        };
+
+        // timeout stops waiting, NOT loading
+        const timeoutId = setTimeout(() => {
+          console.warn("Asset slow, skipping wait:", src);
+          finishWait();
+        }, 5000); // or 3000, or dynamic later…
+
+        const onSuccess = () => {
+          clearTimeout(timeoutId);
+          window.PRELOADED[src] = element;
+          finishWait();
+        };
+
+        const onError = () => {
+          clearTimeout(timeoutId);
+          console.warn("Asset error:", src);
+          finishWait();
+        };
+
+        // type detection
+        if (/\.(mp4|webm)$/i.test(src)) {
+          element = document.createElement("video");
+          element.preload = "auto";
+          element.crossOrigin = "anonymous";
+
+          element.onloadeddata = onSuccess;
+          element.onerror = onError;
+          element.src = src;
+        } else if (/\.(mp3|wav|ogg)$/i.test(src)) {
+          element = new Audio();
+          element.preload = "auto";
+          element.crossOrigin = "anonymous";
+
+          element.addEventListener("canplaythrough", onSuccess, { once: true });
+          element.addEventListener("error", onError, { once: true });
+          element.src = src;
+        } else {
+          element = new Image();
+          element.crossOrigin = "anonymous";
+
+          element.onload = onSuccess;
+          element.onerror = onError;
+          element.src = src;
+        }
+
+        // IMPORTANT :
+        // Even after timeout, the browser CONTINUES to download the element.
+        // When it finishes, onSuccess will populate PRELOADED.
+      });
+    };
+
+    return Promise.all(assets.map(loadAsset));
   }
+
   onLoaded() {
     return new Promise((resolve) => {
       this.emit("completed");

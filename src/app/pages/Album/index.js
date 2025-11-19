@@ -32,10 +32,8 @@ export class Album extends Page {
 
   createBackground() {
     this.cover = this.elements.wrapper.dataset.cover;
-
     const oldBg = this.elements.wrapper.querySelector(".bg-mirror");
     if (oldBg) oldBg.remove();
-
     const bg = document.createElement("div");
     bg.className = "bg-mirror";
     bg.style.position = "absolute";
@@ -45,7 +43,6 @@ export class Album extends Page {
     bg.style.zIndex = "0";
     bg.style.pointerEvents = "none";
     bg.style.filter = "brightness(0.5) grayscale(1)";
-
     this.elements.wrapper.style.position = "relative";
     this.elements.wrapper.prepend(bg);
   }
@@ -55,7 +52,6 @@ export class Album extends Page {
       each(this.elements.duration, (duration) => {
         duration.innerText = duration.innerText.substr(3);
       });
-
       each(this.elements.tableRow, (tr) => {
         tr.querySelector(".album__track__album").remove();
       });

@@ -17,7 +17,13 @@ export default class Media {
   }
 
   createTextures() {
-    const image = window.PRELOADED[this.element.getAttribute("data-src")];
+    let image = window.PRELOADED[this.element.getAttribute("data-src")];
+    //iOS bug
+    if (image === undefined) {
+      img = new Image();
+      img.src = this.element.getAttribute("data-src");
+      img.crossOrigin = "anonymous";
+    }
     this.texture = new THREE.Texture(image);
     this.texture.needsUpdate = true;
   }

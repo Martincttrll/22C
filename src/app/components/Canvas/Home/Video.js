@@ -19,6 +19,19 @@ export default class Video {
 
   createTextures() {
     this.video = window.PRELOADED[this.element.dataset.src];
+    //iOS bug
+    if (this.video === undefined) {
+      const video = document.createElement("video");
+      video.src = this.element.dataset.src;
+      video.preload = "auto";
+      video.crossOrigin = "anonymous";
+      this.video = video;
+    }
+
+    this.video.addEventListener("loadedmetadata", () => {
+      this.onResize(this.sizes);
+    });
+
     this.video.muted = true;
     this.video.playsInline = true;
     this.video.loop = true;
