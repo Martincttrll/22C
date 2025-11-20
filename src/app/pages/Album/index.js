@@ -1,7 +1,11 @@
 import Page from "@classes/Page";
+import gsap from "gsap";
 import TextScramble from "./TextScramble";
 import { Detection } from "@classes/Detection";
 import { each } from "lodash";
+import SplitText from "gsap/SplitText";
+
+gsap.registerPlugin(SplitText);
 
 export class Album extends Page {
   constructor() {
@@ -88,14 +92,19 @@ export class Album extends Page {
   }
 
   toggleAudio(audio, btn) {
+    Array.from(this.elements.playBtn).forEach((otherBtn) => {
+      if (otherBtn !== btn && otherBtn.dataset.text === "PAUSE") {
+        this.animateBtnText(otherBtn, "PLAY");
+      }
+    });
     if (this.audio) {
       if (this.audio === audio) {
         if (!audio.paused) {
           audio.pause();
-          btn.textContent = "▶";
+          this.animateBtnText(btn, "PLAY");
         } else {
           audio.play();
-          btn.textContent = "⏸";
+          this.animateBtnText(btn, "PAUSE");
         }
         return;
       }
@@ -103,26 +112,63 @@ export class Album extends Page {
       // Stop l'audio précédent
       this.audio.pause();
       this.audio.currentTime = 0;
-      if (this.currentBtn) this.currentBtn.textContent = "▶";
+      if (this.currentBtn) this.animateBtnText(btn, "PLAY");
     }
 
     // Play le nouvel audio
     this.audio = audio;
     this.currentBtn = btn;
     audio.play();
-    btn.textContent = "⏸";
+    this.animateBtnText(btn, "PAUSE");
   }
 
-  showLoader(btn) {
-    // Si tu veux un simple loader CSS :
-    btn.dataset.originalText = btn.textContent;
-    btn.textContent = "…"; // ou mettre un SVG inline
-    btn.disabled = true;
-  }
+  animateBtnText(btn, newText) {
+    btn.dataset.text = newText;
+    const oldSplit = new SplitText(btn.querySelector("div"), {
+      type: "chars",
+      mask: "chars",
+      smartWrap: true,
+    });
 
-  hideLoader(btn) {
-    btn.textContent = btn.dataset.originalText || "▶";
-    btn.disabled = false;
+    const wrapper = btn.querySelector(".album__track__btn");
+
+    const temp = document.createElement("div");
+    temp.textContent = newText;
+    temp.style.visibility = "hidden";
+    temp.style.position = "absolute";
+    temp.style.top = "0";
+
+    wrapper.appendChild(temp);
+
+    const newSplit = new SplitText(temp, {
+      type: "chars",
+      smartWrap: true,
+    });
+
+    const tl = gsap.timeline({
+      onComplete: () => {
+        oldSplit.chars?.forEach((c) => (c.style.visibility = "hidden"));
+      },
+    });
+
+    tl.to(
+      oldSplit.chars,
+      {
+        yPercent: 100,
+        duration: 0.35,
+        ease: "power2.in",
+        stagger: 0.03,
+      },
+      0
+    );
+
+    tl.to(newSplit.chars, {
+      visibility: "visible",
+      yPercent: 100,
+      duration: 0.35,
+      ease: "power2.out",
+      stagger: 0.03,
+    });
   }
 
   addEventListeners() {

@@ -148,12 +148,13 @@ td.album__track__action {
   text-align: center;
 }
 
-td.album__track__listen span {
-  cursor: pointer;
-  font-size: 2rem;
-  @include media("<tablet") {
-    font-size: 5rem;
-  }
+td.album__track__listen {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.album__track__listen .album__track__btn {
+  cursor: pointer !important;
 }
 
 @keyframes separator {
