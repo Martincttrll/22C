@@ -3,6 +3,7 @@ import Media from "./Media.js";
 import * as THREE from "three";
 import gsap from "gsap";
 import { mod, lerpVec } from "@utils/math.js";
+import { velocity } from "three/tsl";
 export default class Discography {
   constructor({ scene, sizes, camera, transition }) {
     this.scene = scene;
@@ -111,6 +112,9 @@ export default class Discography {
   onScroll(scrollInfo) {
     if (window.location.pathname !== "/discography/" || !this.mediaInstances)
       return;
+
+    const MAX_VISIBLE = 8.9;
+
     const { position, velocity } = scrollInfo;
     const total = this.mediaInstances.length;
     const lastIndex = total - 1;
@@ -146,6 +150,24 @@ export default class Discography {
       const target = lerpVec(slotA, slotB, t);
 
       media.mesh.position.set(target.x, target.y, target.z);
+
+      const dist = Math.abs(targetSlotIndex);
+
+      const half = (MAX_VISIBLE - 1) / 2;
+      const visibleFade = 1.0;
+
+      if (dist > half + visibleFade) {
+        media.mesh.visible = false;
+        media.mesh.material.forEach((m) => (m.opacity = 0));
+        return;
+      }
+
+      media.mesh.visible = true;
+
+      if (dist > half) {
+        const fadeProgress = 1 - (dist - half) / visibleFade;
+        opacity *= fadeProgress;
+      }
 
       if (this.enableOpacityUpdate) {
         media.mesh.material.forEach((material) => {
@@ -205,6 +227,7 @@ export default class Discography {
       this.createRaycaster();
       this.scene.add(this.group);
     }
+
     if (this.mediaInstances) {
       let delay = 0;
       if (isPreloaded) {
@@ -212,6 +235,7 @@ export default class Discography {
       } else if (isAlbumToDiscography) {
         delay = 1.4;
       }
+
       this.mediaInstances.forEach((media, i) => media.show(delay + i * 0.05));
       setTimeout(() => {
         this.enableOpacityUpdate = true;
