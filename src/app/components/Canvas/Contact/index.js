@@ -18,7 +18,7 @@ export class Contact {
 
   async createMesh() {
     const loader = new FontLoader();
-    const font = await loader.loadAsync("/src/fonts/human_json.json");
+    const font = await loader.loadAsync("src/fonts/human_json.json");
 
     this.geometry = new TextGeometry("22C", {
       font,
