@@ -3,6 +3,7 @@ import { FontLoader } from "three/examples/jsm/loaders/FontLoader.js";
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry.js";
 import { mouse } from "@utils/mousePos.js";
 import { Detection } from "@classes/Detection";
+import humanFontJson from "../../../../fonts/human_json.json";
 
 export class Contact {
   constructor({ scene, camera, sizes }) {
@@ -18,7 +19,7 @@ export class Contact {
 
   async createMesh() {
     const loader = new FontLoader();
-    const font = await loader.loadAsync("src/fonts/human_json.json");
+    const font = await loader.parse(humanFontJson);
 
     this.geometry = new TextGeometry("22C", {
       font,

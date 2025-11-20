@@ -43,7 +43,6 @@ export default function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy("src/fonts");
   eleventyConfig.addPassthroughCopy("src/assets");
   eleventyConfig.addPassthroughCopy("src/styles");
-  eleventyConfig.addPassthroughCopy("albums.json");
   eleventyConfig.addPassthroughCopy(".htaccess");
   eleventyConfig.setServerPassthroughCopyBehavior("copy");
 
