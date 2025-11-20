@@ -67,10 +67,20 @@ export class Album extends Page {
 
   formatForMobile() {
     if (Detection.isMobile) {
-      each(this.elements.duration, (duration) => {
+      const durations =
+        this.elements.duration instanceof NodeList
+          ? [...this.elements.duration]
+          : [this.elements.duration];
+
+      const rows =
+        this.elements.tableRow instanceof NodeList
+          ? [...this.elements.tableRow]
+          : [this.elements.tableRow];
+
+      each(durations, (duration) => {
         duration.innerText = duration.innerText.substr(3);
       });
-      each(this.elements.tableRow, (tr) => {
+      each(rows, (tr) => {
         tr.querySelector(".album__track__album").remove();
       });
 
