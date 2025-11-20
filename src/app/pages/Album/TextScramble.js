@@ -1,9 +1,13 @@
 import gsap from "gsap";
+import { Detection } from "@classes/Detection";
+
 export default class TextScramble {
   constructor(element) {
     this.element = element;
 
-    this.create();
+    if (!Detection.isMobile) {
+      this.create();
+    }
   }
   create() {
     this.initOriginalText();

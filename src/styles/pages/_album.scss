@@ -94,7 +94,7 @@ tr {
 td {
   @include media("<tablet") {
     position: relative;
-    width: 100%;
+    overflow: hidden;
     &::after {
       content: "";
       position: absolute;
@@ -163,5 +163,31 @@ td.album__track__listen {
   }
   100% {
     width: 100%;
+  }
+}
+
+.scroll-wrapper {
+  overflow: hidden;
+  position: relative;
+}
+
+.scroll-text {
+  display: inline-block;
+  transition: transform 0.3s;
+}
+
+.scroll-animate {
+  white-space: nowrap;
+  padding-left: 100%;
+  animation: scroll-text linear infinite;
+  animation-duration: 8s;
+}
+
+@keyframes scroll-text {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
   }
 }

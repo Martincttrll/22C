@@ -25,8 +25,12 @@ block content
                     tbody
                         each track, index in album.tracks
                             tr
-                                td.album__track__name(data-track-name=track.name) #{track.name}
-                                td.album__track__feat  #{track.featuring ? "ft. " + track.featuring  : ''}
+                                td.album__track__name(data-track-name=track.name)
+                                    .scroll-wrapper
+                                        .scroll-text #{track.name}
+                                td.album__track__feat  
+                                    .scroll-wrapper 
+                                        .scroll-text #{track.featuring ? "ft. " + track.featuring  : ''}
                                 td.album__track__album #{track.album ? track.album : album.name}
                                 - const duration = new Date(track.duration_ms).toISOString().substr(11, 8);
                                 td.album__track__duration #{duration}

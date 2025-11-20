@@ -18,6 +18,7 @@ export class Album extends Page {
         backBtn: ".album__back__link",
         playBtn: ".album__track__listen",
         duration: ".album__track__duration",
+        trackName: ".album__track__name",
       },
     });
   }
@@ -32,6 +33,19 @@ export class Album extends Page {
     });
     this.createBackground();
     this.formatForMobile();
+    const rows = document.querySelectorAll(".album__tracklist__table tbody tr");
+    let maxHeight = 0;
+
+    // trouver la hauteur maximale
+    rows.forEach((row) => {
+      const height = row.offsetHeight;
+      if (height > maxHeight) maxHeight = height;
+    });
+
+    // appliquer la même hauteur à toutes
+    rows.forEach((row) => {
+      row.style.height = maxHeight + "px";
+    });
   }
 
   createBackground() {
@@ -58,6 +72,33 @@ export class Album extends Page {
       });
       each(this.elements.tableRow, (tr) => {
         tr.querySelector(".album__track__album").remove();
+      });
+
+      const wrappers = [...document.querySelectorAll(".scroll-wrapper")];
+
+      if (!wrappers.length) return;
+      const heights = wrappers.map((w) => {
+        const txt = w.querySelector(".scroll-text");
+        return txt.getBoundingClientRect().height;
+      });
+      const minHeight = Math.min(...heights.filter((h) => h > 0));
+
+      wrappers.forEach((wrapper, i) => {
+        const text = wrapper.querySelector(".scroll-text");
+        const h = heights[i];
+        wrapper.style.width = "";
+        text.style.whiteSpace = "";
+        text.style.animation = "";
+        text.classList.remove("scroll-animate");
+
+        if (h <= minHeight) return;
+        const width = wrapper.offsetWidth;
+        wrapper.style.width = width + "px";
+        text.classList.add("scroll-animate");
+
+        const fullWidth = text.scrollWidth;
+        const duration = Math.max(6, fullWidth / 50);
+        text.style.animationDuration = duration + "s";
       });
     }
   }
