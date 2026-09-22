@@ -1,0 +1,89 @@
+@use "../shared" as *;
+@use "../utils" as *;
+
+.merch {
+  @extend %page;
+  overflow-x: hidden;
+  color: white;
+}
+
+.merch__wrapper {
+  @extend %cover;
+  @extend %center;
+  flex-direction: column;
+  overflow: hidden;
+  width: 100vw;
+  height: 100dvh;
+  background: black;
+  position: relative;
+  z-index: 2;
+  gap: 20px;
+  padding: 40px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.merch__title {
+  @extend %text-18;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+}
+
+.merch__product {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.merch__product__name {
+  @extend %text-16;
+  text-transform: uppercase;
+}
+
+.merch__product__price {
+  @extend %text-16;
+  opacity: 0.7;
+}
+
+.merch__sizes__label {
+  @extend %text-12;
+  opacity: 0.6;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.merch__sizes {
+  display: flex;
+  gap: 12px;
+}
+
+.merch__size {
+  @extend %text-16;
+  background: transparent;
+  border: 1px solid white;
+  color: white;
+  cursor: pointer;
+  padding: 10px 18px;
+  text-transform: uppercase;
+  transition: opacity 0.3s ease;
+
+  &:hover {
+    opacity: 0.6;
+  }
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+}
+
+.merch__note {
+  @extend %text-12;
+  opacity: 0.5;
+}
+
+.merch__error {
+  @extend %text-12;
+  color: $zarin-crimson;
+}

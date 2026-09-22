@@ -1,0 +1,20 @@
+---
+    template: "merch"
+    title: "Merch | 22Carbone"
+---
+extends ./_layouts/layout.pug
+block content
+    .merch
+        .merch__wrapper
+            h1.merch__title Merch
+            .merch__product
+                p.merch__product__name T-shirt 22Carbone
+                p.merch__product__price 35€
+                p.merch__sizes__label Taille
+                .merch__sizes
+                    button(type="button" data-size="S").merch__size S
+                    button(type="button" data-size="M").merch__size M
+                    button(type="button" data-size="L").merch__size L
+                    button(type="button" data-size="XL").merch__size XL
+                p.merch__note Livraison gérée directement par 22Carbone après commande.
+                p.merch__error(hidden) Une erreur est survenue, réessaie.

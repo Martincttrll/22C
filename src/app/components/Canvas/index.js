@@ -163,6 +163,8 @@ export default class Canvas {
       this.canvasPage = this.album;
     } else if (template == "contact") {
       this.canvasPage = this.contact;
+    } else if (template === "merch") {
+      this.canvasPage = null;
     }
 
     if (this.canvasPage) {

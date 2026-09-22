@@ -3,6 +3,7 @@ import Home from "@pages/Home";
 import { Discography } from "@pages/Discography";
 import { Album } from "@pages/Album";
 import { Contact } from "@pages/Contact";
+import { Merch } from "@pages/Merch";
 import { Navigation } from "@components/Navigation";
 import { each } from "lodash";
 import { Preloader } from "@components/Preloader";
@@ -49,6 +50,7 @@ class App {
       discography: new Discography(),
       album: new Album(),
       contact: new Contact(),
+      merch: new Merch(),
     };
 
     this.page = this.pages[this.template];
