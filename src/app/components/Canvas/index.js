@@ -4,6 +4,7 @@ import Discography from "./Discography";
 import Album from "./Album";
 import Transition from "./Transition";
 import { Contact } from "./Contact";
+import { Merch } from "./Merch";
 export default class Canvas {
   constructor({ template }) {
     this.template = template;
@@ -46,7 +47,10 @@ export default class Canvas {
       this.canvasPage.update(scroll);
     }
 
-    this.renderer.render(this.scene, this.camera);
+    this.renderer.render(
+      this.canvasPage?.scene ?? this.scene,
+      this.canvasPage?.camera ?? this.camera
+    );
   }
 
   createHome() {
@@ -92,6 +96,10 @@ export default class Canvas {
     });
   }
 
+  createMerch() {
+    this.merch = new Merch({ renderer: this.renderer });
+  }
+
   /**
    * Events.
    */
@@ -102,6 +110,7 @@ export default class Canvas {
     this.createDiscography();
     this.createAlbum();
     this.createContact();
+    this.createMerch();
 
     this.onChange({ template: this.template, isPreloaded: true });
   }
@@ -127,6 +136,9 @@ export default class Canvas {
     if (this.album && this.album.onResize) {
       this.album.onResize(this.sizes);
     }
+    if (this.merch) {
+      this.merch.onResize();
+    }
   }
 
   onChange({ template, isPreloaded }) {
@@ -137,6 +149,7 @@ export default class Canvas {
 
     if (this.home) this.home.hide();
     if (this.contact) this.contact.hide();
+    if (this.merch) this.merch.hide();
 
     if (
       this.discography &&
@@ -164,7 +177,7 @@ export default class Canvas {
     } else if (template == "contact") {
       this.canvasPage = this.contact;
     } else if (template === "merch") {
-      this.canvasPage = null;
+      this.canvasPage = this.merch;
     }
 
     if (this.canvasPage) {
