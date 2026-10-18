@@ -5,6 +5,7 @@ import { Album } from "@pages/Album";
 import { Contact } from "@pages/Contact";
 import { Merch } from "@pages/Merch";
 import { Navigation } from "@components/Navigation";
+import { Cart } from "@components/Cart";
 import { each } from "lodash";
 import { Preloader } from "@components/Preloader";
 import Canvas from "@components/Canvas";
@@ -15,6 +16,7 @@ class App {
     this.createContent();
     this.createPreloader();
     this.createNavigation();
+    this.createCart();
     this.createPages();
     this.createCanvas();
     this.addEventListeners();
@@ -34,6 +36,10 @@ class App {
     this.navigation = new Navigation(this.template);
   }
 
+  createCart() {
+    this.cart = new Cart();
+  }
+
   createPreloader() {
     this.preloader = new Preloader();
 
@@ -50,7 +56,7 @@ class App {
       discography: new Discography(),
       album: new Album(),
       contact: new Contact(),
-      merch: new Merch(),
+      merch: new Merch({ cart: this.cart }),
     };
 
     this.page = this.pages[this.template];

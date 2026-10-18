@@ -1,65 +1,92 @@
 import Page from "@classes/Page";
 
 export class Merch extends Page {
-  constructor() {
+  constructor({ cart }) {
     super({
       element: ".merch",
       elements: {
         wrapper: ".merch__wrapper",
+        product: ".merch__product",
+        colorButtons: ".merch__color",
         sizeButtons: ".merch__size",
-        error: ".merch__error",
+        addButton: ".merch__add",
+        added: ".merch__added",
+        success: ".merch__success",
       },
     });
+
+    this.cart = cart;
   }
 
   create() {
     super.create();
+
+    const params = new URLSearchParams(window.location.search);
+    if (params.has("success")) {
+      this.cart.clear();
+      if (this.elements.success) this.elements.success.hidden = false;
+    }
   }
 
-  toButtonArray() {
-    if (!this.elements.sizeButtons) return [];
-    return this.elements.sizeButtons instanceof NodeList
-      ? Array.from(this.elements.sizeButtons)
-      : [this.elements.sizeButtons];
+  toArray(elements) {
+    if (!elements) return [];
+    return elements instanceof NodeList ? Array.from(elements) : [elements];
+  }
+
+  selected(elements) {
+    return this.toArray(elements).find(
+      (btn) => btn.getAttribute("aria-pressed") === "true"
+    );
+  }
+
+  select(elements, clicked) {
+    this.toArray(elements).forEach((btn) =>
+      btn.setAttribute("aria-pressed", String(btn === clicked))
+    );
   }
 
   addEventListeners() {
-    this.onSizeClick = this.onSizeClick.bind(this);
-    this.toButtonArray().forEach((button) =>
+    this.toArray(this.elements.colorButtons).forEach((button) =>
+      button.addEventListener("click", this.onColorClick)
+    );
+    this.toArray(this.elements.sizeButtons).forEach((button) =>
       button.addEventListener("click", this.onSizeClick)
     );
+    this.elements.addButton?.addEventListener("click", this.onAddClick);
   }
 
   removeEventListeners() {
-    this.toButtonArray().forEach((button) =>
+    this.toArray(this.elements.colorButtons).forEach((button) =>
+      button.removeEventListener("click", this.onColorClick)
+    );
+    this.toArray(this.elements.sizeButtons).forEach((button) =>
       button.removeEventListener("click", this.onSizeClick)
     );
+    this.elements.addButton?.removeEventListener("click", this.onAddClick);
   }
 
-  async onSizeClick(event) {
-    const button = event.currentTarget;
-    const { size } = button.dataset;
+  onColorClick = (event) => {
+    this.select(this.elements.colorButtons, event.currentTarget);
+  };
 
-    if (button.disabled) return;
+  onSizeClick = (event) => {
+    this.select(this.elements.sizeButtons, event.currentTarget);
+    this.elements.addButton.disabled = false;
+  };
 
-    this.toButtonArray().forEach((btn) => (btn.disabled = true));
-    if (this.elements.error) this.elements.error.hidden = true;
+  onAddClick = () => {
+    const color = this.selected(this.elements.colorButtons)?.dataset.color;
+    const size = this.selected(this.elements.sizeButtons)?.dataset.size;
+    if (!color || !size) return;
 
-    try {
-      const response = await window.fetch("/api/create-checkout-session", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ size }),
-      });
+    this.cart.add({
+      color,
+      size,
+      price: Number(this.elements.product.dataset.price),
+    });
 
-      if (!response.ok) throw new Error("checkout session request failed");
-
-      const { url } = await response.json();
-      window.location.href = url;
-    } catch (error) {
-      console.error(error);
-      if (this.elements.error) this.elements.error.hidden = false;
-      this.toButtonArray().forEach((btn) => (btn.disabled = false));
-    }
-  }
+    this.elements.added.hidden = false;
+    clearTimeout(this.addedTimeout);
+    this.addedTimeout = setTimeout(() => (this.elements.added.hidden = true), 2000);
+  };
 }

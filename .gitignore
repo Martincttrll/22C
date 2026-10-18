@@ -12,3 +12,5 @@ package-lock.json
 
 .vscode
 .DS_Store
+.vercel
+.env*

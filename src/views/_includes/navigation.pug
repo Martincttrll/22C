@@ -1,17 +1,33 @@
-
 nav.nav__wrapper 
     a(href="/").nav__logo 22Carbone
-    .nav__menu__btn 
-        span.nav__menu__btn__text.menu 
+    .nav__actions
+        button(type="button" aria-label="Ouvrir le panier").nav__cart__btn
             span [ 
-            |menu
+            |panier 
+            span.nav__cart__indicator
             span ]
-        span.nav__menu__btn__text.close 
-            span [ 
-            |fermer
-            span ]
+        .nav__menu__btn 
+            span.nav__menu__btn__text.menu 
+                span [ 
+                |menu
+                span ]
+            span.nav__menu__btn__text.close 
+                span [ 
+                |fermer
+                span ]
 .nav__menu__wrapper
     a(href="/").nav__menu__link Accueil    
     a(href="/discography/").nav__menu__link Discographie    
     a(href="/merch/").nav__menu__link Merch
     a(href="/contact/").nav__menu__link Contact    
+.cart(role="dialog" aria-label="Panier")
+    .cart__panel(data-lenis-prevent)
+        .cart__header
+            p.cart__title Panier
+            button(type="button").cart__close fermer
+        p.cart__empty Ton panier est vide.
+        ul.cart__items
+        p.cart__total
+        p.cart__error(hidden)
+        button(type="button").cart__checkout Commander
+        p.cart__note Montant final et livraison confirmés sur la page de paiement.

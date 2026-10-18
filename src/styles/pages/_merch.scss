@@ -46,6 +46,7 @@
   opacity: 0.7;
 }
 
+.merch__colors__label,
 .merch__sizes__label {
   @extend %text-12;
   opacity: 0.6;
@@ -53,11 +54,13 @@
   letter-spacing: 2px;
 }
 
+.merch__colors,
 .merch__sizes {
   display: flex;
   gap: 12px;
 }
 
+.merch__color,
 .merch__size {
   @extend %text-16;
   background: transparent;
@@ -78,12 +81,46 @@
   }
 }
 
+.merch__color,
+.merch__size {
+  &[aria-pressed="false"] {
+    opacity: 0.4;
+  }
+
+  &[aria-pressed="true"] {
+    opacity: 1;
+    background: white;
+    color: black;
+  }
+}
+
+.merch__add {
+  @extend %text-16;
+  background: white;
+  border: 1px solid white;
+  color: black;
+  cursor: pointer;
+  padding: 12px 24px;
+  text-transform: uppercase;
+  transition: opacity 0.3s ease;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+}
+
+.merch__added,
+.merch__success {
+  @extend %text-12;
+  color: $zarin-crimson;
+}
+
 .merch__note {
   @extend %text-12;
   opacity: 0.5;
-}
-
-.merch__error {
-  @extend %text-12;
-  color: $zarin-crimson;
 }

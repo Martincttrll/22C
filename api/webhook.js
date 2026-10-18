@@ -42,11 +42,24 @@ export default async function handler(req, res) {
   if (event.type === "checkout.session.completed") {
     const session = event.data.object;
 
+    const { data: lineItems } = await stripe.checkout.sessions.listLineItems(session.id, {
+      expand: ["data.price"],
+    });
+
+    const items = lineItems.map((line) => ({
+      color: line.price.metadata.color,
+      size: line.price.metadata.size,
+      quantity: line.quantity,
+    }));
+
     // TODO: transmettre la commande à 22Carbone (mail, tableau...) une fois le canal choisi.
     console.log("Nouvelle commande merch", {
-      size: session.metadata?.size,
+      items,
       email: session.customer_details?.email,
-      shipping: session.shipping_details ?? session.customer_details?.address ?? null,
+      shipping:
+        session.collected_information?.shipping_details ??
+        session.shipping_details ??
+        null,
     });
   }
 

@@ -2,7 +2,7 @@
 
 %text-12 {
   font-size: 1.2rem;
-  @include media("<phone") {
+  @include media("<tablet") {
     font-size: 3rem;
   }
 }

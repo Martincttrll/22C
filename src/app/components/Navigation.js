@@ -144,7 +144,7 @@ export class Navigation {
     });
 
     window.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") this.toggleMenu();
+      if (e.key === "Escape" && this.isMenuOpen) this.toggleMenu();
     });
   }
 }
